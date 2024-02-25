@@ -7,5 +7,5 @@
 </script>
 
 <button on:click={handleClick}>
-  clicks: {count}
+  revoluationary new counter: {count}
 </button>
