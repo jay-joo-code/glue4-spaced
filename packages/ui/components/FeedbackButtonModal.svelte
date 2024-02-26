@@ -3,13 +3,12 @@
   import IconNeutralFace from '$lib/icons/glue/IconNeutralFace.svelte';
   import IconSadFace from '$lib/icons/glue/IconSadFace.svelte';
   import { toast } from '@zerodevx/svelte-toast';
-  import Textarea from './Textarea.svelte';
+  import { Textarea } from '@glue/ui';
 
   export let appName;
   export let pb;
   export let currentUser;
 
-  let isOpen = false;
   let feedbackText = '';
   let feedbackId = '';
   let selected = '';
