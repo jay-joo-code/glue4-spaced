@@ -12,6 +12,26 @@
   import { Navbar } from '@glue/ui';
 
   let topAnchor;
+  const sitemap = [
+    {
+      label: 'About',
+      href: '/about'
+    },
+    {
+      label: 'Products',
+      isParent: true,
+      children: [
+        {
+          label: 'Editor',
+          href: '/editor'
+        },
+        {
+          label: 'Webapp',
+          href: '/webapp'
+        }
+      ]
+    }
+  ];
 
   afterNavigate(() => {
     if (topAnchor) {
@@ -54,7 +74,7 @@
 <div bind:this={topAnchor} />
 
 <div class="w-screen">
-  <Navbar appName={APP_NAME} />
+  <Navbar appName={APP_NAME} {sitemap} />
 
   <div class="flex flex-col items-center">
     <div class="relative w-full">
