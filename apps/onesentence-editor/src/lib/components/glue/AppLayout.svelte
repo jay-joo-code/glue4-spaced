@@ -51,12 +51,12 @@
 
 <TrackWidth />
 
+<div bind:this={topAnchor} />
+
 <div class="w-screen">
   <Navbar appName={APP_NAME} />
 
   <div class="flex flex-col items-center">
-    <div bind:this={topAnchor} />
-
     <div class="relative w-full">
       <!-- body content -->
       <div class="min-h-[82vh]">
