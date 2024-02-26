@@ -1,3 +1,3 @@
 module.exports = {
-  extends: ['@glue/eslint-config/index.js']
+  extends: ['@glue/config-eslint/index.js']
 };

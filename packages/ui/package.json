@@ -14,7 +14,7 @@
     "lint": "eslint ."
   },
   "devDependencies": {
-    "@glue/eslint-config": "*",
+    "@glue/config-eslint": "*",
     "svelte": "^4.2.8"
   }
 }

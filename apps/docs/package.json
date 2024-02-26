@@ -25,7 +25,7 @@
 		"@typescript-eslint/eslint-plugin": "^6.17.0",
 		"@typescript-eslint/parser": "^6.17.0",
 		"eslint": "^8.56.0",
-		"@glue/eslint-config": "*",
+		"@glue/config-eslint": "*",
 		"prettier": "^3.1.1",
 		"prettier-plugin-svelte": "^3.1.2",
 		"svelte": "^4.2.8",
