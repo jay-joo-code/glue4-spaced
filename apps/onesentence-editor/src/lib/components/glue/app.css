@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+	font-family: 'SerifPro';
+	src: url('/SourceSerifPro-Semibold.otf') format('opentype');
+	font-weight: normal;
+	font-style: normal;
+	font-display: swap;
+}
+
+@layer components {
+	.bg-gradient-purple-red-orange {
+		@apply bg-[conic-gradient(at_left,_var(--tw-gradient-stops))] from-fuchsia-700 via-orange-400 to-zinc-800;
+	}
+
+	.text-gradient-purple-red-orange {
+		@apply bg-[conic-gradient(at_left,_var(--tw-gradient-stops))] from-fuchsia-700 via-orange-400 to-zinc-800  bg-clip-text text-transparent;
+	}
+
+	.btn {
+		@apply normal-case;
+	}
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+	letter-spacing: 0.02rem;
+}
+
+html, body {
+	max-width: 100%;
+	overflow-x: hidden;
+}
