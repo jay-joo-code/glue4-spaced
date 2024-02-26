@@ -6,6 +6,6 @@
   }
 </script>
 
-<button on:click={handleClick}>
+<button class="btn btn-primary" on:click={handleClick}>
   revoluationary new counter: {count}
 </button>
