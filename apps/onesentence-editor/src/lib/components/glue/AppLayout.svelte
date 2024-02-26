@@ -1,11 +1,11 @@
 <script>
   import { browser } from '$app/environment';
   import { afterNavigate } from '$app/navigation';
-  import { currentUser } from '$lib/glue/pocketbase';
+  import { currentUser, pb } from '$lib/glue/pocketbase';
   import * as Sentry from '@sentry/sveltekit';
   import { onMount } from 'svelte';
   import Footer from '../Footer.svelte';
-  import FeedbackModal from './FeedbackModal.svelte';
+  import { FeedbackButtonModal } from '@glue/ui';
   import TrackWidth from './TrackWidth.svelte';
   import './app.css';
   import { APP_NAME } from '../../glue/config';
@@ -101,7 +101,7 @@
       <Footer />
 
       <!-- feedback -->
-      <FeedbackModal />
+      <FeedbackButtonModal appName={APP_NAME} {pb} {currentUser} />
     </div>
   </div>
 </div>

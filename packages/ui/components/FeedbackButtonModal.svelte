@@ -1,7 +1,5 @@
 <script>
-  import IconHappyFace from '$lib/icons/glue/IconHappyFace.svelte';
-  import IconNeutralFace from '$lib/icons/glue/IconNeutralFace.svelte';
-  import IconSadFace from '$lib/icons/glue/IconSadFace.svelte';
+  import { IconHappyFace, IconNeutralFace, IconSadFace } from '@glue/ui';
   import { toast } from '@zerodevx/svelte-toast';
   import { Textarea } from '@glue/ui';
 
@@ -32,7 +30,6 @@
   };
 
   const handleSubmitFeedbackText = () => {
-    isOpen = false;
     try {
       pb.collection('logs').update(feedbackId, {
         context: {
@@ -45,15 +42,16 @@
   };
 </script>
 
-{#if !hideRouteIds?.includes($page.route?.id)}
-  <div class="fixed left-0 right-0 bottom-0 flex justify-center">
-    <div class="flex w-full max-w-7xl justify-end pb-6 pr-4 md:pr-0">
-      <div class="">
-        <label for="modal-feedback" class="btn-primary btn-sm btn">Thoughts on {appName}?</label>
-      </div>
+<!-- button -->
+<div class="fixed left-0 right-0 bottom-0 flex justify-center">
+  <div class="flex w-full max-w-7xl justify-end pb-6 pr-4 md:pr-0">
+    <div class="">
+      <label for="modal-feedback" class="btn-primary btn-sm btn">Thoughts on {appName}?</label>
     </div>
   </div>
-{/if}
+</div>
+
+<!-- modal -->
 <input type="checkbox" id="modal-feedback" class="modal-toggle" />
 <label for="modal-feedback" class="modal cursor-pointer">
   <label class="modal-box relative box-border max-h-[70vh]" for="">
