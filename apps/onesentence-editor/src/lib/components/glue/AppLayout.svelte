@@ -74,7 +74,21 @@
 <div bind:this={topAnchor} />
 
 <div class="w-screen">
-  <Navbar appName={APP_NAME} {sitemap} />
+  <Navbar
+    appName={APP_NAME}
+    {sitemap}
+    actionButtons={[
+      {
+        label: 'Sign in',
+        href: '/sign-in'
+      },
+      {
+        label: 'Get starated',
+        href: '/get-started',
+        isPrimary: true
+      }
+    ]}
+  />
 
   <div class="flex flex-col items-center">
     <div class="relative w-full">
