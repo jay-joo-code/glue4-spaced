@@ -65,13 +65,13 @@
 
     <!-- desktop -->
     <div class="navbar-center hidden md:flex">
-      <ul class="menu menu-horizontal px-1 font-medium">
+      <ul class="menu menu-horizontal px-1 font-medium tracking-wide">
         {#each sitemap as navElt}
           {#if navElt?.isParent}
             <li>
               <details>
                 <summary>{navElt?.label}</summary>
-                <ul class="menu p-2">
+                <ul class="menu p-2 bg-base-200">
                   {#each navElt?.children as childNavElt}
                     <li><a href={childNavElt?.href}>{childNavElt?.label}</a></li>
                   {/each}
