@@ -12,16 +12,16 @@
     <div class="absolute top-10 left-0 right-0 flex justify-center">
       <ul class="menu menu-horizontal bg-base-200 rounded-box">
         <li>
-          <a href="/sitemap/${project?.id}"><span class="text-lg"><IconMap /></span>Sitemap</a>
+          <a href="/sitemap/{project?.id}"><span class="text-lg"><IconMap /></span>Sitemap</a>
         </li>
         <li>
-          <a href="/design/${project?.id}"><span class="text-lg"><IconCube /></span>Design</a>
+          <a href="/design/{project?.id}"><span class="text-lg"><IconCube /></span>Design</a>
         </li>
         <li>
-          <a href="/theme/${project?.id}"><span class="text-lg"><IconPalette /></span>Theme</a>
+          <a href="/theme/{project?.id}"><span class="text-lg"><IconPalette /></span>Theme</a>
         </li>
         <li>
-          <a href="/publish/${project?.id}"><span class="text-lg"><IconRocket /></span>Publish</a>
+          <a href="/publish/{project?.id}"><span class="text-lg"><IconRocket /></span>Publish</a>
         </li>
       </ul>
     </div>
