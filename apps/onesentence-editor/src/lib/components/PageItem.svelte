@@ -1,8 +1,26 @@
 <script lang="ts">
   import { IconAdd } from '@glue/ui';
-  import { sectionDesc, sectionTitle } from '../util/constants';
+  import { SECTION_HERO, sectionDesc, sectionTitle } from '../util/constants';
+  import { pb } from '../glue/pocketbase';
+  import { invalidateAll } from '$app/navigation';
 
   export let page;
+
+  let isLoadingAddSection = false;
+
+  const addSection = async () => {
+    isLoadingAddSection = true;
+    await pb.collection('pages').update(page?.id, {
+      sections: [
+        ...page?.sections,
+        {
+          variant: SECTION_HERO
+        }
+      ]
+    });
+    await invalidateAll();
+    isLoadingAddSection = false;
+  };
 </script>
 
 <div class="border-base-content/20 w-[16rem] rounded-xl border">
@@ -18,7 +36,10 @@
         </p>
       </div>
     {/each}
-    <button class="btn btn-block btn-sm">
+    <button class="btn btn-block btn-sm" on:click={addSection} disabled={isLoadingAddSection}>
+      {#if isLoadingAddSection}
+        <span class="loading loading-spinner loading-xs" />
+      {/if}
       <IconAdd />
       Add section
     </button>
