@@ -23,26 +23,25 @@
         prompt,
         sectionName: 'hero',
         componentName: 'title',
-        maxWordCount: 10
+        instructions: 'make it short and catchy. less than 8 words.'
       })
     )?.data;
 
     const overlineCopyText = (
       await axios.post('/api/llm/copy-text', {
         prompt,
-        sectionName: 'overline',
-        componentName: 'title',
-        maxWordCount: 6
+        sectionName: 'hero',
+        componentName: 'overline',
+        instructions: 'make it less than 6 words'
       })
     )?.data;
 
     const descCopyText = (
       await axios.post('/api/llm/copy-text', {
         prompt,
-        sectionName: 'overline',
+        sectionName: 'hero',
         componentName: 'description',
-        minWordCount: 10,
-        maxWordCount: 20
+        instructions: 'one sentence description'
       })
     )?.data;
 
