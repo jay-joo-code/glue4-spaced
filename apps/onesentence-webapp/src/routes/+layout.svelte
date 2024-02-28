@@ -1,5 +1,5 @@
 <script>
-  // import AppLayout from '$lib/components/glue/AppLayout.svelte';
+  import AppLayout from '$lib/components/glue/AppLayout.svelte';
   import { SvelteToast } from '@zerodevx/svelte-toast';
 
   const toastOptions = {
@@ -20,10 +20,9 @@
   <SvelteToast options={toastOptions} />
 </div>
 
-<!-- <AppLayout> -->
-<slot />
-
-<!-- </AppLayout> -->
+<AppLayout>
+  <slot />
+</AppLayout>
 
 <style>
   .toast-styles {
