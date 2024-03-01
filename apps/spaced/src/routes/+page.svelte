@@ -8,7 +8,6 @@
   import { shortcut } from '$lib/actions/shortcut';
   import IconRefresh from '$lib/icons/glue/IconRefresh.svelte';
   import { add, differenceInDays } from 'date-fns';
-  import { MyCounterButton } from '@glue/ui';
 
   let searchQuery = '';
   let searchResultCards = [];
@@ -94,7 +93,6 @@
 
 <PageContainer title="Home" layout="mobile-only">
   <div class="flex w-full justify-center">
-    <MyCounterButton />
     <div class="w-full max-w-3xl">
       <input
         type="text"
