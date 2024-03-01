@@ -1,32 +1,22 @@
-# Turborepo Svelte starter
+# Glue
 
-This is an official starter Turborepo.
+## Deploying an app
 
-## Using this example
+Vercel only allows up to 3 projects per GitHub repo. This means that I have to make a new repo for each project.
 
-Run the following command:
+1. Use the import repository feature on GitHub to make a duplicate of this repo
+2. Deploy a Vercel project based on the newly duplicated repo
+3. Add a new deploy script as a git alias
 
-```sh
-npx create-turbo@latest -e with-svelte
+```bash
+# add fork as git remote
+git remote add fork-APPNAME <FORK_GITHUB_URL>
+git fetch fork-APPNAME
+git checkout -b fork-APPNAME-main fork-APPNAME/main
+
+# pull changes from glue4 root to fork
+git checkout fork-APPNAME-main
+git rebase main
+git push fork-spaced HEAD:main
+git checkout main
 ```
-
-## What's inside?
-
-This Turborepo includes the following packages/apps:
-
-### Apps and Packages
-
-- `docs`: a [svelte-kit](https://kit.svelte.dev/) app
-- `web`: another [svelte-kit](https://kit.svelte.dev/) app
-- `ui`: a stub Svelte component library shared by both `web` and `docs` applications
-- `eslint-config-custom`: `eslint` configurations (includes `eslint-plugin-svelte` and `eslint-config-prettier`)
-
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
