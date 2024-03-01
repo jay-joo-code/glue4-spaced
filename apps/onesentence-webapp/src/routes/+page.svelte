@@ -1,14 +1,14 @@
 <script lang="ts">
   import { page } from '$app/stores';
-  import { SectionHero } from '@glue/ui';
+  import { DynamicSection } from '@glue/ui';
 
   $: ({ project } = $page?.data);
   $: pages = project?.expand['pages(project)'];
-  $: currentPage = pages && pages?.length > 0 ? pages[0] : null;
+  $: tempFirstPage = pages && pages?.length > 0 ? pages[0] : null; // TODO: dynamically parse current page
 </script>
 
-{#if currentPage}
-  {#each currentPage?.sections as section}
-    <SectionHero {...section} />
+{#if tempFirstPage}
+  {#each tempFirstPage?.sections as section}
+    <DynamicSection {section} />
   {/each}
 {/if}
