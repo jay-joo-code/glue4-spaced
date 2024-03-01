@@ -9,12 +9,6 @@ Vercel only allows up to 3 projects per GitHub repo. This means that I have to m
 3. Add a new deploy script as a git alias
 
 ```bash
-# create add-fork git alias
-# TODO:
-
-# add fork with the git alias
-# TODO:
-
 # manually add fork as git remote
 git remote add fork-APPNAME <FORK_GITHUB_URL>
 git fetch fork-APPNAME
@@ -24,14 +18,11 @@ git checkout -b fork-APPNAME-main fork-APPNAME/main
 git config --global alias.syncfork '!f() { git checkout fork-$1-main && git rebase main && git push fork-$1 HEAD:main && git checkout main; }; f'
 
 # sync fork with the git alias
+git syncfork APPNAME
 
 # manually sync fork
 git checkout fork-APPNAME-main
 git rebase main
 git push fork-APPNAME HEAD:main
 git checkout main
-```
-
-```bash
-git checkout fork-APPNAME-main && git rebase main && git push fork-spaced HEAD:main && git checkout main
 ```
