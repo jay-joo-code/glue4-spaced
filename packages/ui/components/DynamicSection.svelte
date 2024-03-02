@@ -3,12 +3,17 @@
   $: console.log('section', section);
 </script>
 
-<div class="border border-blue-500 w-full h-full grid-container relative">
-  <!-- TODO: responsive row count -->
-  {#each [...Array(section?.desktopRowCount).keys()] as count}
-    <div class="grid-row-1 bg-base-200"></div>
-  {/each}
-</div>
+{#if section}
+  <div
+    class="border border-blue-500 w-full grid-container"
+    style="--desktop-row-count:{section?.desktopRowCount};"
+  >
+    <!-- TODO: responsive row count -->
+    {#each [...Array(section?.desktopRowCount * 26).keys()] as _}
+      <div class="border border-base-content/10 rounded"></div>
+    {/each}
+  </div>
+{/if}
 
 <style scoped>
   .grid-container {
@@ -24,14 +29,14 @@
       var(--sqs-site-max-width, 1500px),
       calc(100vw - var(--sqs-site-gutter, 4vw) * 2 - var(--inset-padding))
     );
-    grid-template-rows: repeat(41, minmax(calc(var(--container-width) * 0.0215), auto));
+
+    /* TODO: --mobile-row-count */
+    grid-template-rows: repeat(
+      var(--desktop-row-count),
+      minmax(calc(var(--container-width) * 0.0215), auto)
+    );
     grid-template-columns:
       minmax(var(--grid-gutter), 1fr) repeat(24, minmax(0, var(--cell-max-width)))
       minmax(var(--grid-gutter), 1fr);
-  }
-
-  .grid-row-1 {
-    grid-area: 1/1/1/-1;
-    width: 100%;
   }
 </style>
