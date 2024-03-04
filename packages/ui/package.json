@@ -16,5 +16,9 @@
   "devDependencies": {
     "@glue/config-eslint": "*",
     "svelte": "^4.2.8"
+  },
+  "dependencies": {
+    "svelte-dnd-action": "^0.9.40",
+    "svelte-grid": "^5.1.2"
   }
 }
