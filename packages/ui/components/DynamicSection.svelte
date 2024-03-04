@@ -12,7 +12,8 @@
       24: gridHelp.item({
         x: 2,
         y: 8,
-        w: 10
+        w: 10,
+        h: 1
       }),
       id: id(),
       variant: 'TEXT',
@@ -27,8 +28,9 @@
     {
       24: gridHelp.item({
         x: 2,
-        y: 14,
-        w: 10
+        y: 15,
+        w: 10,
+        h: 1
       }),
       id: id(),
       variant: 'TEXT',
@@ -48,7 +50,7 @@
 
 {#if section}
   <div class="border border-transparent hover:border-blue-600 w-full min-h-[80vh]">
-    <Grid bind:items gap={[11, 11]} rowHeight={40} let:item let:dataItem cols={[[1100, 24]]}>
+    <Grid bind:items gap={[11, 11]} rowHeight={30} let:item let:dataItem cols={[[1100, 24]]}>
       <div class="hover:border-blue-400 border border-transparent w-full h-full">
         <div
           class="border-2 border-transparent hover:border-blue-400 w-full"
@@ -62,3 +64,13 @@
     </Grid>
   </div>
 {/if}
+
+<style>
+  :global(.svlt-grid-item) {
+    height: unset !important;
+  }
+  :global(.svlt-grid-shadow) {
+    background: oklch(var(--bc)) !important;
+    opacity: 0.4;
+  }
+</style>
