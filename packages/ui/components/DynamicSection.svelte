@@ -1,7 +1,6 @@
 <script lang="ts">
   import Grid from 'svelte-grid';
   import gridHelp from 'svelte-grid/build/helper/index.mjs';
-  import { clickOutsideAction } from '@glue/utils';
 
   export let section;
 
@@ -56,17 +55,20 @@
 </script>
 
 {#if section}
-  <div class="border border-transparent hover:border-blue-400 w-full min-h-[80vh]">
+  <div
+    class="border border-transparent hover:border-blue-400 w-full min-h-[80vh]"
+    on:click={() => {
+      selectedItemId = null;
+    }}
+  >
     <Grid bind:items gap={[11, 11]} rowHeight={30} let:item let:dataItem cols={[[1100, 24]]}>
       <div class="w-full h-full">
         <div
           class="focus:border-blue-400 border border-transparent w-full rounded p-1"
           contenteditable={true}
-          on:focus={() => {
-            // HACK: setTimeout used to run after outside click handler
-            setTimeout(() => {
-              selectedItemId = dataItem.id;
-            });
+          on:click={(event) => {
+            selectedItemId = dataItem.id;
+            event.stopPropagation();
           }}
         >
           <h2 class={Object.values(dataItem?.styles)?.join(' ')}>
@@ -79,13 +81,7 @@
 
   <!-- edit styles panel -->
   {#if selectedItemId}
-    <div
-      class="fixed right-4 top-[50%] -translate-y-1/2 z-20"
-      use:clickOutsideAction
-      on:click_outside={() => {
-        selectedItemId = null;
-      }}
-    >
+    <div class="fixed right-4 top-[50%] -translate-y-1/2 z-20">
       <div class="px-4 py-6 shadow bg-base-300 rounded-box w-52 border border-base-content/20">
         <h3 class="uppercase text-sm font-extrabold mb-3 ml-1 text-base-content/80">Text</h3>
         <button
