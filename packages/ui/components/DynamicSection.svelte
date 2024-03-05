@@ -61,7 +61,15 @@
       selectedItemId = null;
     }}
   >
-    <Grid bind:items gap={[11, 11]} rowHeight={30} let:item let:dataItem cols={[[1100, 24]]}>
+    <Grid
+      bind:items
+      gap={[11, 11]}
+      rowHeight={30}
+      let:item
+      let:dataItem
+      cols={[[1100, 24]]}
+      fastStart={true}
+    >
       <div class="w-full h-full">
         <div
           class="focus:border-blue-400 border border-transparent w-full rounded p-1"
