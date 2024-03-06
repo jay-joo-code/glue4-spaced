@@ -46,5 +46,8 @@ export { default as IconSadFace } from './icons/IconSadFace.svelte';
 export { default as IconSearch } from './icons/IconSearch.svelte';
 export { default as IconSeat } from './icons/IconSeat.svelte';
 export { default as IconStarFilled } from './icons/IconStarFilled.svelte';
+export { default as IconTextAlignCenter } from './icons/IconTextAlignCenter.svelte';
+export { default as IconTextAlignLeft } from './icons/IconTextAlignLeft.svelte';
+export { default as IconTextAlignRight } from './icons/IconTextAlignRight.svelte';
 export { default as IconUpArrow } from './icons/IconUpArrow.svelte';
 export { default as IconUpKarat } from './icons/IconUpKarat.svelte';

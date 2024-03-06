@@ -2,6 +2,7 @@
   import Grid from 'svelte-grid';
   import debounce from 'just-debounce-it';
   import { pb } from '../glue/pocketbase';
+  import { IconTextAlignRight, IconTextAlignLeft, IconTextAlignCenter } from '@glue/ui';
 
   export let section;
 
@@ -91,33 +92,57 @@
 <!-- edit styles panel -->
 {#if selectedItemId}
   <div class="fixed right-4 top-[50%] -translate-y-1/2 z-20">
-    <div class="px-4 py-6 shadow bg-base-300 rounded-box w-52 border border-base-content/20">
-      <h3 class="uppercase text-sm font-extrabold mb-3 ml-1 text-base-content/80">Text</h3>
+    <div class="px-4 pt-2 pb-6 shadow bg-base-300 rounded-box w-52 border border-base-content/20">
+      <h3 class="uppercase text-sm font-extrabold mt-5 mb-2 ml-1 text-base-content/80">Text</h3>
       <button
-        class="btn btn-ghost btn-block text-left justify-start btn-sm pl-1"
+        class="btn my-0.5 btn-block text-left justify-start btn-sm pl-2"
         on:click={(event) => {
           updateSelectedItemStyles({ styleKey: 'fontSize', styleValue: 'text-7xl' });
         }}
         >Heading 1
       </button>
       <button
-        class="btn btn-ghost btn-block text-left justify-start btn-sm pl-1"
+        class="btn my-0.5 btn-block text-left justify-start btn-sm pl-2"
         on:click={() => {
           updateSelectedItemStyles({ styleKey: 'fontSize', styleValue: 'text-3xl' });
         }}>Heading 2</button
       >
       <button
-        class="btn btn-ghost btn-block text-left justify-start btn-sm pl-1"
+        class="btn my-0.5 btn-block text-left justify-start btn-sm pl-2"
         on:click={() => {
           updateSelectedItemStyles({ styleKey: 'fontSize', styleValue: 'text-md' });
         }}>Body</button
       >
       <button
-        class="btn btn-ghost btn-block text-left justify-start btn-sm pl-1"
+        class="btn my-0.5 btn-block text-left justify-start btn-sm pl-2"
         on:click={() => {
           updateSelectedItemStyles({ styleKey: 'fontSize', styleValue: 'text-sm' });
         }}>Meta</button
       >
+
+      <h3 class="uppercase text-sm font-extrabold mt-5 mb-2 ml-1 text-base-content/80">
+        Text Align
+      </h3>
+      <div class="flex items-center space-x-2">
+        <button
+          class="btn btn-sm text-xl"
+          on:click={() => {
+            updateSelectedItemStyles({ styleKey: 'textAlign', styleValue: 'text-left' });
+          }}><IconTextAlignLeft /></button
+        >
+        <button
+          class="btn btn-sm text-xl"
+          on:click={() => {
+            updateSelectedItemStyles({ styleKey: 'textAlign', styleValue: 'text-center' });
+          }}><IconTextAlignCenter /></button
+        >
+        <button
+          class="btn btn-sm text-xl"
+          on:click={() => {
+            updateSelectedItemStyles({ styleKey: 'textAlign', styleValue: 'text-right' });
+          }}><IconTextAlignRight /></button
+        >
+      </div>
     </div>
   </div>
 {/if}
