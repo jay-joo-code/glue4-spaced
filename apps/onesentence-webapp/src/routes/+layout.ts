@@ -9,7 +9,7 @@ export const load: Load = async ({ fetch }) => {
     currentUser.set(null);
   }
 
-  const projectId = 'x924v9210oj0d0l'; // TODO: dynamically fetch project id from deployment url
+  const projectId = 'x924v9210oj0d0l'; // TODO: dynamically fetch project id from deployment subdomain
 
   const fetchProject = async () => {
     return await pb.collection('projects').getOne(projectId, {

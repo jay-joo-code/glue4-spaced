@@ -52,6 +52,7 @@
     "resend": "^1.1.0",
     "showdown": "^2.1.0",
     "svelte-email": "^0.0.4",
+    "svelte-grid": "^5.1.2",
     "svelte-intersection-observer": "^1.0.0",
     "universal-cookie": "^4.0.4"
   }

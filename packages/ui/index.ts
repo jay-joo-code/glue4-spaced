@@ -1,4 +1,3 @@
-export { default as DynamicSection } from './components/DynamicSection.svelte';
 export { default as FeedbackButtonModal } from './components/FeedbackButtonModal.svelte';
 export { default as MyCounterButton } from './components/MyCounterButton.svelte';
 export { default as Navbar } from './components/Navbar.svelte';
