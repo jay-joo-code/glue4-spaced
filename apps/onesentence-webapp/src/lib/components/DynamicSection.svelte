@@ -1,19 +1,24 @@
 <script lang="ts">
   import Grid from 'svelte-grid';
   import debounce from 'just-debounce-it';
-  import { pb } from '../glue/pocketbase';
-  import { IconTextAlignRight, IconTextAlignLeft, IconTextAlignCenter } from '@glue/ui';
+  import { currentUser, pb } from '../glue/pocketbase';
+  import { IconAdd, IconTextAlignRight, IconTextAlignLeft, IconTextAlignCenter } from '@glue/ui';
+  import { page } from '$app/stores';
+  import { invalidateAll } from '$app/navigation';
 
   export let section;
+  export let nextSectionOrder;
 
   let selectedItemId: string | null = null;
-  let items =
-    section.expand['items(section)'].map((item) => ({
-      ...item,
-      ...item.position
-    })) || [];
+  let items = section?.expand
+    ? section?.expand['items(section)']?.map((item) => ({
+        ...item,
+        ...item.position
+      })) || []
+    : [];
   const COL_COUNT = 24; // TODO: make responsive
   let container;
+  let isAddSectionLoading = false;
 
   const updateSelectedItemStyles = ({ styleKey, styleValue }) => {
     items = items.map((item) => {
@@ -41,10 +46,26 @@
       }
     });
   }, 500);
+
+  const handleAddSection = async () => {
+    isAddSectionLoading = true;
+    const order = nextSectionOrder
+      ? Math.floor(section?.order + (nextSectionOrder - section?.order) / 2)
+      : section?.order + 1000;
+    await pb.collection('sections').create({
+      project: section?.project,
+      user: $currentUser?.id,
+      path: $page.url.pathname,
+      order,
+      template: null
+    });
+    await invalidateAll();
+    isAddSectionLoading = false;
+  };
 </script>
 
 <div
-  class="border border-transparent hover:border-blue-400 w-full min-h-[80vh]"
+  class="border border-transparent hover:border-blue-400 w-full min-h-[80vh] group relative"
   on:click={() => {
     selectedItemId = null;
   }}
@@ -87,12 +108,29 @@
       {/if}
     </div>
   </Grid>
+
+  <div class="absolute bottom-[-16px] hidden group-hover:flex left-0 right-0 justify-center">
+    <div class="bg-base-100">
+      <button
+        class="btn btn-sm btn-primary"
+        on:click={handleAddSection}
+        disabled={isAddSectionLoading}
+      >
+        {#if isAddSectionLoading}
+          <span class="loading loading-spinner loading-xs" />
+        {:else}
+          <IconAdd />
+        {/if}
+        Add section</button
+      >
+    </div>
+  </div>
 </div>
 
 <!-- edit styles panel -->
 {#if selectedItemId}
   <div class="fixed right-4 top-[50%] -translate-y-1/2 z-20">
-    <div class="px-4 pt-2 pb-6 shadow bg-base-300 rounded-box w-52 border border-base-content/20">
+    <div class="px-4 pt-2 pb-6 shadow bg-base-300 rounded w-52 border border-base-content/20">
       <h3 class="uppercase text-sm font-extrabold mt-5 mb-2 ml-1 text-base-content/80">Text</h3>
       <button
         class="btn my-0.5 btn-block text-left justify-start btn-sm pl-2"
