@@ -12,9 +12,11 @@
   } from '@glue/ui';
   import { page } from '$app/stores';
   import { invalidateAll } from '$app/navigation';
+  import { toast } from '@zerodevx/svelte-toast';
 
   export let section;
   export let nextSectionOrder;
+  export let isLastSection;
 
   let selectedItemId: string | null = null;
   let items = section?.expand
@@ -73,8 +75,12 @@
 
   const handleDeleteSection = async () => {
     isDeleteSectionLoading = true;
-    await pb.collection('sections').delete(section?.id);
-    await invalidateAll();
+    if (isLastSection) {
+      toast.push("You can't delete the only section on the page");
+    } else {
+      await pb.collection('sections').delete(section?.id);
+      await invalidateAll();
+    }
     isDeleteSectionLoading = false;
   };
 </script>

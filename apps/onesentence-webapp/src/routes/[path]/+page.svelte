@@ -11,6 +11,7 @@
     <DynamicSection
       {section}
       nextSectionOrder={idx === sections?.length - 1 ? null : sections[idx + 1]?.order}
+      isLastSection={sections?.length === 1}
     />
   {/each}
 </div>
