@@ -2,7 +2,14 @@
   import Grid from 'svelte-grid';
   import debounce from 'just-debounce-it';
   import { currentUser, pb } from '../glue/pocketbase';
-  import { IconAdd, IconTextAlignRight, IconTextAlignLeft, IconTextAlignCenter } from '@glue/ui';
+  import {
+    IconAdd,
+    IconTextAlignRight,
+    IconTextAlignLeft,
+    IconTextAlignCenter,
+    IconSettings,
+    IconDelete
+  } from '@glue/ui';
   import { page } from '$app/stores';
   import { invalidateAll } from '$app/navigation';
 
@@ -19,6 +26,7 @@
   const COL_COUNT = 24; // TODO: make responsive
   let container;
   let isAddSectionLoading = false;
+  let isDeleteSectionLoading = false;
 
   const updateSelectedItemStyles = ({ styleKey, styleValue }) => {
     items = items.map((item) => {
@@ -61,6 +69,13 @@
     });
     await invalidateAll();
     isAddSectionLoading = false;
+  };
+
+  const handleDeleteSection = async () => {
+    isDeleteSectionLoading = true;
+    await pb.collection('sections').delete(section?.id);
+    await invalidateAll();
+    isDeleteSectionLoading = false;
   };
 </script>
 
@@ -109,6 +124,7 @@
     </div>
   </Grid>
 
+  <!-- add section button -->
   <div class="absolute bottom-[-16px] hidden group-hover:flex left-0 right-0 justify-center">
     <div class="bg-base-100">
       <button
@@ -123,6 +139,41 @@
         {/if}
         Add section</button
       >
+    </div>
+  </div>
+
+  <!-- top right toolbar -->
+  <div class="absolute top-4 hidden group-hover:flex right-4 justify-center items-center">
+    <div class="bg-base-100">
+      <div class="dropdown dropdown-end">
+        <div
+          class="btn btn-primary text-2xl btn-sm py-2 h-[unset] mb-2"
+          tabindex="0"
+          role="button"
+          disabled={isDeleteSectionLoading || undefined}
+        >
+          {#if isDeleteSectionLoading}
+            <span class="loading loading-spinner loading" />
+          {:else}
+            <IconSettings />
+          {/if}
+        </div>
+        <ul
+          tabindex="0"
+          class="dropdown-content z-[1] menu p-2 shadow bg-base-300 rounded-box w-48"
+        >
+          <li>
+            <button
+              class={isDeleteSectionLoading ? 'text-base-content/60' : 'text-error'}
+              on:click={handleDeleteSection}
+              disabled={isDeleteSectionLoading}
+            >
+              <IconDelete />
+              Delete
+            </button>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </div>

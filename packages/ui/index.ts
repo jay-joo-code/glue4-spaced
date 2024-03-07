@@ -45,6 +45,7 @@ export { default as IconRugbyBall } from './icons/IconRugbyBall.svelte';
 export { default as IconSadFace } from './icons/IconSadFace.svelte';
 export { default as IconSearch } from './icons/IconSearch.svelte';
 export { default as IconSeat } from './icons/IconSeat.svelte';
+export { default as IconSettings } from './icons/IconSettings.svelte';
 export { default as IconStarFilled } from './icons/IconStarFilled.svelte';
 export { default as IconTextAlignCenter } from './icons/IconTextAlignCenter.svelte';
 export { default as IconTextAlignLeft } from './icons/IconTextAlignLeft.svelte';
