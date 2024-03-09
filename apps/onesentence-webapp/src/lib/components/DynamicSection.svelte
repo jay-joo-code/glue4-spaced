@@ -8,27 +8,39 @@
     IconTextAlignLeft,
     IconTextAlignCenter,
     IconSettings,
-    IconDelete
+    IconDelete,
+    IconAddItem
   } from '@glue/ui';
   import { page } from '$app/stores';
   import { invalidateAll } from '$app/navigation';
   import { toast } from '@zerodevx/svelte-toast';
+  import gridHelp from 'svelte-grid/build/helper/index.mjs';
+  import { onMount } from 'svelte';
 
   export let section;
   export let nextSectionOrder;
   export let isLastSection;
 
   let selectedItemId: string | null = null;
-  let items = section?.expand
-    ? section?.expand['items(section)']?.map((item) => ({
-        ...item,
-        ...item.position
-      })) || []
-    : [];
+  let items = [];
   const COL_COUNT = 24; // TODO: make responsive
   let container;
   let isAddSectionLoading = false;
   let isDeleteSectionLoading = false;
+  let isAddItemLoading = false;
+
+  onMount(() => {
+    parseItems();
+  });
+
+  const parseItems = () => {
+    items = section?.expand
+      ? section?.expand['items(section)']?.map((item) => ({
+          ...item,
+          ...item.position
+        })) || []
+      : [];
+  };
 
   const updateSelectedItemStyles = ({ styleKey, styleValue }) => {
     items = items.map((item) => {
@@ -83,6 +95,34 @@
     }
     isDeleteSectionLoading = false;
   };
+
+  const addItem = async ({ variant }) => {
+    isAddItemLoading = true;
+
+    switch (variant) {
+      case 'TEXT': {
+        await pb.collection('items').create({
+          user: $currentUser?.id,
+          section: section?.id,
+          variant,
+          value: 'Text',
+          position: {
+            [COL_COUNT]: gridHelp.item({
+              x: 12,
+              y: 2,
+              h: 1,
+              w: 2
+            })
+          },
+          styles: {}
+        });
+      }
+    }
+    await invalidateAll();
+    parseItems();
+
+    isAddItemLoading = false;
+  };
 </script>
 
 <div
@@ -107,9 +147,9 @@
     <div class="w-full h-full">
       {#if dataItem?.variant === 'TEXT'}
         <p
-          class="{Object.values(dataItem?.styles)?.join(
-            ' '
-          )} focus:border-blue-400 border border-transparent w-full rounded p-2"
+          class="{dataItem?.styles
+            ? Object.values(dataItem?.styles)?.join(' ')
+            : ''} focus:border-blue-400 border border-transparent w-full rounded p-2"
           contenteditable={true}
           on:click={(event) => {
             selectedItemId = dataItem.id;
@@ -149,7 +189,39 @@
   </div>
 
   <!-- top right toolbar -->
-  <div class="absolute top-4 hidden group-hover:flex right-4 justify-center items-center">
+  <div class="absolute top-4 hidden group-hover:flex right-4 justify-center items-center space-x-3">
+    <div class="bg-base-100">
+      <div class="dropdown dropdown-end">
+        <div
+          class="btn btn-primary text-2xl btn-sm py-2 h-[unset] mb-2"
+          tabindex="0"
+          role="button"
+          disabled={isAddItemLoading || undefined}
+        >
+          {#if isAddItemLoading}
+            <span class="loading loading-spinner" />
+          {:else}
+            <IconAddItem />
+          {/if}
+        </div>
+        <ul
+          tabindex="0"
+          class="dropdown-content z-[1] menu p-2 shadow bg-base-300 rounded-box w-48"
+        >
+          <li>
+            <button
+              on:click={() => {
+                addItem({ variant: 'TEXT' });
+              }}
+              disabled={isAddItemLoading}
+            >
+              Text
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+
     <div class="bg-base-100">
       <div class="dropdown dropdown-end">
         <div
@@ -159,7 +231,7 @@
           disabled={isDeleteSectionLoading || undefined}
         >
           {#if isDeleteSectionLoading}
-            <span class="loading loading-spinner loading" />
+            <span class="loading loading-spinner" />
           {:else}
             <IconSettings />
           {/if}

@@ -4,6 +4,7 @@ export { default as Navbar } from './components/Navbar.svelte';
 export { default as SectionHero } from './components/SectionHero.svelte';
 export { default as Textarea } from './components/Textarea.svelte';
 export { default as IconAdd } from './icons/IconAdd.svelte';
+export { default as IconAddItem } from './icons/IconAddItem.svelte';
 export { default as IconAlertCircle } from './icons/IconAlertCircle.svelte';
 export { default as IconBack } from './icons/IconBack.svelte';
 export { default as IconBookmarkFilled } from './icons/IconBookmarkFilled.svelte';
