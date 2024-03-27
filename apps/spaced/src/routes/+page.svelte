@@ -145,6 +145,9 @@
                 <IconRefresh />
               {/if}
               Reset space
+              {#if !isResetSpaceLoading}
+                ({todayFlashcards?.length})
+              {/if}
             </button>
             <button class="btn-secondary btn-sm btn" on:click={addCard} disabled={isAddCardLoading}>
               {#if isAddCardLoading}
