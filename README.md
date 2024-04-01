@@ -15,7 +15,7 @@ git fetch fork-APPNAME
 git checkout -b fork-APPNAME-main fork-APPNAME/main
 
 # create syncfork git alias
-git config --global alias.syncfork '!f() { git checkout fork-$1-main && git rebase main && git push fork-$1 HEAD:main && git checkout main; }; f'
+git config --global alias.syncfork '!f() { git checkout fork-$1-main && git rebase main && git push fork-$1 HEAD:main -f && git checkout main; }; f'
 
 # sync fork with the git alias
 git syncfork APPNAME
