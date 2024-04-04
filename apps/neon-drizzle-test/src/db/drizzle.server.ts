@@ -1,8 +1,8 @@
 import { NEON_DATABASE_URL } from '$env/static/private';
-import { neon } from '@neondatabase/serverless';
-import { drizzle } from 'drizzle-orm/neon-http';
+import { drizzle } from 'drizzle-orm/postgres-js';
+import postgres from 'postgres';
 
-const sql = neon(NEON_DATABASE_URL);
-const db = drizzle(sql);
+const queryClient = postgres(NEON_DATABASE_URL);
+const db = drizzle(queryClient);
 
 export default db;
