@@ -26,3 +26,10 @@ git rebase main
 git push fork-APPNAME HEAD:main
 git checkout main
 ```
+
+## Adding a new package
+
+Use an existing package as a template.
+
+1. Change the name property in package.json
+2. Run `npm install` in the root of the monorepo
