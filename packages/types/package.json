@@ -1,5 +1,5 @@
 {
-  "name": "@glue/ui",
+  "name": "@glue/types",
   "version": "0.0.0",
   "type": "module",
   "module": "index.ts",
@@ -13,12 +13,7 @@
   "scripts": {
     "lint": "eslint ."
   },
-  "devDependencies": {
-    "@glue/config-eslint": "*",
-    "@glue/types": "*",
-    "svelte": "^4.2.8"
-  },
   "dependencies": {
-    "svelte-dnd-action": "^0.9.40"
+    "svelte": "^4.2.12"
   }
 }

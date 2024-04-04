@@ -1,8 +1,7 @@
-import { IconMessage } from '@glue/ui';
-import type { IPublicNav, IPrivateNav } from '$lib/types/glue/nav.type';
+import type { Nav } from '@glue/types';
 
-export const APP_NAME = 'OneSentence';
-export const PUBLIC_NAVS: IPublicNav[] = [
+export const APP_NAME = 'ND Test';
+export const PUBLIC_NAVS: Nav[] = [
   {
     label: 'Home',
     path: '/'
@@ -16,21 +15,18 @@ export const PUBLIC_NAVS: IPublicNav[] = [
     path: '/privacy-policy'
   }
 ];
-export const PRIVATE_NAVS: IPrivateNav[] = [
+export const PRIVATE_NAVS: Nav[] = [
   {
     label: 'My reservations',
-    path: '/profile/my-reservations',
-    icon: IconMessage
+    path: '/profile/my-reservations'
   },
   {
     label: 'Messages',
-    path: '/chatrooms/list',
-    icon: IconMessage
+    path: '/chatrooms/list'
   },
   {
     label: 'Driver dashboard',
-    path: '/driver-dashboard',
-    icon: IconMessage
+    path: '/driver-dashboard'
   }
 ];
 export const IS_GOOGLE_AUTH_ONLY = true;
