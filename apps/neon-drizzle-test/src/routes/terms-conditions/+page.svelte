@@ -1,9 +1,9 @@
 <script lang="ts">
-  import PageContainer from '$lib/components/glue/PageContainer.svelte';
+  import { PageContainer } from '@glue/ui';
   import { ADMIN_EMAIL, APP_NAME, PROD_DOMAIN } from '$root/src/lib/config';
 </script>
 
-<PageContainer title="Terms and conditions" layout="mobile-only">
+<PageContainer {APP_NAME} title="Terms and conditions" layout="mobile-only">
   <div class="document-previewer-wrapper-a717db max-w-full">
     <div data-custom-class="body">
       <div align="center" style="text-align: left;">

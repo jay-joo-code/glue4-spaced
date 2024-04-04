@@ -1,9 +1,9 @@
 <script>
-  import PageContainer from '$lib/components/glue/PageContainer.svelte';
+  import { PageContainer } from '@glue/ui';
   import { APP_NAME, ADMIN_EMAIL, PROD_DOMAIN } from '$root/src/lib/config';
 </script>
 
-<PageContainer title="Privacy policy" layout="mobile-only">
+<PageContainer {APP_NAME} title="Privacy policy" layout="mobile-only">
   <div class="document-previewer-wrapper-a717db max-w-full">
     <div data-custom-class="body">
       <div>
