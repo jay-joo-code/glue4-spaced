@@ -44,7 +44,7 @@
 </script>
 
 <PageContainer {APP_NAME}>
-  <div class="space-y-8 max-w-lg">
+  <div class="space-y-8 max-w-lg w-full">
     <!-- create todo -->
     {#if dev}
       <SuperDebug data={$form} />
@@ -68,9 +68,9 @@
 
     <!-- todos list -->
     {#await data.todos}
-      <div class="skeleton w-full h-18" />
-      <div class="skeleton w-full h-18" />
-      <div class="skeleton w-full h-18" />
+      <div class="skeleton w-full h-12" />
+      <div class="skeleton w-full h-12" />
+      <div class="skeleton w-full h-12" />
     {:then todos}
       <div class="space-y-2">
         {#each todos as todo (todo.id)}
