@@ -9,3 +9,9 @@ export const DELETE: RequestHandler = async ({ request }) => {
   const result = await db.delete(todosTable).where(eq(todosTable.id, todoId)).returning();
   return json(result);
 };
+
+export const PUT: RequestHandler = async ({ request }) => {
+  const { id, text } = await request.json();
+  const result = await db.update(todosTable).set({ text }).where(eq(todosTable.id, id)).returning();
+  return json(result);
+};

@@ -5,6 +5,7 @@
   import { APP_NAME } from '$lib/config';
   import { IconDelete, IconSearch, PageContainer } from '@glue/ui';
   import SuperDebug, { superForm } from 'sveltekit-superforms';
+  import debounce from 'just-debounce-it';
 
   export let data;
 
@@ -28,6 +29,18 @@
     await response.json();
     await invalidateAll();
   };
+
+  const handleUpdate = async (id: string, text: string) => {
+    await fetch('/api/todos', {
+      method: 'PUT',
+      body: JSON.stringify({ id, text }),
+      headers: {
+        'content-type': 'application/json'
+      }
+    });
+  };
+
+  const debouncedHandleUpdate = debounce(handleUpdate, 500);
 </script>
 
 <PageContainer {APP_NAME}>
@@ -61,8 +74,17 @@
     {:then todos}
       <div class="space-y-2">
         {#each todos as todo (todo.id)}
-          <div class="p-4 rounded border border-base-content/10 flex items-center justify-between">
-            <p class="">{todo.text}</p>
+          <div
+            class="rounded-xl border border-base-content/10 flex items-center justify-between space-x-4 pr-4"
+          >
+            <input
+              class="input rounded-xl w-full"
+              bind:value={todo.text}
+              on:input={(event) => {
+                if (event.currentTarget.value)
+                  debouncedHandleUpdate(todo.id, event.currentTarget.value);
+              }}
+            />
             <button
               class="btn text-xl btn-sm text-base-content/80"
               on:click={() => handleDelete(todo.id)}
