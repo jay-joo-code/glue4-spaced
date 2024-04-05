@@ -67,12 +67,12 @@
     </form>
 
     <!-- todos list -->
-    {#await data.todos}
-      <div class="skeleton w-full h-12" />
-      <div class="skeleton w-full h-12" />
-      <div class="skeleton w-full h-12" />
-    {:then todos}
-      <div class="space-y-2">
+    <div class="space-y-2">
+      {#await data.todos}
+        <div class="skeleton w-full h-12" />
+        <div class="skeleton w-full h-12" />
+        <div class="skeleton w-full h-12" />
+      {:then todos}
         {#each todos as todo (todo.id)}
           <div
             class="rounded-xl border border-base-content/10 flex items-center justify-between space-x-4 pr-4"
@@ -93,7 +93,7 @@
             </button>
           </div>
         {/each}
-      </div>
-    {/await}
+      {/await}
+    </div>
   </div>
 </PageContainer>
