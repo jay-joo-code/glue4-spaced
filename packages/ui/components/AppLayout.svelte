@@ -1,8 +1,10 @@
 <script lang="ts">
+  import { invalidateAll } from '$app/navigation';
   import { Navbar } from '@glue/ui';
   import { SvelteToast } from '@zerodevx/svelte-toast';
   import { format } from 'date-fns';
   import type { Nav } from '@glue/types';
+  import { onMount } from 'svelte';
 
   export let APP_NAME: string;
   export let PUBLIC_NAVS: Nav[];
@@ -57,6 +59,12 @@
       '--toastWidth': 'auto'
     }
   };
+
+  onMount(() => {
+    window.addEventListener('focus', () => {
+      invalidateAll();
+    });
+  });
 
   $: navGroups = [publicNavGroup];
 </script>
