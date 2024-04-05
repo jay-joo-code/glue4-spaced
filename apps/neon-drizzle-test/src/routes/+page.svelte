@@ -1,9 +1,9 @@
 <script lang="ts">
   import { dev } from '$app/environment';
-  import { goto } from '$app/navigation';
+  import { goto, invalidateAll } from '$app/navigation';
   import { page } from '$app/stores';
   import { APP_NAME } from '$lib/config';
-  import { IconSearch, PageContainer } from '@glue/ui';
+  import { IconDelete, IconSearch, PageContainer } from '@glue/ui';
   import SuperDebug, { superForm } from 'sveltekit-superforms';
 
   export let data;
@@ -14,6 +14,19 @@
   const handleSearch = () => {
     const path = searchQuery ? `/?q=${encodeURIComponent(searchQuery)}` : '/';
     goto(path, { keepFocus: true });
+  };
+
+  const handleDelete = async (todoId: string) => {
+    const response = await fetch('/api/todos', {
+      method: 'DELETE',
+      body: JSON.stringify({ todoId }),
+      headers: {
+        'content-type': 'application/json'
+      }
+    });
+
+    await response.json();
+    await invalidateAll();
   };
 </script>
 
@@ -47,9 +60,15 @@
       <div class="skeleton w-full h-18" />
     {:then todos}
       <div class="space-y-2">
-        {#each todos as todo}
-          <div class="p-4 rounded border border-base-content/10">
+        {#each todos as todo (todo.id)}
+          <div class="p-4 rounded border border-base-content/10 flex items-center justify-between">
             <p class="">{todo.text}</p>
+            <button
+              class="btn text-xl btn-sm text-base-content/80"
+              on:click={() => handleDelete(todo.id)}
+            >
+              <IconDelete />
+            </button>
           </div>
         {/each}
       </div>
