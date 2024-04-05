@@ -5,14 +5,19 @@ import { createInsertSchema } from 'drizzle-zod';
 import { message, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import type { Actions } from './$types';
-import { desc } from 'drizzle-orm';
+import { desc, like } from 'drizzle-orm';
 
 const addTodoSchema = createInsertSchema(todosTable);
 
-export const load: ServerLoad = async ({}) => {
+export const load: ServerLoad = async ({ url }) => {
   const fetchTodos = async () => {
-    const todos = await db.select().from(todosTable).orderBy(desc(todosTable.createdAt));
-    return todos;
+    const searchQuery = url.searchParams.get('q');
+
+    return await db
+      .select()
+      .from(todosTable)
+      .where(searchQuery ? like(todosTable.text, `%${searchQuery}%`) : undefined)
+      .orderBy(desc(todosTable.createdAt));
   };
 
   const addTodoForm = await superValidate(zod(addTodoSchema));
