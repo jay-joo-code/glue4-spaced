@@ -1,16 +1,24 @@
 <script lang="ts">
+  import { dev } from '$app/environment';
   import { invalidateAll } from '$app/navigation';
   import { APP_NAME } from '$lib/config';
   import { PageContainer } from '@glue/ui';
+  import { superForm } from 'sveltekit-superforms';
+  import SuperDebug from 'sveltekit-superforms';
 
   export let data;
+
+  const { form } = superForm(data.addTodoForm);
 </script>
 
 <PageContainer {APP_NAME}>
   <div class="space-y-8">
     <!-- create todo -->
+    {#if dev}
+      <SuperDebug data={$form} />
+    {/if}
     <form class="space-x-2" method="POST" action="?/addTodo">
-      <input class="input input-bordered w-full max-w-md" name="text" />
+      <input class="input input-bordered w-full max-w-md" name="text" bind:value={$form.text} />
       <button class="btn btn-primary">Add</button>
     </form>
 

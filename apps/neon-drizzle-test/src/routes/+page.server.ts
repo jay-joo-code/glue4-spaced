@@ -1,33 +1,35 @@
-import { fail, type ServerLoad } from '@sveltejs/kit';
 import db from '$src/db/drizzle.server';
 import { todosTable } from '$src/db/schema.server';
+import { fail, type ServerLoad } from '@sveltejs/kit';
+import { createInsertSchema } from 'drizzle-zod';
+import { message, superValidate } from 'sveltekit-superforms';
+import { zod } from 'sveltekit-superforms/adapters';
 import type { Actions } from './$types';
+import { desc } from 'drizzle-orm';
+
+const addTodoSchema = createInsertSchema(todosTable);
 
 export const load: ServerLoad = async ({}) => {
   const fetchTodos = async () => {
-    const todos = await db.select().from(todosTable);
+    const todos = await db.select().from(todosTable).orderBy(desc(todosTable.createdAt));
     return todos;
   };
 
+  const addTodoForm = await superValidate(zod(addTodoSchema));
+
   return {
-    todos: fetchTodos()
+    todos: fetchTodos(),
+    addTodoForm
   };
 };
 
 export const actions = {
-  addTodo: async (event) => {
-    const formData = await event.request.formData();
-    const text = formData.get('text') as string;
-    console.log('text', text);
+  addTodo: async ({ request }) => {
+    const form = await superValidate(request, zod(addTodoSchema));
 
-    if (!text) {
-      return fail(400, { message: 'Text is required' });
-    }
+    if (!form.valid) return fail(400, { form });
 
-    await db.insert(todosTable).values({
-      text
-    });
-
-    return { message: 'Todo added successfully' };
+    await db.insert(todosTable).values(form.data);
+    return message(form, 'Form posted successfully!');
   }
 } satisfies Actions;
