@@ -1,7 +1,8 @@
 <script lang="ts">
+  import { dev } from '$app/environment';
   import { APP_NAME } from '$root/src/lib/config';
   import { PageContainer, TextInput } from '@glue/ui';
-  import { superForm } from 'sveltekit-superforms';
+  import SuperDebug, { superForm } from 'sveltekit-superforms';
 
   export let data;
 
@@ -24,13 +25,28 @@
     {/each}
   {/await}
 
+  {#if dev}
+    <SuperDebug data={$form} />
+  {/if}
   <form use:enhance method="POST">
     <TextInput
       label="Origin"
-      name="origin"
       bind:value={$form.origin}
       errors={$errors.origin}
       constraints={$constraints.origin}
+    />
+    <TextInput
+      label="Destination"
+      bind:value={$form.destination}
+      errors={$errors.destination}
+      constraints={$constraints.destination}
+    />
+    <TextInput
+      label="Price ($)"
+      type="number"
+      bind:value={$form.price}
+      errors={$errors.price}
+      constraints={$constraints.price}
     />
   </form>
 </PageContainer>
