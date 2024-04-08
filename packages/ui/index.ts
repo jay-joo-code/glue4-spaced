@@ -4,6 +4,7 @@ export { default as MyCounterButton } from './components/MyCounterButton.svelte'
 export { default as Navbar } from './components/Navbar.svelte';
 export { default as PageContainer } from './components/PageContainer.svelte';
 export { default as SectionHero } from './components/SectionHero.svelte';
+export { default as TextInput } from './components/TextInput.svelte';
 export { default as Textarea } from './components/Textarea.svelte';
 export { default as IconAdd } from './icons/IconAdd.svelte';
 export { default as IconAddItem } from './icons/IconAddItem.svelte';
