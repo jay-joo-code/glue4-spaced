@@ -27,8 +27,8 @@ export const sessionTable = pgTable('session', {
 export const ridesTable = pgTable('rides', {
   id: uuid('id').defaultRandom().primaryKey(),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
-  origin: text('text').notNull(),
-  destination: text('text').notNull(),
-  price: integer('text').notNull(),
-  datetime: timestamp('timestamp1', { withTimezone: true }).notNull()
+  origin: text('origin').notNull(),
+  destination: text('destination').notNull(),
+  price: integer('price').notNull(),
+  datetime: timestamp('datetime', { withTimezone: true }).notNull()
 });
