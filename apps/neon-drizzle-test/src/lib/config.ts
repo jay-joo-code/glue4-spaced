@@ -7,6 +7,10 @@ export const PUBLIC_NAVS: Nav[] = [
     path: '/'
   },
   {
+    label: 'Sign up',
+    path: '/signup'
+  },
+  {
     label: 'Terms and Conditions',
     path: '/terms-conditions'
   },
