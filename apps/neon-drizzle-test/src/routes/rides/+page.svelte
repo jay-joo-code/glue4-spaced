@@ -1,12 +1,13 @@
 <script lang="ts">
   import { dev } from '$app/environment';
   import { APP_NAME } from '$root/src/lib/config';
-  import { PageContainer, TextInput } from '@glue/ui';
-  import SuperDebug, { superForm } from 'sveltekit-superforms';
+  import { PageContainer, TextInput, Textarea } from '@glue/ui';
+  import SuperDebug, { dateProxy, superForm } from 'sveltekit-superforms';
 
   export let data;
 
   const { form, enhance, errors, constraints } = superForm(data.form);
+  const proxyDatetime = dateProxy(form, 'datetime', { format: 'date' });
 </script>
 
 <PageContainer {APP_NAME} title="Rides CRUD">
@@ -28,7 +29,7 @@
   {#if dev}
     <SuperDebug data={$form} />
   {/if}
-  <form use:enhance method="POST">
+  <form class="space-y-4" use:enhance method="POST">
     <TextInput
       label="Origin"
       bind:value={$form.origin}
@@ -47,6 +48,19 @@
       bind:value={$form.price}
       errors={$errors.price}
       constraints={$constraints.price}
+    />
+    <Textarea
+      label="Description"
+      bind:value={$form.desc}
+      errors={$errors.desc}
+      constraints={$constraints.desc}
+    />
+    <TextInput
+      label="Date"
+      type="date"
+      bind:value={$proxyDatetime}
+      errors={$errors.datetime}
+      constraints={$constraints.datetime}
     />
   </form>
 </PageContainer>

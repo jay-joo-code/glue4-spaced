@@ -30,5 +30,6 @@ export const ridesTable = pgTable('rides', {
   origin: text('origin').notNull(),
   destination: text('destination').notNull(),
   price: integer('price').notNull(),
-  datetime: timestamp('datetime', { withTimezone: true }).notNull()
+  datetime: timestamp('datetime', { withTimezone: true }).notNull(),
+  desc: text('desc').notNull()
 });

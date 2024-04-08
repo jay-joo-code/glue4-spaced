@@ -1,35 +1,29 @@
 <script lang="ts">
-	import type { HTMLInputAttributes } from 'svelte/elements';
-	interface $$Props extends HTMLInputAttributes {
-		label?: string;
-		name?: string;
-	}
-	export let label: string = '';
-	export let name: string = '';
-	export let value: string = '';
+  import type { InputConstraint } from 'sveltekit-superforms';
+
+  export let value: string | number;
+  export let label: string | undefined = undefined;
+  export let errors: string[] | undefined = undefined;
+  export let constraints: InputConstraint | undefined = undefined;
 </script>
 
-<div class="form-control">
-	{#if label}
-		<label class="label" for={name}>{label}</label>
-	{/if}
-	<textarea
-		bind:value
-		on:blur
-		on:change
-		on:click
-		on:input
-		on:contextmenu
-		on:focus
-		on:keydown
-		on:keypress
-		on:keyup
-		on:mouseenter
-		on:mouseleave
-		on:mouseover
-		on:paste
-		{...$$restProps}
-		{name}
-		class={`${$$props.class} textarea h-24 w-full text-base placeholder:text-sm`}
-	/>
+<div class="form-control w-full">
+  {#if label}
+    <label class="label">
+      <span class="label-text">{label}</span>
+    </label>
+  {/if}
+  <textarea
+    bind:value
+    aria-invalid={errors ? 'true' : undefined}
+    {...constraints}
+    {...$$restProps}
+    class="{$$props.class} textarea h-24 w-full text-base placeholder:text-sm textarea-bordered"
+    class:input-error={errors?.length > 0}
+  />
+  {#if errors}
+    <label class="label">
+      <span class="label-text-alt text-error">{errors}</span>
+    </label>
+  {/if}
 </div>
