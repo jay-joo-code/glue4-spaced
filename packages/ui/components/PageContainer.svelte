@@ -1,6 +1,6 @@
 <script lang="ts">
   export let APP_NAME: string;
-  export let title = '';
+  export let title: string;
   export let layout: 'mobile-only' | 'aside-main' = 'mobile-only';
   export let isHoriPadding = true;
   export let isVertPadding = true;
