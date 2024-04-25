@@ -37,10 +37,14 @@ export const GET: RequestHandler = async ({ url, fetch }) => {
     const previousCloses = bars.slice(0, bars.length - 1).map((bar) => bar.c);
     const sma = previousCloses.reduce((acc, curr) => acc + curr, 0) / previousCloses.length;
     const status = latestClose > sma ? 'ABOVE' : 'BELOW';
-    return `${symbol}: ${status} ${latestClose.toFixed(2)} (SMA ${sma.toFixed(2)})`;
+    return {
+      simple: `${symbol}:${status}`,
+      verbose: `${symbol}:${status} ${latestClose.toFixed(2)} (SMA ${sma.toFixed(2)})`
+    };
   });
 
-  const mergedAnalyses = analysisBySymbol.join(' | ');
+  const analysisTitle = analysisBySymbol.map((analysis) => analysis.simple).join(' | ');
+  const analysisDesc = analysisBySymbol.map((analysis) => analysis.verbose).join(' | ');
 
-  return json({ success: true, mergedAnalyses });
+  return json({ success: true, analysisTitle, analysisDesc });
 };
