@@ -1,20 +1,21 @@
-import { boolean, integer, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
-
-export const todosTable = pgTable('todos', {
-  id: uuid('id').defaultRandom().primaryKey(),
-  text: text('text').notNull(),
-  done: boolean('done').default(false).notNull(),
-  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull()
-});
+import { boolean, integer, numeric, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
 export const userTable = pgTable('user', {
-  id: text('id').primaryKey(),
+  id: uuid('id').defaultRandom().primaryKey(),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+  updatedAt: timestamp('updated_at')
+    .notNull()
+    .$onUpdate(() => new Date()),
   username: text('username').notNull(),
   password: text('password').notNull()
 });
 
 export const sessionTable = pgTable('session', {
   id: text('id').primaryKey(),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+  updatedAt: timestamp('updated_at')
+    .notNull()
+    .$onUpdate(() => new Date()),
   userId: text('user_id')
     .notNull()
     .references(() => userTable.id),
@@ -24,12 +25,50 @@ export const sessionTable = pgTable('session', {
   }).notNull()
 });
 
-export const ridesTable = pgTable('rides', {
+export const itemTable = pgTable('item', {
   id: uuid('id').defaultRandom().primaryKey(),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
-  origin: text('origin').notNull(),
-  destination: text('destination').notNull(),
-  price: integer('price').notNull(),
+  updatedAt: timestamp('updated_at')
+    .notNull()
+    .$onUpdate(() => new Date()),
+  userId: text('user_id')
+    .notNull()
+    .references(() => userTable.id),
+  institution: text('institution').notNull(),
+  accessToken: text('access_token').notNull(),
+  cursor: text('cursor')
+});
+
+export const categoryTable = pgTable('category', {
+  id: text('id').primaryKey(),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+  updatedAt: timestamp('updated_at')
+    .notNull()
+    .$onUpdate(() => new Date()),
+  userId: text('user_id')
+    .notNull()
+    .references(() => userTable.id),
+  name: text('name').notNull()
+});
+
+export const transactionTable = pgTable('transaction', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+  updatedAt: timestamp('updated_at')
+    .notNull()
+    .$onUpdate(() => new Date()),
+  amount: numeric('amount').notNull(),
+  categoryId: text('category_id')
+    .notNull()
+    .references(() => categoryTable.id),
   datetime: timestamp('datetime', { withTimezone: true }).notNull(),
-  desc: text('desc').notNull()
+  authorizedDatetime: timestamp('authorized_datetime', { withTimezone: true }).notNull(),
+  usageDatetime: timestamp('usage_datetime', { withTimezone: true }).notNull(),
+  name: text('name').notNull(),
+  rawName: text('raw_name').notNull(),
+  merchantName: text('merchant_name').notNull(),
+  merchantEntityId: text('merchant_entity_id').notNull(),
+  merchantLogoUrl: text('logo_url').notNull(),
+  merchantWebsite: text('merchant_website').notNull(),
+  isPending: boolean('is_pending').notNull()
 });
