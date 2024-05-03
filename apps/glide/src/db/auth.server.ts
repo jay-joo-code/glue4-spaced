@@ -12,11 +12,6 @@ export const lucia = new Lucia(adapter, {
     attributes: {
       secure: !dev
     }
-  },
-  getUserAttributes: (attributes) => {
-    return {
-      username: attributes.username
-    };
   }
 });
 
@@ -25,8 +20,4 @@ declare module 'lucia' {
     Lucia: typeof lucia;
     DatabaseUserAttributes: DatabaseUserAttributes;
   }
-}
-
-interface DatabaseUserAttributes {
-  username: string;
 }
