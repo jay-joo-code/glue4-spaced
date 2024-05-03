@@ -35,7 +35,6 @@ export const GET: RequestHandler = async ({ url, params, cookies }) => {
       }
     });
     const user: OAuthUser = await response.json();
-    console.log('user', user);
 
     const existingUser = await (
       await db.select().from(userTable).where(eq(userTable.email, user.email)).limit(1)
@@ -75,7 +74,6 @@ export const GET: RequestHandler = async ({ url, params, cookies }) => {
       }
     });
   } catch (e) {
-    console.log('e', e);
     if (e instanceof OAuth2RequestError) {
       return error(400);
     }
