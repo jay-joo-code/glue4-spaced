@@ -1,13 +1,13 @@
-import { boolean, integer, numeric, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
+import { boolean, numeric, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
 export const userTable = pgTable('user', {
   id: uuid('id').defaultRandom().primaryKey(),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
   updatedAt: timestamp('updated_at')
     .notNull()
+    .defaultNow()
     .$onUpdate(() => new Date()),
-  username: text('username').notNull(),
-  password: text('password').notNull()
+  email: text('email')
 });
 
 export const sessionTable = pgTable('session', {
@@ -15,8 +15,9 @@ export const sessionTable = pgTable('session', {
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
   updatedAt: timestamp('updated_at')
     .notNull()
+    .defaultNow()
     .$onUpdate(() => new Date()),
-  userId: text('user_id')
+  userId: uuid('user_id')
     .notNull()
     .references(() => userTable.id),
   expiresAt: timestamp('expires_at', {
@@ -30,8 +31,9 @@ export const itemTable = pgTable('item', {
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
   updatedAt: timestamp('updated_at')
     .notNull()
+    .defaultNow()
     .$onUpdate(() => new Date()),
-  userId: text('user_id')
+  userId: uuid('user_id')
     .notNull()
     .references(() => userTable.id),
   institution: text('institution').notNull(),
@@ -40,12 +42,13 @@ export const itemTable = pgTable('item', {
 });
 
 export const categoryTable = pgTable('category', {
-  id: text('id').primaryKey(),
+  id: uuid('id').primaryKey(),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
   updatedAt: timestamp('updated_at')
     .notNull()
+    .defaultNow()
     .$onUpdate(() => new Date()),
-  userId: text('user_id')
+  userId: uuid('user_id')
     .notNull()
     .references(() => userTable.id),
   name: text('name').notNull()
@@ -56,9 +59,10 @@ export const transactionTable = pgTable('transaction', {
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
   updatedAt: timestamp('updated_at')
     .notNull()
+    .defaultNow()
     .$onUpdate(() => new Date()),
   amount: numeric('amount').notNull(),
-  categoryId: text('category_id')
+  categoryId: uuid('category_id')
     .notNull()
     .references(() => categoryTable.id),
   datetime: timestamp('datetime', { withTimezone: true }).notNull(),

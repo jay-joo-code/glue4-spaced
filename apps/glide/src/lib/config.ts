@@ -28,5 +28,5 @@ export const PRIVATE_NAVS: Nav[] = [
 export const IS_GOOGLE_AUTH_ONLY = true;
 export const IS_BETA = true;
 export const SENTRY_DSN_PUBLIC = '';
-// export const ADMIN_EMAIL = 'contact@revycarpool.com';
+export const ADMIN_EMAIL = 'glide.contact.team@gmail.com';
 // export const PROD_DOMAIN = 'https://www.revycarpool.com';
