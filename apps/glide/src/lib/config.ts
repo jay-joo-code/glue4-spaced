@@ -1,28 +1,35 @@
-import type { Nav } from '@glue/types';
+import type { FooterNav, Nav } from '@glue/types';
 
 export const APP_NAME = 'Glide';
 export const PUBLIC_NAVS: Nav[] = [
   {
     label: 'Home',
-    path: '/'
+    href: '/'
   },
   {
-    label: 'Sign up',
-    path: '/signup'
-  },
-  {
-    label: 'Terms and Conditions',
-    path: '/terms-conditions'
-  },
-  {
-    label: 'Privacy Policy',
-    path: '/privacy-policy'
+    label: 'Sign in',
+    href: '/login'
   }
 ];
 export const PRIVATE_NAVS: Nav[] = [
   {
     label: 'My reservations',
-    path: '/profile/my-reservations'
+    href: '/profile/my-reservations'
+  }
+];
+export const FOOTER_NAVS: FooterNav[] = [
+  {
+    heading: 'Legal',
+    nav: [
+      {
+        label: 'Terms and Conditions',
+        href: '/terms-conditions'
+      },
+      {
+        label: 'Privacy Policy',
+        href: '/privacy-policy'
+      }
+    ]
   }
 ];
 export const IS_GOOGLE_AUTH_ONLY = true;

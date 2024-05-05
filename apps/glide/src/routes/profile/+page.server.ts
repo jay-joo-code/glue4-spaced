@@ -5,10 +5,12 @@ import { redirect, type ServerLoad } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
 
 export const load: ServerLoad = async ({ url, locals }) => {
+  if (!locals.user) {
+    return redirect(302, protectedRouteRedirectUrl(url));
+  }
+
   const fetchUser = async () => {
-    if (!locals.user) {
-      return redirect(302, protectedRouteRedirectUrl(url));
-    }
+    if (!locals.user) return;
 
     const pause = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
     await pause(3000);

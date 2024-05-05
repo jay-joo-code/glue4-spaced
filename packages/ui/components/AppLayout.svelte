@@ -3,49 +3,13 @@
   import { Navbar } from '@glue/ui';
   import { SvelteToast } from '@zerodevx/svelte-toast';
   import { format } from 'date-fns';
-  import type { Nav } from '@glue/types';
+  import type { FooterNav, Nav } from '@glue/types';
   import { onMount } from 'svelte';
 
   export let APP_NAME: string;
   export let PUBLIC_NAVS: Nav[];
   export let PRIVATE_NAVS: Nav[];
-
-  const sitemap = [
-    {
-      label: 'About',
-      href: '/about'
-    },
-    {
-      label: 'Products',
-      isParent: true,
-      children: [
-        {
-          label: 'Editor',
-          href: '/editor'
-        },
-        {
-          label: 'Webapp',
-          href: '/webapp'
-        }
-      ]
-    }
-  ];
-
-  const publicNavGroup = {
-    heading: 'Product',
-    navs: PUBLIC_NAVS?.map(({ label, path }) => ({
-      label,
-      href: path
-    }))
-  };
-
-  const privateNavGroup = {
-    heading: 'My pages',
-    navs: PRIVATE_NAVS?.map(({ label, path }) => ({
-      label,
-      href: path
-    }))
-  };
+  export let FOOTER_NAVS: FooterNav[];
 
   const toastOptions = {
     dismissable: false,
@@ -65,8 +29,6 @@
       invalidateAll();
     });
   });
-
-  $: navGroups = [publicNavGroup];
 </script>
 
 <div class="toast-styles">
@@ -76,7 +38,7 @@
 <div class="w-screen">
   <Navbar
     appName={APP_NAME}
-    {sitemap}
+    sitemap={PUBLIC_NAVS}
     actionButtons={[
       {
         label: 'Sign in',
@@ -114,11 +76,13 @@
             </div>
             <div class="mt-12 grid grid-cols-1 gap-8 xl:col-span-2 xl:mt-0">
               <div class="grid grid-cols-2 gap-8 md:grid-cols-3">
-                {#each navGroups as navGroup}
+                {#each FOOTER_NAVS as footernavGroup}
                   <div>
-                    <h6 class="ml-1 text-lg font-bold text-base-content/80">{navGroup?.heading}</h6>
+                    <h6 class="ml-1 text-lg font-bold text-base-content/80">
+                      {footernavGroup?.heading}
+                    </h6>
                     <ul class="mt-4 space-y-1">
-                      {#each navGroup.navs as nav}
+                      {#each footernavGroup.nav as nav}
                         <li>
                           <a
                             href={nav.href}
