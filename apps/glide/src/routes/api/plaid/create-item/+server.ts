@@ -6,7 +6,7 @@ import { json, redirect } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 
 export const POST: RequestHandler = async ({ request, fetch, locals, url }) => {
-  if (!locals.user) return redirect(304, protectedRouteRedirectUrl(url));
+  if (!locals.user) return redirect(302, protectedRouteRedirectUrl(url));
 
   const { public_token, institution } = await request.json();
 

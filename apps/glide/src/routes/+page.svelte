@@ -1,14 +1,19 @@
 <script lang="ts">
   import { browser } from '$app/environment';
   import { enhance } from '$app/forms';
-  import { APP_NAME } from '$lib/config';
-  import { IconAdd, PageContainer } from '@glue/ui';
   import { invalidateAll } from '$app/navigation';
+  import { APP_NAME } from '$lib/config';
+  import { IconAdd, IconDelete, PageContainer } from '@glue/ui';
+  import { formatDistanceToNow } from 'date-fns';
 
   export let data;
   export let form;
 
   let isLoadingCreateIntegration = false;
+  let isLoadingDeleteItem = false;
+
+  let deleteItemId: string | null = null;
+  let dialog: HTMLDialogElement;
 
   $: if (browser && form?.link_token) {
     // @ts-expect-error
@@ -30,6 +35,24 @@
     });
     handler.open();
   }
+
+  const handleDeleteItem = async () => {
+    isLoadingDeleteItem = true;
+
+    await fetch('/api/item', {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        itemId: deleteItemId
+      })
+    });
+    await invalidateAll();
+    dialog.close();
+
+    isLoadingDeleteItem = false;
+  };
 </script>
 
 <PageContainer {APP_NAME} title="Home">
@@ -57,10 +80,58 @@
           <p class="text-sm text-base-content/80">Create an integration to get started</p>
         {:else}
           {#each items as item}
-            <p class="">{item.id}</p>
+            <div
+              class="flex justify-between items-center border border-base-content/10 rounded-xl px-4 py-2"
+            >
+              <div class="">
+                <p class="text-lg font-medium">{item.institution}</p>
+                <p class="text-xs text-base-content/80">
+                  Synced {formatDistanceToNow(item.updatedAt, { addSuffix: true })}
+                </p>
+              </div>
+              <button
+                class="btn btn-ghost"
+                on:click={() => {
+                  deleteItemId = item.id;
+                  dialog.showModal();
+                }}
+              >
+                <span class="text-xl">
+                  <IconDelete />
+                </span>
+              </button>
+            </div>
           {/each}
         {/if}
       {/await}
     </div>
   </section>
 </PageContainer>
+
+<dialog bind:this={dialog} class="modal cursor-pointer">
+  <div class="modal-box relative box-border max-h-[70vh] max-w-sm">
+    <h2 class="text-xl font-extrabold">Delete integration</h2>
+    <p class="text-sm text-base-content/80 mt-3">
+      This action will permanantly delete this integration. The integration cannot be recovered.
+    </p>
+    <div class="flex justify-end space-x-2 mt-6">
+      <button
+        class="btn btn-ghost btn-sm"
+        on:click={() => {
+          dialog.close();
+        }}>Cancel</button
+      >
+      <button class="btn btn-sm btn-error" on:click={handleDeleteItem}>
+        {#if isLoadingDeleteItem}
+          <span class="loading loading-spinner loading-sm" />
+        {:else}
+          Delete
+        {/if}
+      </button>
+    </div>
+  </div>
+
+  <form method="dialog" class="modal-backdrop">
+    <button>close</button>
+  </form>
+</dialog>
