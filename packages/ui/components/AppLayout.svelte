@@ -3,13 +3,14 @@
   import { Navbar } from '@glue/ui';
   import { SvelteToast } from '@zerodevx/svelte-toast';
   import { format } from 'date-fns';
-  import type { FooterNav, Nav } from '@glue/types';
+  import type { ActionButton, FooterNav, Nav } from '@glue/types';
   import { onMount } from 'svelte';
 
   export let APP_NAME: string;
   export let PUBLIC_NAVS: Nav[];
   export let PRIVATE_NAVS: Nav[];
   export let FOOTER_NAVS: FooterNav[];
+  export let ACTION_BUTTONS: ActionButton[];
 
   const toastOptions = {
     dismissable: false,
@@ -36,21 +37,7 @@
 </div>
 
 <div class="w-screen">
-  <Navbar
-    appName={APP_NAME}
-    sitemap={PUBLIC_NAVS}
-    actionButtons={[
-      {
-        label: 'Sign in',
-        href: '/sign-in'
-      },
-      {
-        label: 'Get starated',
-        href: '/get-started',
-        isPrimary: true
-      }
-    ]}
-  />
+  <Navbar appName={APP_NAME} sitemap={PUBLIC_NAVS} actionButtons={ACTION_BUTTONS} />
 
   <div class="flex flex-col items-center">
     <div class="relative w-full">

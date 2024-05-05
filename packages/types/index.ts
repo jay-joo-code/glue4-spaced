@@ -8,3 +8,9 @@ export type FooterNav = {
   heading: string;
   nav: Nav[];
 };
+
+export type ActionButton = {
+  label: string;
+  href: string;
+  variant: 'primary' | 'ghost';
+};

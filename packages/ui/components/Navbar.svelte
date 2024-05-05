@@ -1,7 +1,9 @@
 <script lang="ts">
+  import type { ActionButton, Nav } from '@glue/types';
+
   export let appName: string;
-  export let sitemap = [];
-  export let actionButtons = [];
+  export let sitemap: Nav[] = [];
+  export let actionButtons: ActionButton[] = [];
 
   // configs
   export let configLimitWidth = true;
@@ -33,7 +35,7 @@
           class="menu dropdown-content mt-3 z-[1] p-2 shadow bg-base-200 w-52 rounded-box font-medium"
         >
           {#each sitemap as navElt}
-            {#if navElt?.isParent}
+            {#if Boolean(navElt?.children)}
               <li>
                 <a>{navElt?.label}</a>
                 <ul class="p-2">
@@ -52,7 +54,8 @@
             {#each actionButtons as actionButton}
               <a
                 class="btn btn-sm last:hidden w-full btn-outline"
-                class:btn-primary={actionButton?.isPrimary}
+                class:btn-primary={actionButton?.variant === 'primary'}
+                class:btn-ghost={actionButton?.variant === 'ghost'}
                 href={actionButton?.href}>{actionButton?.label}</a
               >
             {/each}
@@ -67,7 +70,7 @@
     <div class="navbar-center hidden md:flex">
       <ul class="menu menu-horizontal px-1 font-medium tracking-wide">
         {#each sitemap as navElt}
-          {#if navElt?.isParent}
+          {#if Boolean(navElt?.children)}
             <li>
               <details>
                 <summary>{navElt?.label}</summary>
@@ -89,7 +92,8 @@
       {#each actionButtons as actionButton}
         <a
           class="btn btn-sm md:btn-md hidden last:flex md:flex"
-          class:btn-primary={actionButton?.isPrimary}
+          class:btn-primary={actionButton?.variant === 'primary'}
+          class:btn-ghost={actionButton?.variant === 'ghost'}
           href={actionButton?.href}>{actionButton?.label}</a
         >
       {/each}
