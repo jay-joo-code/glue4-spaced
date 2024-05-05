@@ -1,16 +1,7 @@
 import type { ActionButton, FooterNav, Nav } from '@glue/types';
 
 export const APP_NAME = 'Glide';
-export const PUBLIC_NAVS: Nav[] = [
-  {
-    label: 'Home',
-    href: '/'
-  },
-  {
-    label: 'Sign in',
-    href: '/login'
-  }
-];
+export const PUBLIC_NAVS: Nav[] = [];
 export const PRIVATE_NAVS: Nav[] = [
   {
     label: 'My reservations',
