@@ -38,7 +38,8 @@ export const itemTable = pgTable('item', {
     .references(() => userTable.id),
   institution: text('institution').notNull(),
   accessToken: text('access_token').notNull(),
-  cursor: text('cursor')
+  cursor: text('cursor'),
+  plaidItemId: text('plaid_item_id').notNull()
 });
 
 export const categoryTable = pgTable('category', {

@@ -3,38 +3,29 @@
   import { enhance } from '$app/forms';
   import { APP_NAME } from '$lib/config';
   import { IconAdd, PageContainer } from '@glue/ui';
+  import { invalidateAll } from '$app/navigation';
 
   export let data;
   export let form;
 
   let isLoadingCreateIntegration = false;
 
-  $: console.log('form', form);
   $: if (browser && form?.link_token) {
+    // @ts-expect-error
     const handler = window.Plaid?.create({
       token: form?.link_token,
-      onSuccess: (public_token, metadata) => {
-        console.log('public_token, metadata', public_token, metadata);
-        fetch('/api/plaid/create-item', {
+      onSuccess: async (public_token: string, metadata: any) => {
+        await fetch('/api/plaid/create-item', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
             public_token,
-            account_id: metadata.account_id,
             institution: metadata.institution.name
           })
         });
-      },
-      onLoad: () => {
-        console.log('onLoad');
-      },
-      onExit: (err, metadata) => {
-        console.log('err, metadata', err, metadata);
-      },
-      onEvent: (eventName, metadata) => {
-        console.log('eventName, metadata', eventName, metadata);
+        invalidateAll();
       }
     });
     handler.open();
