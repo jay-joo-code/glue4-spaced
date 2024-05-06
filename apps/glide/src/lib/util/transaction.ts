@@ -93,7 +93,8 @@ export const parseTransactionsCSV = (file: File): Promise<Omit<InsertTransaction
                 amount: Number(transaction.Amount),
                 date,
                 usageDate: date,
-                name
+                name,
+                source: 'chase'
               };
             });
           resolve(transactions);

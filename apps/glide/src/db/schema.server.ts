@@ -61,7 +61,8 @@ export const transactionTable = pgTable('transaction', {
   name: text('name').notNull(),
   merchantName: text('merchant_name'),
   merchantLogoUrl: text('logo_url'),
-  isIgnore: boolean('is_ignore').default(false)
+  isIgnore: boolean('is_ignore').default(false),
+  source: text('source').notNull()
 });
 
 export type InsertTransaction = typeof transactionTable.$inferInsert;
