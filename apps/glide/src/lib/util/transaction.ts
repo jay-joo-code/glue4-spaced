@@ -12,7 +12,9 @@ export const groupTransactionsByWeek = (transactions: SelectTransaction[]) => {
     let weekKey;
 
     if (transaction.usageDate) {
-      const weekStartDate = startOfWeek(transaction.usageDate, { weekStartsOn: 1 });
+      const weekStartDate = startOfWeek(parse(transaction.usageDate, 'yyyy-MM-dd', new Date()), {
+        weekStartsOn: 1
+      });
       weekKey = weekStartDate.toISOString().split('T')[0];
     } else {
       weekKey = 'DATE_UNSET';
@@ -103,6 +105,7 @@ export const parseTransactionsCSV = (file: File): Promise<Omit<InsertTransaction
               const match = transaction.Description.match(dateRegex);
               const postingDate = parse(transaction['Posting Date'], 'MM/dd/yyyy', new Date());
               const date = match ? parse(match[0], 'MM/dd', postingDate) : undefined;
+              const dateString = date ? format(date, 'yyyy-MM-dd') : undefined;
               const name = transaction.Description.replace(dateRegex, '')
                 .replace(/\s+/g, ' ')
                 .trim();
@@ -110,8 +113,8 @@ export const parseTransactionsCSV = (file: File): Promise<Omit<InsertTransaction
 
               return {
                 amount,
-                date,
-                usageDate: date,
+                date: dateString,
+                usageDate: dateString,
                 name,
                 source: 'chase',
                 identifier: transactionIdentifier(date, name, amount)
@@ -134,6 +137,7 @@ export const parseTransactionsCSV = (file: File): Promise<Omit<InsertTransaction
             )
             .map((transaction) => {
               const date = new Date(transaction._1);
+              const dateString = date ? format(date, 'yyyy-MM-dd') : undefined;
               const otherPersonName =
                 transaction._6 === 'Jay Joo' ? transaction._5 : transaction._6;
               const name = `${transaction._4} (${otherPersonName})`;
@@ -142,8 +146,8 @@ export const parseTransactionsCSV = (file: File): Promise<Omit<InsertTransaction
 
               return {
                 amount,
-                date,
-                usageDate: date,
+                date: dateString,
+                usageDate: dateString,
                 name,
                 source: 'venmo',
                 identifier: transactionIdentifier(date, name, amount)

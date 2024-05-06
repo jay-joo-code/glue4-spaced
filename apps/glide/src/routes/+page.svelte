@@ -2,8 +2,8 @@
   import { browser } from '$app/environment';
   import { invalidateAll } from '$app/navigation';
   import { APP_NAME } from '$lib/config';
-  import { PageContainer } from '@glue/ui';
-  import { format } from 'date-fns';
+  import { IconNewTab, PageContainer } from '@glue/ui';
+  import { format, parse } from 'date-fns';
   import { formatMoney, parseTransactionsCSV } from '../lib/util/transaction';
 
   export let data;
@@ -140,6 +140,25 @@
         on:input={handleFileUpload}
       />
     </label>
+
+    <div class="flex items-center space-x-4 mt-8">
+      <a
+        class="btn btn-sm btn-primary"
+        href="https://account.venmo.com/statement"
+        target="_blank"
+        rel="noreferrer"
+        >Venmo
+        <IconNewTab />
+      </a>
+      <a
+        class="btn btn-sm btn-primary"
+        href="https://secure.chase.com/web/auth/dashboard#/dashboard/accountDetails/downloadAccountTransactions/index;params=DDA,CHK,891906848"
+        target="_blank"
+        rel="noreferrer"
+        >Chase
+        <IconNewTab />
+      </a>
+    </div>
   </section>
 
   <section class="py-12 mt-8">
@@ -180,7 +199,10 @@
                           <p class="text-sm">{transaction.name}</p>
                           {#if transaction.usageDate}
                             <p class="text-sm text-base-content/60 mt-0.5">
-                              {format(transaction.usageDate, 'EEE MM/dd')}
+                              {format(
+                                parse(transaction.usageDate, 'yyyy-MM-dd', new Date()),
+                                'EEE MM/dd'
+                              )}
                             </p>
                           {:else}
                             <p class="text-sm text-base-content/60 mt-0.5">Date unset</p>
