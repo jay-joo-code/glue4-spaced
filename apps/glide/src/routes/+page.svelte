@@ -3,7 +3,7 @@
   import { enhance } from '$app/forms';
   import { invalidateAll } from '$app/navigation';
   import { APP_NAME } from '$lib/config';
-  import { IconAdd, IconDelete, PageContainer } from '@glue/ui';
+  import { IconAdd, IconDelete, IconRefresh, PageContainer } from '@glue/ui';
   import { formatDistanceToNow } from 'date-fns';
 
   export let data;
@@ -11,6 +11,7 @@
 
   let isLoadingCreateIntegration = false;
   let isLoadingDeleteItem = false;
+  let isLoadingSync = false;
 
   let deleteItemId: string | null = null;
   let dialog: HTMLDialogElement;
@@ -30,7 +31,8 @@
             institution: metadata.institution.name
           })
         });
-        invalidateAll();
+        await invalidateAll();
+        isLoadingCreateIntegration = false;
       }
     });
     handler.open();
@@ -53,13 +55,53 @@
 
     isLoadingDeleteItem = false;
   };
+
+  const handleSync = async () => {
+    isLoadingSync = true;
+
+    const response = await (
+      await fetch('/api/plaid/sync', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+    ).json();
+    console.log('response', response);
+    await invalidateAll();
+
+    isLoadingSync = false;
+  };
 </script>
 
 <PageContainer {APP_NAME} title="Home">
   <section class="py-12">
     <div class="flex justify-between items-center">
-      <p class="text-4xl font-extrabold">Integrations</p>
-      <form method="POST" action="?/createPlaidToken" use:enhance>
+      <div class="">
+        <h2 class="text-3xl font-extrabold">Expenses</h2>
+        <p class="text-base-content/80 text-sm mt-2">Track all of your expenses in one place</p>
+      </div>
+
+      <button class="btn btn-ghost" on:click={handleSync}>
+        {#if isLoadingSync}
+          <span class="loading loading-spinner loading-sm" />
+        {:else}
+          <span class="text-xl"><IconRefresh /></span>
+          Sync
+        {/if}
+      </button>
+    </div>
+  </section>
+  <section class="py-12">
+    <div class="flex justify-between items-center">
+      <h2 class="text-3xl font-extrabold">Integrations</h2>
+      <form
+        method="POST"
+        action="?/createPlaidToken"
+        use:enhance={() => {
+          isLoadingCreateIntegration = true;
+        }}
+      >
         <button class="btn btn-primary btn-sm">
           {#if isLoadingCreateIntegration}
             <span class="loading loading-spinner loading-sm" />

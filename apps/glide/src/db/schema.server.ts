@@ -42,8 +42,8 @@ export const itemTable = pgTable('item', {
   plaidItemId: text('plaid_item_id').notNull()
 });
 
-export const categoryTable = pgTable('category', {
-  id: uuid('id').primaryKey(),
+export const transactionTable = pgTable('transaction', {
+  id: uuid('id').defaultRandom().primaryKey(),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
   updatedAt: timestamp('updated_at')
     .notNull()
@@ -52,28 +52,16 @@ export const categoryTable = pgTable('category', {
   userId: uuid('user_id')
     .notNull()
     .references(() => userTable.id),
-  name: text('name').notNull()
-});
-
-export const transactionTable = pgTable('transaction', {
-  id: uuid('id').defaultRandom().primaryKey(),
-  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
-  updatedAt: timestamp('updated_at')
-    .notNull()
-    .defaultNow()
-    .$onUpdate(() => new Date()),
   amount: numeric('amount').notNull(),
-  categoryId: uuid('category_id')
-    .notNull()
-    .references(() => categoryTable.id),
-  datetime: timestamp('datetime', { withTimezone: true }).notNull(),
-  authorizedDatetime: timestamp('authorized_datetime', { withTimezone: true }).notNull(),
-  usageDatetime: timestamp('usage_datetime', { withTimezone: true }).notNull(),
+  category: text('category'),
+  categoryDetailed: text('category_detailed'),
+  datetime: timestamp('datetime', { withTimezone: true }),
+  usageDatetime: timestamp('usage_datetime', { withTimezone: true }),
+  isChangedDatetime: boolean('is_changed_datetime').default(false),
   name: text('name').notNull(),
-  rawName: text('raw_name').notNull(),
   merchantName: text('merchant_name').notNull(),
-  merchantEntityId: text('merchant_entity_id').notNull(),
-  merchantLogoUrl: text('logo_url').notNull(),
-  merchantWebsite: text('merchant_website').notNull(),
+  merchantLogoUrl: text('logo_url'),
   isPending: boolean('is_pending').notNull()
 });
+
+export type InsertTransaction = typeof transactionTable.$inferInsert;
