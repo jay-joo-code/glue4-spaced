@@ -1,4 +1,8 @@
-import type { ChaseTransaction, TransactionReduceGroup } from '$lib/types/transaction.type';
+import type {
+  ChaseTransaction,
+  TransactionReduceGroup,
+  VenmoTransaction
+} from '$lib/types/transaction.type';
 import type { InsertTransaction, SelectTransaction } from '$root/src/db/schema.server';
 import { endOfWeek, format, parse, startOfWeek } from 'date-fns';
 import Papa from 'papaparse';
@@ -65,17 +69,18 @@ export const formatMoney = (num: number) => {
 
 export const parseTransactionsCSV = (file: File): Promise<Omit<InsertTransaction, 'userId'>[]> => {
   return new Promise(async (resolve, reject) => {
-    Papa.parse<ChaseTransaction>(file, {
+    Papa.parse<ChaseTransaction | VenmoTransaction>(file, {
       download: true,
       header: true,
       skipEmptyLines: false,
       complete: (results) => {
         console.log('results', results);
         const CHASE_FIELDS = 'Details,Posting Date,Description,Amount,Type,Balance,Check or Slip #';
+        const VENDMO_FIELDS_SUBSTR = 'Account Statement - (@jj534)';
 
         if (results.meta.fields?.join(',') === CHASE_FIELDS) {
           const dateRegex = /(\d{2}\/\d{2})$/;
-          const transactions = results.data
+          const transactions = (results.data as ChaseTransaction[])
             .filter(
               (transaction) =>
                 transaction &&
@@ -98,6 +103,30 @@ export const parseTransactionsCSV = (file: File): Promise<Omit<InsertTransaction
               };
             });
           resolve(transactions);
+        } else if (results.meta.fields?.join(',').includes(VENDMO_FIELDS_SUBSTR)) {
+          const transactions = (results.data as VenmoTransaction[])
+            .filter(
+              (transaction) =>
+                transaction && transaction._1 && !['', 'Datetime'].includes(transaction._1)
+            )
+            .map((transaction) => {
+              const date = new Date(transaction._1);
+              const name = `${transaction._4} (${transaction._6})`;
+              const numericStr = transaction._7.replace(/[^0-9.-]/g, '');
+              let amount = parseFloat(numericStr);
+              if (transaction._7.startsWith('-')) amount *= -1;
+
+              return {
+                amount,
+                date,
+                usageDate: date,
+                name,
+                source: 'venmo'
+              };
+            });
+          resolve(transactions);
+        } else {
+          resolve([]);
         }
       }
     });
