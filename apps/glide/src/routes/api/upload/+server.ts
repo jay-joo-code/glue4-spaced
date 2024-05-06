@@ -19,7 +19,11 @@ export const POST: RequestHandler = async ({ request, url, locals }) => {
     };
   });
 
-  const transactions = await db.insert(transactionTable).values(newTransactions).returning();
+  const transactions = await db
+    .insert(transactionTable)
+    .values(newTransactions)
+    .onConflictDoNothing()
+    .returning();
 
   return json({ transactions });
 };

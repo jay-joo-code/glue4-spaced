@@ -11,6 +11,9 @@ export const load: ServerLoad = async ({ url, locals }) => {
 
   const fetchWeeklyExpenses = async () => {
     if (!locals.user) return;
+
+    // await db.delete(transactionTable).where(eq(transactionTable.userId, locals.user.id));
+
     const expenses = await db
       .select()
       .from(transactionTable)
@@ -20,7 +23,8 @@ export const load: ServerLoad = async ({ url, locals }) => {
           lt(transactionTable.amount, 0),
           eq(transactionTable.isIgnore, false)
         )
-      );
+      )
+      .limit(50);
 
     const weeklyExpenses = groupTransactionsByWeek(expenses);
     return weeklyExpenses;

@@ -62,7 +62,8 @@ export const transactionTable = pgTable('transaction', {
   merchantName: text('merchant_name'),
   merchantLogoUrl: text('logo_url'),
   isIgnore: boolean('is_ignore').default(false),
-  source: text('source').notNull()
+  source: text('source').notNull(),
+  identifier: text('identifier').unique().notNull() // immutable contact of date_name_amount
 });
 
 export type InsertTransaction = typeof transactionTable.$inferInsert;

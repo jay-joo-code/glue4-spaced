@@ -85,6 +85,7 @@
   const handleFileUpload = async (event: Event & { currentTarget: HTMLInputElement }) => {
     if (event.currentTarget?.files && event.currentTarget?.files?.length > 0) {
       const parsedTransactions = await parseTransactionsCSV(event.currentTarget?.files[0]);
+      console.log('parsedTransactions', parsedTransactions);
       await fetch('/api/upload', {
         method: 'POST',
         headers: {
@@ -149,7 +150,7 @@
         <span class="loading loading-spinner loading-sm" />
       {:then weeklyExpenses}
         {#if weeklyExpenses}
-          <div class="space-y-6">
+          <div class="space-y-8">
             {#each weeklyExpenses as { weekString, totalAmount, transactions }}
               <div class="">
                 <div class="flex items-center justify-between px-2">
@@ -176,6 +177,7 @@
                         </div>
                         <div class="text-right">
                           <p class="font-medium">{formatMoney(transaction.amount)}</p>
+                          <p class="text-sm text-base-content/60 mt-0.5">{transaction.source}</p>
                         </div>
                       </div>
 

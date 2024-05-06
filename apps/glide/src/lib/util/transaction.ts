@@ -13,7 +13,7 @@ export const groupTransactionsByWeek = (transactions: SelectTransaction[]) => {
 
     if (transaction.usageDate) {
       const weekStartDate = startOfWeek(transaction.usageDate, { weekStartsOn: 1 });
-      weekKey = weekStartDate.toISOString().slice(0, 10);
+      weekKey = weekStartDate.toISOString().split('T')[0];
     } else {
       weekKey = 'DATE_UNSET';
     }
@@ -25,19 +25,18 @@ export const groupTransactionsByWeek = (transactions: SelectTransaction[]) => {
     return groups;
   }, {});
 
-  return Object.entries(groups).map(([weekKey, transactions]) => {
+  const transactionGroups = Object.entries(groups).map(([weekKey, transactions]) => {
     let weekString;
 
     if (weekKey === 'DATE_UNSET') {
       weekString = 'Date unset';
     } else {
-      const date = new Date(weekKey);
-      const startOfWeekDate = startOfWeek(date);
-      const endOfWeekDate = endOfWeek(date);
-      const formattedStartDate = format(startOfWeekDate, 'MMM d');
+      const date = parse(weekKey, 'yyyy-MM-dd', new Date());
+      const endOfWeekDate = endOfWeek(date, { weekStartsOn: 1 });
+      const formattedStartDate = format(date, 'MMM dd');
       const formattedEndDate = format(
         endOfWeekDate,
-        startOfWeekDate.getMonth() === endOfWeekDate.getMonth() ? 'd' : 'MMM d'
+        date.getMonth() === endOfWeekDate.getMonth() ? 'dd' : 'MMM dd'
       );
       weekString = `${formattedStartDate} - ${formattedEndDate}`;
     }
@@ -49,6 +48,14 @@ export const groupTransactionsByWeek = (transactions: SelectTransaction[]) => {
       transactions
     };
   });
+
+  const index = transactionGroups.findIndex((obj) => obj.weekString === 'Date unset');
+  if (index !== -1) {
+    const [obj] = transactionGroups.splice(index, 1);
+    transactionGroups.unshift(obj);
+  }
+
+  return transactionGroups;
 };
 
 export const formatMoney = (num: number) => {
@@ -65,6 +72,11 @@ export const formatMoney = (num: number) => {
       return `$${num}`;
     }
   }
+};
+
+export const transactionIdentifier = (date: Date | undefined, name: string, amount: number) => {
+  const dateString = date ? format(date, 'MM/dd') : 'DATE_UNSET';
+  return `${dateString}_${name}_${amount}`;
 };
 
 export const parseTransactionsCSV = (file: File): Promise<Omit<InsertTransaction, 'userId'>[]> => {
@@ -85,43 +97,56 @@ export const parseTransactionsCSV = (file: File): Promise<Omit<InsertTransaction
               (transaction) =>
                 transaction &&
                 transaction.Description &&
-                !transaction.Description?.includes('POS DEBIT')
+                !transaction.Description.includes('POS DEBIT')
             )
             .map((transaction) => {
               const match = transaction.Description.match(dateRegex);
-              const date = match ? parse(match[0], 'MM/dd', new Date()) : undefined;
+              const postingDate = parse(transaction['Posting Date'], 'MM/dd/yyyy', new Date());
+              const date = match ? parse(match[0], 'MM/dd', postingDate) : undefined;
               const name = transaction.Description.replace(dateRegex, '')
                 .replace(/\s+/g, ' ')
                 .trim();
-
-              return {
-                amount: Number(transaction.Amount),
-                date,
-                usageDate: date,
-                name,
-                source: 'chase'
-              };
-            });
-          resolve(transactions);
-        } else if (results.meta.fields?.join(',').includes(VENDMO_FIELDS_SUBSTR)) {
-          const transactions = (results.data as VenmoTransaction[])
-            .filter(
-              (transaction) =>
-                transaction && transaction._1 && !['', 'Datetime'].includes(transaction._1)
-            )
-            .map((transaction) => {
-              const date = new Date(transaction._1);
-              const name = `${transaction._4} (${transaction._6})`;
-              const numericStr = transaction._7.replace(/[^0-9.-]/g, '');
-              let amount = parseFloat(numericStr);
-              if (transaction._7.startsWith('-')) amount *= -1;
+              const amount = Number(transaction.Amount);
 
               return {
                 amount,
                 date,
                 usageDate: date,
                 name,
-                source: 'venmo'
+                source: 'chase',
+                identifier: transactionIdentifier(date, name, amount)
+              };
+            })
+            .filter(
+              (transaction) =>
+                !transaction.name.includes('VENMO PAYMENT') &&
+                !transaction.name.includes('CAPITAL ONE CRCARDPMT')
+            );
+          resolve(transactions);
+        } else if (results.meta.fields?.join(',').includes(VENDMO_FIELDS_SUBSTR)) {
+          const transactions = (results.data as VenmoTransaction[])
+            .filter(
+              (transaction) =>
+                transaction &&
+                transaction._1 &&
+                transaction._6 !== '' &&
+                !['', 'Datetime'].includes(transaction._1)
+            )
+            .map((transaction) => {
+              const date = new Date(transaction._1);
+              const otherPersonName =
+                transaction._6 === 'Jay Joo' ? transaction._5 : transaction._6;
+              const name = `${transaction._4} (${otherPersonName})`;
+              const numericStr = transaction._7.replace('$', '').replace(' ', '');
+              let amount = parseFloat(numericStr);
+
+              return {
+                amount,
+                date,
+                usageDate: date,
+                name,
+                source: 'venmo',
+                identifier: transactionIdentifier(date, name, amount)
               };
             });
           resolve(transactions);
