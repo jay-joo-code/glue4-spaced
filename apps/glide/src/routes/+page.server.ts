@@ -1,7 +1,7 @@
 import { PLAID_CLIENT_ID, PLAID_SECRET_DEV } from '$env/static/private';
 import { protectedRouteRedirectUrl } from '$root/src/lib/util/auth';
 import { redirect, type Actions, type ServerLoad } from '@sveltejs/kit';
-import { and, eq, gt, isNotNull } from 'drizzle-orm';
+import { and, eq, isNotNull, lt } from 'drizzle-orm';
 import db from '../db/drizzle.server';
 import { itemTable, transactionTable } from '../db/schema.server';
 import { groupTransactionsByWeek } from '../lib/util/transaction';
@@ -17,8 +17,8 @@ export const load: ServerLoad = async ({ url, locals }) => {
       .where(
         and(
           eq(transactionTable.userId, locals.user.id),
-          gt(transactionTable.amount, 0),
-          isNotNull(transactionTable.usageDatetime)
+          lt(transactionTable.amount, 0),
+          eq(transactionTable.isIgnore, false)
         )
       );
 

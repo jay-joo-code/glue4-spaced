@@ -1,4 +1,4 @@
-import { boolean, pgTable, real, text, timestamp, uuid } from 'drizzle-orm/pg-core';
+import { boolean, date, pgTable, real, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
 export const userTable = pgTable('user', {
   id: uuid('id').defaultRandom().primaryKey(),
@@ -55,13 +55,13 @@ export const transactionTable = pgTable('transaction', {
   amount: real('amount').notNull(),
   category: text('category'),
   categoryDetailed: text('category_detailed'),
-  datetime: timestamp('datetime', { withTimezone: true }),
-  usageDatetime: timestamp('usage_datetime', { withTimezone: true }),
-  isChangedDatetime: boolean('is_changed_datetime').default(false),
+  date: date('date', { mode: 'date' }),
+  usageDate: date('usage_date', { mode: 'date' }),
+  isChangedDate: boolean('is_changed_date').default(false),
   name: text('name').notNull(),
-  merchantName: text('merchant_name').notNull(),
+  merchantName: text('merchant_name'),
   merchantLogoUrl: text('logo_url'),
-  isPending: boolean('is_pending').notNull()
+  isIgnore: boolean('is_ignore').default(false)
 });
 
 export type InsertTransaction = typeof transactionTable.$inferInsert;

@@ -1,11 +1,10 @@
 <script lang="ts">
   import { browser } from '$app/environment';
-  import { enhance } from '$app/forms';
   import { invalidateAll } from '$app/navigation';
   import { APP_NAME } from '$lib/config';
-  import { IconAdd, IconDelete, IconRefresh, PageContainer } from '@glue/ui';
-  import { format, formatDistanceToNow } from 'date-fns';
-  import { formatMoney } from '../lib/util/transaction';
+  import { PageContainer } from '@glue/ui';
+  import { format } from 'date-fns';
+  import { formatMoney, parseTransactionsCSV } from '../lib/util/transaction';
 
   export let data;
   export let form;
@@ -82,24 +81,52 @@
 
     isLoadingSync = false;
   };
+
+  const handleFileUpload = async (event: Event & { currentTarget: HTMLInputElement }) => {
+    if (event.currentTarget?.files && event.currentTarget?.files?.length > 0) {
+      const parsedTransactions = await parseTransactionsCSV(event.currentTarget?.files[0]);
+      await fetch('/api/upload', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          parsedTransactions
+        })
+      });
+      invalidateAll();
+    }
+  };
 </script>
 
 <PageContainer {APP_NAME} title="Home">
-  <section class="py-12">
-    <div class="flex justify-between items-center">
-      <div class="">
-        <h2 class="text-3xl font-extrabold">Expenses</h2>
-        <p class="text-base-content/60 text-sm mt-2">Track all of your expenses in one place</p>
-      </div>
+  <section class="py-4">
+    <h2 class="text-3xl font-extrabold">Upload transactions</h2>
 
-      <button class="btn" on:click={handleSync}>
+    <label class="form-control w-full max-w-xs">
+      <div class="label">
+        <span class="label-text">Upload transaction CSV</span>
+      </div>
+      <input
+        class="file-input file-input-bordered file-input-sm"
+        type="file"
+        on:input={handleFileUpload}
+      />
+    </label>
+  </section>
+
+  <section class="py-12 mt-8">
+    <div class="flex justify-between items-center">
+      <h2 class="text-3xl font-extrabold">Expenses</h2>
+
+      <!-- <button class="btn" on:click={handleSync}>
         {#if isLoadingSync}
           <span class="loading loading-spinner loading-sm" />
         {:else}
           <span class="text-xl"><IconRefresh /></span>
           Sync
         {/if}
-      </button>
+      </button> -->
     </div>
 
     <div class="mt-8">
@@ -120,16 +147,15 @@
                       class="border rounded-xl px-4 py-2 flex justify-between items-center w-full text-left border-base-content/10 hover:bg-base-content/10"
                     >
                       <div class="">
-                        <p class="font-medium text-sm">{transaction.merchantName}</p>
-                        <p class="text-xs text-base-content/60">{transaction.name}</p>
+                        <p class="text-sm">{transaction.name}</p>
+                        {#if transaction.usageDate}
+                          <p class="text-sm text-base-content/60 mt-0.5">
+                            {format(transaction.usageDate, 'EEE MM/dd')}
+                          </p>
+                        {/if}
                       </div>
                       <div class="text-right">
                         <p class="font-medium">{formatMoney(transaction.amount)}</p>
-                        {#if transaction.usageDatetime}
-                          <p class="text-sm text-base-content/60">
-                            {format(transaction.usageDatetime, 'yyyy-MM-dd')}
-                          </p>
-                        {/if}
                       </div>
                     </button>
                   {/each}
@@ -141,7 +167,8 @@
       {/await}
     </div>
   </section>
-  <section class="py-12">
+
+  <!-- <section class="py-12">
     <div class="flex justify-between items-center">
       <h2 class="text-3xl font-extrabold">Integrations</h2>
       <form
@@ -196,7 +223,7 @@
         {/if}
       {/await}
     </div>
-  </section>
+  </section> -->
 </PageContainer>
 
 <dialog bind:this={dialog} class="modal cursor-pointer">
