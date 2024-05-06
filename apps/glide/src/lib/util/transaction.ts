@@ -76,8 +76,11 @@ export const formatMoney = (num: number) => {
   }
 };
 
-export const transactionIdentifier = (date: Date | undefined, name: string, amount: number) => {
-  const dateString = date ? format(date, 'MM/dd') : 'DATE_UNSET';
+export const transactionIdentifier = (
+  dateString: string | undefined,
+  name: string,
+  amount: number
+) => {
   return `${dateString}_${name}_${amount}`;
 };
 
@@ -117,7 +120,7 @@ export const parseTransactionsCSV = (file: File): Promise<Omit<InsertTransaction
                 usageDate: dateString,
                 name,
                 source: 'chase',
-                identifier: transactionIdentifier(date, name, amount)
+                identifier: transactionIdentifier(dateString, name, amount)
               };
             })
             .filter(
@@ -150,7 +153,7 @@ export const parseTransactionsCSV = (file: File): Promise<Omit<InsertTransaction
                 usageDate: dateString,
                 name,
                 source: 'venmo',
-                identifier: transactionIdentifier(date, name, amount)
+                identifier: transactionIdentifier(dateString, name, amount)
               };
             });
           resolve(transactions);

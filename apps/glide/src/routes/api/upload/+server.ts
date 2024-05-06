@@ -14,8 +14,8 @@ export const POST: RequestHandler = async ({ request, url, locals }) => {
     return {
       ...transaction,
       userId: locals.user?.id ?? '',
-      date: transaction.date ? new Date(transaction.date) : undefined,
-      usageDate: transaction.usageDate ? new Date(transaction.usageDate) : undefined
+      date: transaction.date,
+      usageDate: transaction.usageDate
     };
   });
 
