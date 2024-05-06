@@ -63,8 +63,23 @@ export const transactionTable = pgTable('transaction', {
   merchantLogoUrl: text('logo_url'),
   isIgnore: boolean('is_ignore').default(false),
   source: text('source').notNull(),
-  identifier: text('identifier').unique().notNull() // immutable contact of date_name_amount
+  identifier: text('identifier').unique().notNull(), // immutable contact of date_name_amount
+  isPendingRefund: boolean('is_pending_refund').default(false)
 });
 
 export type InsertTransaction = typeof transactionTable.$inferInsert;
 export type SelectTransaction = typeof transactionTable.$inferSelect;
+
+export const recurringTable = pgTable('recurring', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+  updatedAt: timestamp('updated_at')
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => new Date()),
+  userId: uuid('user_id')
+    .notNull()
+    .references(() => userTable.id),
+  baseName: text('base_name').notNull(),
+  baseAmount: real('base_amount').notNull()
+});

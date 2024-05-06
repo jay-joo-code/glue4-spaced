@@ -100,17 +100,28 @@
   };
 
   const handleIgnore = async (transactionId: string) => {
-    await (
-      await fetch('/api/transaction/ignore', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          transactionId
-        })
+    await fetch('/api/transaction/ignore', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        transactionId
       })
-    ).json();
+    });
+    await invalidateAll();
+  };
+
+  const handlePendingRefund = async (transactionId: string) => {
+    await fetch('/api/transaction/pending-refund', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        transactionId
+      })
+    });
     await invalidateAll();
   };
 </script>
@@ -191,6 +202,14 @@
                               handleIgnore(transaction.id);
                             }}
                             >Ignore
+                          </a>
+                        </li>
+                        <li>
+                          <a
+                            on:click={() => {
+                              handlePendingRefund(transaction.id);
+                            }}
+                            >Pending refund
                           </a>
                         </li>
                       </ul>
