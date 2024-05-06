@@ -96,28 +96,35 @@
     </div>
 
     <div class="mt-8">
-      {#await data.expenses}
+      {#await data.weeklyExpenses}
         <span class="loading loading-spinner loading-sm" />
-      {:then expenses}
-        {#if expenses}
-          <div class="space-y-2">
-            {#each expenses as transaction}
-              <button
-                class="border rounded-xl px-4 py-2 flex justify-between items-center w-full text-left border-base-content/10 hover:bg-base-content/10"
-              >
-                <div class="">
-                  <p class="font-medium text-sm">{transaction.merchantName}</p>
-                  <p class="text-xs text-base-content/60">{transaction.name}</p>
+      {:then weeklyExpenses}
+        {#if weeklyExpenses}
+          <div class="space-y-6">
+            {#each weeklyExpenses as { weekString, transactions }}
+              <div class="">
+                <p class="text-sm font-extrabold text-base-content/60">{weekString}</p>
+                <div class="space-y-2 mt-3">
+                  {#each transactions as transaction}
+                    <button
+                      class="border rounded-xl px-4 py-2 flex justify-between items-center w-full text-left border-base-content/10 hover:bg-base-content/10"
+                    >
+                      <div class="">
+                        <p class="font-medium text-sm">{transaction.merchantName}</p>
+                        <p class="text-xs text-base-content/60">{transaction.name}</p>
+                      </div>
+                      <div class="text-right">
+                        <p class="font-medium">${transaction.amount}</p>
+                        {#if transaction.usageDatetime}
+                          <p class="text-sm text-base-content/60">
+                            {format(transaction.usageDatetime, 'yyyy-MM-dd')}
+                          </p>
+                        {/if}
+                      </div>
+                    </button>
+                  {/each}
                 </div>
-                <div class="text-right">
-                  <p class="font-medium">${transaction.amount}</p>
-                  {#if transaction.usageDatetime}
-                    <p class="text-sm text-base-content/60">
-                      {format(transaction.usageDatetime, 'yyyy-MM-dd')}
-                    </p>
-                  {/if}
-                </div>
-              </button>
+              </div>
             {/each}
           </div>
         {/if}

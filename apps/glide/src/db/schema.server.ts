@@ -65,3 +65,4 @@ export const transactionTable = pgTable('transaction', {
 });
 
 export type InsertTransaction = typeof transactionTable.$inferInsert;
+export type SelectTransaction = typeof transactionTable.$inferSelect;

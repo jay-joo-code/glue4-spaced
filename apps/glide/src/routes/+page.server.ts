@@ -4,11 +4,12 @@ import { redirect, type Actions, type ServerLoad } from '@sveltejs/kit';
 import { and, eq, gt, isNotNull } from 'drizzle-orm';
 import db from '../db/drizzle.server';
 import { itemTable, transactionTable } from '../db/schema.server';
+import { groupTransactionsByWeek } from '../lib/util/transaction';
 
 export const load: ServerLoad = async ({ url, locals }) => {
   if (!locals.user) return redirect(302, protectedRouteRedirectUrl(url));
 
-  const fetchExpenses = async () => {
+  const fetchWeeklyExpenses = async () => {
     if (!locals.user) return;
     const expenses = await db
       .select()
@@ -21,7 +22,8 @@ export const load: ServerLoad = async ({ url, locals }) => {
         )
       );
 
-    return expenses;
+    const weeklyExpenses = groupTransactionsByWeek(expenses);
+    return weeklyExpenses;
   };
 
   const fetchItems = async () => {
@@ -32,7 +34,7 @@ export const load: ServerLoad = async ({ url, locals }) => {
   };
 
   return {
-    expenses: fetchExpenses(),
+    weeklyExpenses: fetchWeeklyExpenses(),
     items: fetchItems()
   };
 };
