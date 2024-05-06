@@ -97,6 +97,21 @@
       invalidateAll();
     }
   };
+
+  const handleIgnore = async (transactionId: string) => {
+    await (
+      await fetch('/api/transaction/ignore', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          transactionId
+        })
+      })
+    ).json();
+    await invalidateAll();
+  };
 </script>
 
 <PageContainer {APP_NAME} title="Home">
@@ -143,21 +158,41 @@
                 </div>
                 <div class="space-y-2 mt-3">
                   {#each transactions as transaction}
-                    <button
-                      class="border rounded-xl px-4 py-2 flex justify-between items-center w-full text-left border-base-content/10 hover:bg-base-content/10"
-                    >
-                      <div class="">
-                        <p class="text-sm">{transaction.name}</p>
-                        {#if transaction.usageDate}
-                          <p class="text-sm text-base-content/60 mt-0.5">
-                            {format(transaction.usageDate, 'EEE MM/dd')}
-                          </p>
-                        {/if}
+                    <div class="dropdown w-full dropdown-end">
+                      <div
+                        class="border rounded-xl px-4 py-2 flex justify-between items-center w-full border-base-content/10 hover:bg-base-content/10 mb-2"
+                        tabindex="0"
+                        role="button"
+                      >
+                        <div class="">
+                          <p class="text-sm">{transaction.name}</p>
+                          {#if transaction.usageDate}
+                            <p class="text-sm text-base-content/60 mt-0.5">
+                              {format(transaction.usageDate, 'EEE MM/dd')}
+                            </p>
+                          {:else}
+                            <p class="text-sm text-base-content/60 mt-0.5">Date unset</p>
+                          {/if}
+                        </div>
+                        <div class="text-right">
+                          <p class="font-medium">{formatMoney(transaction.amount)}</p>
+                        </div>
                       </div>
-                      <div class="text-right">
-                        <p class="font-medium">{formatMoney(transaction.amount)}</p>
-                      </div>
-                    </button>
+
+                      <ul
+                        tabindex="0"
+                        class="dropdown-content z-[1] menu p-2 shadow bg-base-300 rounded-box w-52"
+                      >
+                        <li>
+                          <a
+                            on:click={() => {
+                              handleIgnore(transaction.id);
+                            }}
+                            >Ignore
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
                   {/each}
                 </div>
               </div>
