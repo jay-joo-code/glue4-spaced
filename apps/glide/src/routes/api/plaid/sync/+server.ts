@@ -1,6 +1,6 @@
 import { json, redirect } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { PLAID_CLIENT_ID, PLAID_SECRET_SANDBOX } from '$env/static/private';
+import { PLAID_CLIENT_ID, PLAID_SECRET_DEV } from '$env/static/private';
 import db from '$root/src/db/drizzle.server';
 import { itemTable, transactionTable, type InsertTransaction } from '$root/src/db/schema.server';
 import { eq } from 'drizzle-orm';
@@ -15,14 +15,14 @@ export const POST: RequestHandler = async ({ fetch, locals, url }) => {
 
   const syncPromises = items.map(async (item) => {
     const response = await (
-      await fetch('https://sandbox.plaid.com/transactions/sync', {
+      await fetch('https://development.plaid.com/transactions/sync', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           client_id: PLAID_CLIENT_ID,
-          secret: PLAID_SECRET_SANDBOX,
+          secret: PLAID_SECRET_DEV,
           access_token: item.accessToken,
           cursor: item.cursor ?? undefined,
           count: 10

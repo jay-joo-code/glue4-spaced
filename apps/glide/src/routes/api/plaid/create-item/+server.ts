@@ -1,4 +1,4 @@
-import { PLAID_CLIENT_ID, PLAID_SECRET_SANDBOX } from '$env/static/private';
+import { PLAID_CLIENT_ID, PLAID_SECRET_DEV } from '$env/static/private';
 import db from '$root/src/db/drizzle.server';
 import { itemTable } from '$root/src/db/schema.server';
 import { protectedRouteRedirectUrl } from '$root/src/lib/util/auth';
@@ -11,14 +11,14 @@ export const POST: RequestHandler = async ({ request, fetch, locals, url }) => {
   const { public_token, institution } = await request.json();
 
   const response = await (
-    await fetch('https://sandbox.plaid.com/item/public_token/exchange', {
+    await fetch('https://development.plaid.com/item/public_token/exchange', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
         client_id: PLAID_CLIENT_ID,
-        secret: PLAID_SECRET_SANDBOX,
+        secret: PLAID_SECRET_DEV,
         public_token
       })
     })

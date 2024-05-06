@@ -34,6 +34,12 @@
         });
         await invalidateAll();
         isLoadingCreateIntegration = false;
+      },
+      onExit: (err, metadata) => {
+        console.log('err, metadata', err, metadata);
+      },
+      onEvent: (eventName, metadata) => {
+        console.log('eventName, metadata', eventName, metadata);
       }
     });
     handler.open();

@@ -1,4 +1,4 @@
-import { PLAID_CLIENT_ID, PLAID_SECRET_SANDBOX } from '$env/static/private';
+import { PLAID_CLIENT_ID, PLAID_SECRET_DEV } from '$env/static/private';
 import { protectedRouteRedirectUrl } from '$root/src/lib/util/auth';
 import { redirect, type Actions, type ServerLoad } from '@sveltejs/kit';
 import { and, eq, gt, isNotNull } from 'drizzle-orm';
@@ -43,7 +43,7 @@ export const actions = {
   createPlaidToken: async ({ fetch, locals }) => {
     if (!locals.user) return;
 
-    const TOKEN_CREATE_URL = 'https://sandbox.plaid.com/link/token/create';
+    const TOKEN_CREATE_URL = 'https://development.plaid.com/link/token/create';
     const response = await fetch(TOKEN_CREATE_URL, {
       method: 'POST',
       headers: {
@@ -51,7 +51,7 @@ export const actions = {
       },
       body: JSON.stringify({
         client_id: PLAID_CLIENT_ID,
-        secret: PLAID_SECRET_SANDBOX,
+        secret: PLAID_SECRET_DEV,
         user: {
           client_user_id: locals.user.id
         },
