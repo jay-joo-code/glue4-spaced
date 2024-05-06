@@ -35,11 +35,6 @@ export const ACTION_BUTTONS_UNAUTHED: ActionButton[] = [
     label: 'Sign in',
     href: '/login',
     variant: 'ghost'
-  },
-  {
-    label: 'Get starated',
-    href: '/get-started',
-    variant: 'primary'
   }
 ];
 export const IS_GOOGLE_AUTH_ONLY = true;
