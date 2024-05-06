@@ -4,7 +4,7 @@
   import { invalidateAll } from '$app/navigation';
   import { APP_NAME } from '$lib/config';
   import { IconAdd, IconDelete, IconRefresh, PageContainer } from '@glue/ui';
-  import { formatDistanceToNow } from 'date-fns';
+  import { format, formatDistanceToNow } from 'date-fns';
 
   export let data;
   export let form;
@@ -59,7 +59,7 @@
   const handleSync = async () => {
     isLoadingSync = true;
 
-    const response = await (
+    const responses = await (
       await fetch('/api/plaid/sync', {
         method: 'POST',
         headers: {
@@ -67,7 +67,10 @@
         }
       })
     ).json();
-    console.log('response', response);
+
+    // TODO: remove
+    responses.map((response: any) => console.log('response', response));
+
     await invalidateAll();
 
     isLoadingSync = false;
@@ -79,10 +82,10 @@
     <div class="flex justify-between items-center">
       <div class="">
         <h2 class="text-3xl font-extrabold">Expenses</h2>
-        <p class="text-base-content/80 text-sm mt-2">Track all of your expenses in one place</p>
+        <p class="text-base-content/60 text-sm mt-2">Track all of your expenses in one place</p>
       </div>
 
-      <button class="btn btn-ghost" on:click={handleSync}>
+      <button class="btn" on:click={handleSync}>
         {#if isLoadingSync}
           <span class="loading loading-spinner loading-sm" />
         {:else}
@@ -90,6 +93,35 @@
           Sync
         {/if}
       </button>
+    </div>
+
+    <div class="mt-8">
+      {#await data.expenses}
+        <span class="loading loading-spinner loading-sm" />
+      {:then expenses}
+        {#if expenses}
+          <div class="space-y-2">
+            {#each expenses as transaction}
+              <button
+                class="border rounded-xl px-4 py-2 flex justify-between items-center w-full text-left border-base-content/10 hover:bg-base-content/10"
+              >
+                <div class="">
+                  <p class="font-medium text-sm">{transaction.merchantName}</p>
+                  <p class="text-xs text-base-content/60">{transaction.name}</p>
+                </div>
+                <div class="text-right">
+                  <p class="font-medium">${transaction.amount}</p>
+                  {#if transaction.usageDatetime}
+                    <p class="text-sm text-base-content/60">
+                      {format(transaction.usageDatetime, 'yyyy-MM-dd')}
+                    </p>
+                  {/if}
+                </div>
+              </button>
+            {/each}
+          </div>
+        {/if}
+      {/await}
     </div>
   </section>
   <section class="py-12">

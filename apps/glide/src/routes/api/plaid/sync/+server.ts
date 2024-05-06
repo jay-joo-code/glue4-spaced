@@ -33,17 +33,16 @@ export const POST: RequestHandler = async ({ fetch, locals, url }) => {
     const transactions = response.added
       .map((transaction: PlaidTransaction): InsertTransaction | undefined => {
         if (transaction.amount && transaction.name && transaction.merchant_name && locals.user) {
+          const date = transaction.authorized_datetime || transaction.authorized_date;
+          const parsedDate = date ? parseISO(date) : undefined;
+
           return {
             userId: locals.user.id,
-            amount: String(transaction.amount),
+            amount: transaction.amount,
             category: transaction.personal_finance_category?.primary,
             categoryDetailed: transaction.personal_finance_category?.detailed,
-            datetime: transaction.authorized_datetime
-              ? parseISO(transaction.authorized_datetime)
-              : undefined,
-            usageDatetime: transaction.authorized_datetime
-              ? parseISO(transaction.authorized_datetime)
-              : undefined,
+            datetime: parsedDate,
+            usageDatetime: parsedDate,
             name: transaction.name,
             merchantName: transaction.merchant_name,
             merchantLogoUrl: transaction.logo_url,
@@ -53,14 +52,14 @@ export const POST: RequestHandler = async ({ fetch, locals, url }) => {
       })
       .filter((transaction: InsertTransaction | undefined) => transaction);
 
-    const savedTransactions = await db.insert(transactionTable).values(transactions).returning();
+    await db.insert(transactionTable).values(transactions).returning();
 
     await db
       .update(itemTable)
       .set({ cursor: response.next_cursor })
       .where(eq(itemTable.id, item.id));
 
-    return savedTransactions;
+    return response;
   });
 
   const mergedResponses = await Promise.all(syncPromises);

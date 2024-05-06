@@ -1,4 +1,4 @@
-import { boolean, numeric, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
+import { boolean, pgTable, real, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
 export const userTable = pgTable('user', {
   id: uuid('id').defaultRandom().primaryKey(),
@@ -52,7 +52,7 @@ export const transactionTable = pgTable('transaction', {
   userId: uuid('user_id')
     .notNull()
     .references(() => userTable.id),
-  amount: numeric('amount').notNull(),
+  amount: real('amount').notNull(),
   category: text('category'),
   categoryDetailed: text('category_detailed'),
   datetime: timestamp('datetime', { withTimezone: true }),

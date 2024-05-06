@@ -1,18 +1,27 @@
+import { PLAID_CLIENT_ID, PLAID_SECRET_SANDBOX } from '$env/static/private';
 import { protectedRouteRedirectUrl } from '$root/src/lib/util/auth';
 import { redirect, type Actions, type ServerLoad } from '@sveltejs/kit';
+import { and, eq, gt, isNotNull } from 'drizzle-orm';
 import db from '../db/drizzle.server';
-import { itemTable } from '../db/schema.server';
-import { eq } from 'drizzle-orm';
-import { APP_NAME } from '../lib/config';
-import { PLAID_CLIENT_ID, PLAID_SECRET_SANDBOX } from '$env/static/private';
+import { itemTable, transactionTable } from '../db/schema.server';
 
 export const load: ServerLoad = async ({ url, locals }) => {
-  if (!locals.user) {
-    return redirect(302, protectedRouteRedirectUrl(url));
-  }
+  if (!locals.user) return redirect(302, protectedRouteRedirectUrl(url));
 
   const fetchExpenses = async () => {
     if (!locals.user) return;
+    const expenses = await db
+      .select()
+      .from(transactionTable)
+      .where(
+        and(
+          eq(transactionTable.userId, locals.user.id),
+          gt(transactionTable.amount, 0),
+          isNotNull(transactionTable.usageDatetime)
+        )
+      );
+
+    return expenses;
   };
 
   const fetchItems = async () => {
