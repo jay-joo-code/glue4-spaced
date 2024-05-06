@@ -5,6 +5,7 @@
   import { APP_NAME } from '$lib/config';
   import { IconAdd, IconDelete, IconRefresh, PageContainer } from '@glue/ui';
   import { format, formatDistanceToNow } from 'date-fns';
+  import { formatMoney } from '../lib/util/transaction';
 
   export let data;
   export let form;
@@ -101,9 +102,12 @@
       {:then weeklyExpenses}
         {#if weeklyExpenses}
           <div class="space-y-6">
-            {#each weeklyExpenses as { weekString, transactions }}
+            {#each weeklyExpenses as { weekString, totalAmount, transactions }}
               <div class="">
-                <p class="text-sm font-extrabold text-base-content/60">{weekString}</p>
+                <div class="flex items-center justify-between px-2">
+                  <p class="text-sm font-extrabold text-base-content/60">{weekString}</p>
+                  <p class="text-sm font-extrabold text-error">{formatMoney(totalAmount)}</p>
+                </div>
                 <div class="space-y-2 mt-3">
                   {#each transactions as transaction}
                     <button
@@ -114,7 +118,7 @@
                         <p class="text-xs text-base-content/60">{transaction.name}</p>
                       </div>
                       <div class="text-right">
-                        <p class="font-medium">${transaction.amount}</p>
+                        <p class="font-medium">{formatMoney(transaction.amount)}</p>
                         {#if transaction.usageDatetime}
                           <p class="text-sm text-base-content/60">
                             {format(transaction.usageDatetime, 'yyyy-MM-dd')}

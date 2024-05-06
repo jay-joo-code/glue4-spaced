@@ -40,7 +40,7 @@ export const load: ServerLoad = async ({ url, locals }) => {
 };
 
 export const actions = {
-  createPlaidToken: async ({ fetch, locals, url }) => {
+  createPlaidToken: async ({ fetch, locals }) => {
     if (!locals.user) return;
 
     const TOKEN_CREATE_URL = 'https://sandbox.plaid.com/link/token/create';

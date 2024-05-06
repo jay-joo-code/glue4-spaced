@@ -20,8 +20,8 @@ export const groupTransactionsByWeek = (transactions: SelectTransaction[]) => {
     return groups;
   }, {});
 
-  return Object.entries(groups).map(([key, value]) => {
-    const date = new Date(key);
+  return Object.entries(groups).map(([startOfWeekString, transactions]) => {
+    const date = new Date(startOfWeekString);
     const startOfWeekDate = startOfWeek(date);
     const endOfWeekDate = endOfWeek(date);
     const formattedStartDate = format(startOfWeekDate, 'MMM d');
@@ -29,10 +29,20 @@ export const groupTransactionsByWeek = (transactions: SelectTransaction[]) => {
       endOfWeekDate,
       startOfWeekDate.getMonth() === endOfWeekDate.getMonth() ? 'd' : 'MMM d'
     );
+    const totalAmount = transactions.reduce((accum, transaction) => accum + transaction.amount, 0);
 
     return {
       weekString: `${formattedStartDate} - ${formattedEndDate}`,
-      transactions: value
+      totalAmount,
+      transactions
     };
   });
+};
+
+export const formatMoney = (num: number) => {
+  if (num % 1 !== 0) {
+    return `$${num.toFixed(2)}`;
+  } else {
+    return `$${num}`;
+  }
 };
