@@ -140,7 +140,7 @@ export const parseTransactionsCSV = (file: File): Promise<Omit<InsertTransaction
                 !['', 'Datetime'].includes(transaction._1)
             )
             .map((transaction) => {
-              const date = new Date(transaction._1);
+              const date = new Date(transaction._1 + 'z');
               const dateString = date ? format(date, 'yyyy-MM-dd') : undefined;
               const otherPersonName =
                 transaction._6 === 'Jay Joo' ? transaction._5 : transaction._6;
