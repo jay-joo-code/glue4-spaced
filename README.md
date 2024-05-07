@@ -13,7 +13,11 @@ Vercel only allows up to 3 projects per GitHub repo. This means that I have to m
 git remote add fork-APPNAME <FORK_GITHUB_URL>
 git fetch fork-APPNAME
 git checkout -b fork-APPNAME-main fork-APPNAME/main
+```
 
+## Syncing changes to forks
+
+```bash
 # create syncfork git alias
 git config --global alias.syncfork '!f() { git checkout fork-$1-main && git rebase main && git push fork-$1 HEAD:main -f && git checkout main; }; f'
 
