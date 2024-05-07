@@ -172,11 +172,11 @@
   </div>
 
   {#if transactionHasRefunds(transaction)}
-    <div class="mt-4 pr-11">
+    <div class="mt-2 pr-11">
       {#each transaction.refunds as refund}
         <div class="flex justify-between items-center">
           <div class="">
-            <p class="text-base-content/60">{refund.name}</p>
+            <p class="text-base-content/60 text-sm">{refund.name}</p>
           </div>
 
           <div class="">
