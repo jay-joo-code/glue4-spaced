@@ -51,37 +51,37 @@
 <div class="border-b px-2 py-2 w-full border-base-content/10">
   <div class="flex justify-between space-x-8">
     <div class="flex-1">
-      {#if transaction.usageDate}
-        <div class="flex items-center space-x-1">
+      <div class="flex items-center space-x-1">
+        {#if transaction.usageDate}
           <p class="text-sm text-base-content/60 mt-0.5">
             {format(parse(transaction.usageDate, 'yyyy-MM-dd', new Date()), 'EEE MM/dd')}
           </p>
-          <input
-            class="input input-sm max-w-[1.3rem] h-[unset] leading-[unset] !p-0"
-            type="date"
-            bind:value={transaction.usageDate}
-            on:input={(event) => {
+        {:else}
+          <p class="text-sm text-base-content/60 mt-0.5">Date unset</p>
+        {/if}
+        <input
+          class="input input-sm max-w-[1.3rem] h-[unset] leading-[unset] !p-0"
+          type="date"
+          bind:value={transaction.usageDate}
+          on:input={(event) => {
+            updateTransaction(transaction.id, {
+              usageDate: event.currentTarget?.value,
+              isChangedDate: true
+            });
+          }}
+        />
+        {#if transaction.isChangedDate}
+          <button
+            class="btn btn-circle btn-xs btn-ghost text-lg"
+            on:click={() => {
               updateTransaction(transaction.id, {
-                usageDate: event.currentTarget?.value,
-                isChangedDate: true
+                usageDate: transaction.date,
+                isChangedDate: false
               });
-            }}
-          />
-          {#if transaction.isChangedDate}
-            <button
-              class="btn btn-circle btn-xs btn-ghost text-lg"
-              on:click={() => {
-                updateTransaction(transaction.id, {
-                  usageDate: transaction.date,
-                  isChangedDate: false
-                });
-              }}><IconRefresh /></button
-            >
-          {/if}
-        </div>
-      {:else}
-        <p class="text-sm text-base-content/60 mt-0.5">Date unset</p>
-      {/if}
+            }}><IconRefresh /></button
+          >
+        {/if}
+      </div>
       <input
         class="input w-full !py-1 !px-0 h-[unset]"
         bind:value={transaction.displayName}
