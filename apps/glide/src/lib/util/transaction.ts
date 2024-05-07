@@ -40,7 +40,7 @@ export const groupTransactionsByWeek = (transactions: SelectTransaction[]) => {
         endOfWeekDate,
         date.getMonth() === endOfWeekDate.getMonth() ? 'dd' : 'MMM dd'
       );
-      weekString = `${formattedStartDate} - ${formattedEndDate}`;
+      weekString = `Week ${formattedStartDate} - ${formattedEndDate}`;
     }
     const totalAmount = transactions.reduce((accum, transaction) => accum + transaction.amount, 0);
 

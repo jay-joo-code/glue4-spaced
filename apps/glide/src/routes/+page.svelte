@@ -202,7 +202,9 @@
           <div class="space-y-8">
             {#each weeklyExpenses as { weekString, totalAmount, transactions }}
               <div class="">
-                <div class="flex items-center justify-between px-2">
+                <div
+                  class="flex items-center justify-between pl-4 pr-12 bg-base-300 rounded-xl py-2"
+                >
                   <p class="text-sm font-extrabold text-base-content/60">{weekString}</p>
                   <p class="text-sm font-extrabold text-error">{formatMoney(totalAmount)}</p>
                 </div>
@@ -212,11 +214,6 @@
                       class="border-b px-2 py-2 flex justify-between items-center w-full border-base-content/10 space-x-8"
                     >
                       <div class="flex-1">
-                        <input
-                          class="input w-full !py-1 !px-0 h-[unset]"
-                          bind:value={transaction.displayName}
-                          on:input={(event) => debouncedHandleInputName(event, transaction.id)}
-                        />
                         {#if transaction.usageDate}
                           <p class="text-sm text-base-content/60 mt-0.5">
                             {format(
@@ -227,11 +224,18 @@
                         {:else}
                           <p class="text-sm text-base-content/60 mt-0.5">Date unset</p>
                         {/if}
+                        <input
+                          class="input w-full !py-1 !px-0 h-[unset]"
+                          bind:value={transaction.displayName}
+                          on:input={(event) => debouncedHandleInputName(event, transaction.id)}
+                        />
                       </div>
                       <div class="flex items-center space-x-3">
                         <div class="text-right">
+                          <p class="text-sm text-base-content/60 mb-0.5 capitalize">
+                            {transaction.source}
+                          </p>
                           <p class="font-medium">{formatMoney(transaction.amount)}</p>
-                          <p class="text-sm text-base-content/60 mt-0.5">{transaction.source}</p>
                         </div>
                         <div class="dropdown w-full dropdown-end">
                           <button
