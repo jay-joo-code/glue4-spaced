@@ -12,7 +12,6 @@
   export let dialogAssignRefund: HTMLDialogElement | undefined = undefined;
 
   const updateTransaction = async (transactionId: string, data: any) => {
-    console.log('transactionId, data', transactionId, data);
     await fetch('/api/transaction', {
       method: 'PUT',
       headers: {
