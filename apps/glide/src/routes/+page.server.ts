@@ -1,10 +1,11 @@
 import { PLAID_CLIENT_ID, PLAID_SECRET_DEV } from '$env/static/private';
+import { aggregateRefunds, groupTransactionsByWeek } from '$lib/util/transaction';
 import { protectedRouteRedirectUrl } from '$root/src/lib/util/auth';
+import db from '$src/db/drizzle.server';
+import { itemTable, transactionTable } from '$src/db/schema.server';
 import { redirect, type Actions, type ServerLoad } from '@sveltejs/kit';
-import { and, desc, eq, lt } from 'drizzle-orm';
-import db from '../db/drizzle.server';
-import { itemTable, transactionTable } from '../db/schema.server';
-import { groupTransactionsByWeek } from '../lib/util/transaction';
+import { and, desc, eq, gt, isNull, lt } from 'drizzle-orm';
+import { alias } from 'drizzle-orm/pg-core';
 
 export const load: ServerLoad = async ({ url, locals }) => {
   if (!locals.user) return redirect(302, protectedRouteRedirectUrl(url));
@@ -13,7 +14,7 @@ export const load: ServerLoad = async ({ url, locals }) => {
     if (!locals.user) return;
 
     // await db.delete(transactionTable).where(eq(transactionTable.userId, locals.user.id));
-
+    const refund = alias(transactionTable, 'refund');
     const expenses = await db
       .select()
       .from(transactionTable)
@@ -23,13 +24,16 @@ export const load: ServerLoad = async ({ url, locals }) => {
           lt(transactionTable.amount, 0),
           eq(transactionTable.isIgnore, false),
           eq(transactionTable.isPendingRefund, false),
-          eq(transactionTable.isRecurring, false)
+          eq(transactionTable.isRecurring, false),
+          isNull(transactionTable.refundId)
         )
       )
+      .leftJoin(refund, eq(transactionTable.id, refund.refundId))
       .orderBy(desc(transactionTable.usageDate))
       .limit(50);
 
-    const weeklyExpenses = groupTransactionsByWeek(expenses);
+    const expensesWithRefunds = aggregateRefunds(expenses);
+    const weeklyExpenses = groupTransactionsByWeek(expensesWithRefunds);
     return weeklyExpenses;
   };
 
@@ -40,9 +44,30 @@ export const load: ServerLoad = async ({ url, locals }) => {
     return items;
   };
 
+  const fetchRefundCandidates = async () => {
+    if (!locals.user) return;
+
+    const refundCandidates = await db
+      .select()
+      .from(transactionTable)
+      .where(
+        and(
+          eq(transactionTable.userId, locals.user.id),
+          gt(transactionTable.amount, 0),
+          isNull(transactionTable.refundId),
+          eq(transactionTable.isIgnore, false)
+        )
+      )
+      .orderBy(desc(transactionTable.usageDate))
+      .limit(50);
+
+    return refundCandidates;
+  };
+
   return {
     weeklyExpenses: fetchWeeklyExpenses(),
-    items: fetchItems()
+    items: fetchItems(),
+    refundCandidates: fetchRefundCandidates()
   };
 };
 

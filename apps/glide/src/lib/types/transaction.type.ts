@@ -1,7 +1,7 @@
 import type { SelectTransaction } from '$root/src/db/schema.server';
 
 export type TransactionReduceGroup = {
-  [key: string]: SelectTransaction[];
+  [key: string]: TransactionWithRefunds[];
 };
 
 export type ChaseTransaction = {
@@ -38,4 +38,14 @@ export type VenmoTransaction = {
   _18: string;
   _19: string;
   _20: string;
+};
+
+export type TransactionWithRefunds = SelectTransaction & {
+  refunds: SelectTransaction[];
+};
+
+export const transactionHasRefunds = (
+  transaction: TransactionWithRefunds | SelectTransaction
+): transaction is TransactionWithRefunds => {
+  return (transaction as TransactionWithRefunds).refunds !== undefined;
 };

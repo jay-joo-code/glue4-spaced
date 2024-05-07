@@ -1,4 +1,13 @@
-import { boolean, date, pgTable, real, text, timestamp, uuid } from 'drizzle-orm/pg-core';
+import {
+  boolean,
+  date,
+  pgTable,
+  real,
+  text,
+  timestamp,
+  uuid,
+  type AnyPgColumn
+} from 'drizzle-orm/pg-core';
 
 export const userTable = pgTable('user', {
   id: uuid('id').defaultRandom().primaryKey(),
@@ -66,7 +75,8 @@ export const transactionTable = pgTable('transaction', {
   identifier: text('identifier').unique().notNull(), // immutable contact of date_name_amount
   isPendingRefund: boolean('is_pending_refund').default(false),
   displayName: text('display_name').notNull(),
-  isRecurring: boolean('is_recurring').default(false)
+  isRecurring: boolean('is_recurring').default(false),
+  refundId: uuid('refund_id').references((): AnyPgColumn => transactionTable.id) // id of transaction receiving refund
 });
 
 export type InsertTransaction = typeof transactionTable.$inferInsert;

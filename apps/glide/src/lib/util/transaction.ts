@@ -1,13 +1,14 @@
 import type {
   ChaseTransaction,
   TransactionReduceGroup,
+  TransactionWithRefunds,
   VenmoTransaction
 } from '$lib/types/transaction.type';
 import type { InsertTransaction, SelectTransaction } from '$root/src/db/schema.server';
 import { endOfWeek, format, parse, startOfWeek } from 'date-fns';
 import Papa from 'papaparse';
 
-export const groupTransactionsByWeek = (transactions: SelectTransaction[]) => {
+export const groupTransactionsByWeek = (transactions: TransactionWithRefunds[]) => {
   const groups = transactions.reduce((groups: TransactionReduceGroup, transaction) => {
     let weekKey;
 
@@ -42,7 +43,13 @@ export const groupTransactionsByWeek = (transactions: SelectTransaction[]) => {
       );
       weekString = `Week ${formattedStartDate} - ${formattedEndDate}`;
     }
-    const totalAmount = transactions.reduce((accum, transaction) => accum + transaction.amount, 0);
+    const totalAmount = transactions.reduce((accum, transaction) => {
+      let sum = accum + transaction.amount;
+      for (const refund of transaction.refunds) {
+        sum -= refund.amount;
+      }
+      return sum;
+    }, 0);
 
     return {
       weekString,
@@ -69,9 +76,9 @@ export const formatMoney = (num: number) => {
     }
   } else {
     if (num % 1 !== 0) {
-      return `$${num.toFixed(2)}`;
+      return `+$${num.toFixed(2)}`;
     } else {
-      return `$${num}`;
+      return `+$${num}`;
     }
   }
 };
@@ -127,7 +134,8 @@ export const parseTransactionsCSV = (file: File): Promise<Omit<InsertTransaction
             .filter(
               (transaction) =>
                 !transaction.name.includes('VENMO PAYMENT') &&
-                !transaction.name.includes('CAPITAL ONE CRCARDPMT')
+                !transaction.name.includes('CAPITAL ONE CRCARDPMT') &&
+                !transaction.name.includes('VENMO CASHOUT')
             );
           resolve(transactions);
         } else if (results.meta.fields?.join(',').includes(VENDMO_FIELDS_SUBSTR)) {
@@ -165,4 +173,25 @@ export const parseTransactionsCSV = (file: File): Promise<Omit<InsertTransaction
       }
     });
   });
+};
+
+export const aggregateRefunds = (
+  transactionJoinRefund: { transaction: SelectTransaction; refund: SelectTransaction | null }[]
+): TransactionWithRefunds[] => {
+  const idToTransaction = transactionJoinRefund.reduce<Record<string, TransactionWithRefunds>>(
+    (acc, row) => {
+      const transaction = row.transaction;
+      const refund = row.refund;
+      if (!acc[transaction.id]) {
+        acc[transaction.id] = { ...transaction, refunds: [] };
+      }
+      if (refund) {
+        acc[transaction.id].refunds.push(refund);
+      }
+      return acc;
+    },
+    {}
+  );
+
+  return Object.values(idToTransaction);
 };
