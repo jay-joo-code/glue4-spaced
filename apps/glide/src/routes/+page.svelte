@@ -251,7 +251,7 @@
                         </div>
                         <div class="dropdown w-full dropdown-end">
                           <button
-                            class="text-2xl btn btn-circle btn-sm btn-ghost"
+                            class="text-2xl btn btn-circle btn-sm btn-ghost text-base-content/50"
                             tabindex="0"
                             role="button"><IconMoreVert /></button
                           >
