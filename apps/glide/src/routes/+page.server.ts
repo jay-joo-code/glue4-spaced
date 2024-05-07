@@ -22,7 +22,8 @@ export const load: ServerLoad = async ({ url, locals }) => {
           eq(transactionTable.userId, locals.user.id),
           lt(transactionTable.amount, 0),
           eq(transactionTable.isIgnore, false),
-          eq(transactionTable.isPendingRefund, false)
+          eq(transactionTable.isPendingRefund, false),
+          eq(transactionTable.isRecurring, false)
         )
       )
       .orderBy(desc(transactionTable.usageDate))

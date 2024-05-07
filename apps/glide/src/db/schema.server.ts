@@ -65,7 +65,8 @@ export const transactionTable = pgTable('transaction', {
   source: text('source').notNull(),
   identifier: text('identifier').unique().notNull(), // immutable contact of date_name_amount
   isPendingRefund: boolean('is_pending_refund').default(false),
-  displayName: text('display_name').notNull()
+  displayName: text('display_name').notNull(),
+  isRecurring: boolean('is_recurring').default(false)
 });
 
 export type InsertTransaction = typeof transactionTable.$inferInsert;

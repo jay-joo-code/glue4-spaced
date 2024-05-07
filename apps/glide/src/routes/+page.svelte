@@ -100,27 +100,15 @@
     }
   };
 
-  const handleIgnore = async (transactionId: string) => {
-    await fetch('/api/transaction/ignore', {
-      method: 'POST',
+  const updateTransaction = async (transactionId: string, data: any) => {
+    await fetch('/api/transaction', {
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        transactionId
-      })
-    });
-    await invalidateAll();
-  };
-
-  const handlePendingRefund = async (transactionId: string) => {
-    await fetch('/api/transaction/pending-refund', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        transactionId
+        transactionId,
+        data
       })
     });
     await invalidateAll();
@@ -250,7 +238,9 @@
                             <li>
                               <a
                                 on:click={() => {
-                                  handleIgnore(transaction.id);
+                                  updateTransaction(transaction.id, {
+                                    isIgnore: true
+                                  });
                                 }}
                                 >Ignore
                               </a>
@@ -258,9 +248,21 @@
                             <li>
                               <a
                                 on:click={() => {
-                                  handlePendingRefund(transaction.id);
+                                  updateTransaction(transaction.id, {
+                                    isPendingRefund: true
+                                  });
                                 }}
                                 >Pending refund
+                              </a>
+                            </li>
+                            <li>
+                              <a
+                                on:click={() => {
+                                  updateTransaction(transaction.id, {
+                                    isRecurring: true
+                                  });
+                                }}
+                                >Recurring
                               </a>
                             </li>
                           </ul>
