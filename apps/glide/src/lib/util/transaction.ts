@@ -120,7 +120,8 @@ export const parseTransactionsCSV = (file: File): Promise<Omit<InsertTransaction
                 usageDate: dateString,
                 name,
                 source: 'chase',
-                identifier: transactionIdentifier(dateString, name, amount)
+                identifier: transactionIdentifier(dateString, name, amount),
+                displayName: name
               };
             })
             .filter(
@@ -153,7 +154,8 @@ export const parseTransactionsCSV = (file: File): Promise<Omit<InsertTransaction
                 usageDate: dateString,
                 name,
                 source: 'venmo',
-                identifier: transactionIdentifier(dateString, name, amount)
+                identifier: transactionIdentifier(dateString, name, amount),
+                displayName: name
               };
             });
           resolve(transactions);

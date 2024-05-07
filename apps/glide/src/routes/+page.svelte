@@ -2,8 +2,9 @@
   import { browser } from '$app/environment';
   import { invalidateAll } from '$app/navigation';
   import { APP_NAME } from '$lib/config';
-  import { IconNewTab, PageContainer } from '@glue/ui';
+  import { IconMoreVert, IconNewTab, PageContainer } from '@glue/ui';
   import { format, parse } from 'date-fns';
+  import debounce from 'just-debounce-it';
   import { formatMoney, parseTransactionsCSV } from '../lib/util/transaction';
 
   export let data;
@@ -124,6 +125,24 @@
     });
     await invalidateAll();
   };
+
+  const handleInputName = async (event: InputEvent, transactionId: string) => {
+    const target = event.target as HTMLInputElement;
+    fetch('/api/transaction', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        transactionId,
+        data: {
+          displayName: target.value
+        }
+      })
+    });
+  };
+
+  const debouncedHandleInputName = debounce(handleInputName, 500);
 </script>
 
 <PageContainer {APP_NAME} title="Home">
@@ -189,52 +208,60 @@
                 </div>
                 <div class="space-y-2 mt-3">
                   {#each transactions as transaction}
-                    <div class="dropdown w-full dropdown-end">
-                      <div
-                        class="border rounded-xl px-4 py-2 flex justify-between items-center w-full border-base-content/10 hover:bg-base-content/10 mb-2"
-                        tabindex="0"
-                        role="button"
-                      >
-                        <div class="">
-                          <p class="text-sm">{transaction.name}</p>
-                          {#if transaction.usageDate}
-                            <p class="text-sm text-base-content/60 mt-0.5">
-                              {format(
-                                parse(transaction.usageDate, 'yyyy-MM-dd', new Date()),
-                                'EEE MM/dd'
-                              )}
-                            </p>
-                          {:else}
-                            <p class="text-sm text-base-content/60 mt-0.5">Date unset</p>
-                          {/if}
-                        </div>
+                    <div
+                      class="border-b px-2 py-2 flex justify-between items-center w-full border-base-content/10 space-x-8"
+                    >
+                      <div class="flex-1">
+                        <input
+                          class="input w-full !py-1 !px-0 h-[unset]"
+                          bind:value={transaction.displayName}
+                          on:input={(event) => debouncedHandleInputName(event, transaction.id)}
+                        />
+                        {#if transaction.usageDate}
+                          <p class="text-sm text-base-content/60 mt-0.5">
+                            {format(
+                              parse(transaction.usageDate, 'yyyy-MM-dd', new Date()),
+                              'EEE MM/dd'
+                            )}
+                          </p>
+                        {:else}
+                          <p class="text-sm text-base-content/60 mt-0.5">Date unset</p>
+                        {/if}
+                      </div>
+                      <div class="flex items-center space-x-3">
                         <div class="text-right">
                           <p class="font-medium">{formatMoney(transaction.amount)}</p>
                           <p class="text-sm text-base-content/60 mt-0.5">{transaction.source}</p>
                         </div>
+                        <div class="dropdown w-full dropdown-end">
+                          <button
+                            class="text-2xl btn btn-circle btn-sm btn-ghost"
+                            tabindex="0"
+                            role="button"><IconMoreVert /></button
+                          >
+                          <ul
+                            tabindex="0"
+                            class="dropdown-content z-[1] menu p-2 shadow bg-base-300 rounded-box w-52"
+                          >
+                            <li>
+                              <a
+                                on:click={() => {
+                                  handleIgnore(transaction.id);
+                                }}
+                                >Ignore
+                              </a>
+                            </li>
+                            <li>
+                              <a
+                                on:click={() => {
+                                  handlePendingRefund(transaction.id);
+                                }}
+                                >Pending refund
+                              </a>
+                            </li>
+                          </ul>
+                        </div>
                       </div>
-
-                      <ul
-                        tabindex="0"
-                        class="dropdown-content z-[1] menu p-2 shadow bg-base-300 rounded-box w-52"
-                      >
-                        <li>
-                          <a
-                            on:click={() => {
-                              handleIgnore(transaction.id);
-                            }}
-                            >Ignore
-                          </a>
-                        </li>
-                        <li>
-                          <a
-                            on:click={() => {
-                              handlePendingRefund(transaction.id);
-                            }}
-                            >Pending refund
-                          </a>
-                        </li>
-                      </ul>
                     </div>
                   {/each}
                 </div>

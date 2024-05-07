@@ -64,7 +64,8 @@ export const transactionTable = pgTable('transaction', {
   isIgnore: boolean('is_ignore').default(false),
   source: text('source').notNull(),
   identifier: text('identifier').unique().notNull(), // immutable contact of date_name_amount
-  isPendingRefund: boolean('is_pending_refund').default(false)
+  isPendingRefund: boolean('is_pending_refund').default(false),
+  displayName: text('display_name').notNull()
 });
 
 export type InsertTransaction = typeof transactionTable.$inferInsert;

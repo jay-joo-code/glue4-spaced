@@ -36,6 +36,7 @@ export { default as IconLogout } from './icons/IconLogout.svelte';
 export { default as IconMap } from './icons/IconMap.svelte';
 export { default as IconMenu } from './icons/IconMenu.svelte';
 export { default as IconMessage } from './icons/IconMessage.svelte';
+export { default as IconMoreVert } from './icons/IconMoreVert.svelte';
 export { default as IconNeutralFace } from './icons/IconNeutralFace.svelte';
 export { default as IconNewTab } from './icons/IconNewTab.svelte';
 export { default as IconPage } from './icons/IconPage.svelte';
