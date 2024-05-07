@@ -2,7 +2,7 @@
   import { browser } from '$app/environment';
   import { invalidateAll } from '$app/navigation';
   import { APP_NAME } from '$lib/config';
-  import { IconMoreVert, IconNewTab, PageContainer } from '@glue/ui';
+  import { IconMoreVert, IconNewTab, IconRefresh, PageContainer } from '@glue/ui';
   import { format, parse } from 'date-fns';
   import debounce from 'just-debounce-it';
   import { formatMoney, parseTransactionsCSV } from '../lib/util/transaction';
@@ -203,12 +203,36 @@
                     >
                       <div class="flex-1">
                         {#if transaction.usageDate}
-                          <p class="text-sm text-base-content/60 mt-0.5">
-                            {format(
-                              parse(transaction.usageDate, 'yyyy-MM-dd', new Date()),
-                              'EEE MM/dd'
-                            )}
-                          </p>
+                          <div class="flex items-center space-x-1">
+                            <p class="text-sm text-base-content/60 mt-0.5">
+                              {format(
+                                parse(transaction.usageDate, 'yyyy-MM-dd', new Date()),
+                                'EEE MM/dd'
+                              )}
+                            </p>
+                            <input
+                              class="input input-sm max-w-[1.3rem] h-[unset] leading-[unset] !p-0"
+                              type="date"
+                              bind:value={transaction.usageDate}
+                              on:input={(event) => {
+                                updateTransaction(transaction.id, {
+                                  usageDate: event.currentTarget?.value,
+                                  isChangedDate: true
+                                });
+                              }}
+                            />
+                            {#if transaction.isChangedDate}
+                              <button
+                                class="btn btn-circle btn-xs btn-ghost text-lg"
+                                on:click={() => {
+                                  updateTransaction(transaction.id, {
+                                    usageDate: transaction.date,
+                                    isChangedDate: false
+                                  });
+                                }}><IconRefresh /></button
+                              >
+                            {/if}
+                          </div>
                         {:else}
                           <p class="text-sm text-base-content/60 mt-0.5">Date unset</p>
                         {/if}
