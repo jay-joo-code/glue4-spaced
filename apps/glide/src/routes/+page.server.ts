@@ -1,7 +1,7 @@
 import { PLAID_CLIENT_ID, PLAID_SECRET_DEV } from '$env/static/private';
 import { protectedRouteRedirectUrl } from '$root/src/lib/util/auth';
 import { redirect, type Actions, type ServerLoad } from '@sveltejs/kit';
-import { and, desc, eq, isNotNull, lt } from 'drizzle-orm';
+import { and, desc, eq, lt } from 'drizzle-orm';
 import db from '../db/drizzle.server';
 import { itemTable, transactionTable } from '../db/schema.server';
 import { groupTransactionsByWeek } from '../lib/util/transaction';
