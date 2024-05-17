@@ -46,7 +46,7 @@ export const groupTransactionsByWeek = (transactions: TransactionWithRefunds[]) 
     const totalAmount = transactions.reduce((accum, transaction) => {
       let sum = accum + transaction.amount;
       for (const refund of transaction.refunds) {
-        sum -= refund.amount;
+        sum += refund.amount;
       }
       return sum;
     }, 0);
