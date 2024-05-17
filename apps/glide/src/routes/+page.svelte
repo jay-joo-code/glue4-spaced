@@ -65,6 +65,26 @@
 
   <section class="py-12 mt-8">
     <div class="flex justify-between items-center">
+      <h2 class="text-3xl font-extrabold">Pending refund</h2>
+    </div>
+
+    {#await data.pendingRefunds}
+      <span class="loading loading-spinner loading-sm" />
+    {:then pendingRefunds}
+      <div class="mt-4">
+        {#if pendingRefunds && pendingRefunds.length > 0}
+          {#each pendingRefunds as transaction}
+            <TransactionItem {transaction} bind:dialogAssignRefund bind:refundId />
+          {/each}
+        {:else}
+          <p class="text-sm text-base-content/80">No transactions pending refund</p>
+        {/if}
+      </div>
+    {/await}
+  </section>
+
+  <section class="py-12">
+    <div class="flex justify-between items-center">
       <h2 class="text-3xl font-extrabold">Expenses</h2>
     </div>
 

@@ -161,6 +161,9 @@
                   updateTransaction(transaction.id, {
                     refundId
                   });
+                  updateTransaction(refundId, {
+                    isPendingRefund: false
+                  });
                 }}
                 >Add as refund
               </a>
