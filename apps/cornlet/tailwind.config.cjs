@@ -23,7 +23,7 @@ module.exports = {
           ...require('daisyui/src/theming/themes')['light'],
           'base-content': colors.slate[700],
           'base-200': '#F8F8F8',
-          primary: '#3478F6',
+          primary: '#B31B1B',
           'primary-content': colors.white,
           secondary: colors.slate[700],
           'secondary-content': colors.white,
@@ -36,7 +36,8 @@ module.exports = {
           'base-content': '#FCFCFC',
           'base-200': '#272D33',
           'base-300': '#30363C',
-          primary: '#3478F6',
+          primary: '#B31B1B',
+          'primary-content': colors.white,
           secondary: '#FCFCFC',
           'secondary-content': colors.slate[800],
           'accent-content': colors.indigo[200]
