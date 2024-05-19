@@ -22,7 +22,7 @@
   </div>
   <input
     name={field}
-    type="text"
+    type="date"
     aria-invalid={$errors ? 'true' : undefined}
     bind:value={$value}
     class="input input-bordered w-full max-w-xs"

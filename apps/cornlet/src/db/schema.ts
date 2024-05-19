@@ -1,13 +1,13 @@
 import {
   boolean,
   date,
-  decimal,
+  numeric,
+  pgEnum,
   pgTable,
   real,
   text,
   timestamp,
-  uuid,
-  varchar
+  uuid
 } from 'drizzle-orm/pg-core';
 
 export const userTable = pgTable('user', {
@@ -36,6 +36,8 @@ export const sessionTable = pgTable('session', {
   }).notNull()
 });
 
+export const propertyTypeEnum = pgEnum('property_type_enum', ['apt', 'house', 'studio']);
+
 export const listingTable = pgTable('listing', {
   id: uuid('id').defaultRandom().primaryKey(),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
@@ -47,16 +49,17 @@ export const listingTable = pgTable('listing', {
     .notNull()
     .references(() => userTable.id),
 
-  addr: text('addr').notNull(),
+  address: text('address').notNull(),
   lat: real('lat').notNull(),
   lng: real('lng').notNull(),
-  toCampus: real('to_campus').notNull(),
-  propertyType: text('property_type'),
+  minsToCampus: real('mins_to_campus').notNull(),
+  propertyType: propertyTypeEnum('property_type'),
   totalRooms: real('total_rooms').notNull(),
   availableRooms: real('available_rooms').notNull(),
   bathrooms: real('bathrooms').notNull(),
   femaleRoommates: real('female_roommates').notNull(),
   maleRoommates: real('male_roommates').notNull(),
+  nonbinaryRoommates: real('nonbinary_roommates').notNull(),
   desc: text('desc'),
   start: date('start').notNull(),
   end: date('end').notNull(),
@@ -68,3 +71,5 @@ export const listingTable = pgTable('listing', {
   // thumbnailIdx: decimal("thumbnail_idx", { precision: 64, scale: 0 }).notNullable(),
   // views: decimal("views", { precision: 64, scale: 0 }).notNullable().default(0),
 });
+
+export type InsertListing = typeof listingTable.$inferInsert;

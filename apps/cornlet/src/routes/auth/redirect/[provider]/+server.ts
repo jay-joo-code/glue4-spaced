@@ -4,7 +4,7 @@ import { Google, OAuth2RequestError } from 'arctic';
 import { OAUTH_GOOGLE_CLIENT_ID, OAUTH_GOOGLE_CLIENT_SECRET } from '$env/static/private';
 import { lucia } from '$root/src/db/auth.server';
 import db from '$root/src/db/drizzle.server';
-import { userTable } from '$root/src/db/schema.server';
+import { userTable } from '$root/src/db/schema';
 import { eq } from 'drizzle-orm';
 
 interface OAuthUser {

@@ -4,7 +4,7 @@ import type {
   TransactionWithRefunds,
   VenmoTransaction
 } from '$lib/types/transaction.type';
-import type { InsertTransaction, SelectTransaction } from '$root/src/db/schema.server';
+import type { InsertTransaction, SelectTransaction } from '$root/src/db/schema';
 import { endOfWeek, format, parse, startOfWeek } from 'date-fns';
 import Papa from 'papaparse';
 

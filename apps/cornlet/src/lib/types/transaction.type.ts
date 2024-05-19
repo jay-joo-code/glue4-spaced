@@ -1,4 +1,4 @@
-import type { SelectTransaction } from '$root/src/db/schema.server';
+import type { SelectTransaction } from '$root/src/db/schema';
 
 export type TransactionReduceGroup = {
   [key: string]: TransactionWithRefunds[];

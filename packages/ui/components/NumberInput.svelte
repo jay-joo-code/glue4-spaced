@@ -1,18 +1,18 @@
 <script lang="ts" generics="T extends Record<string, unknown>">
   import {
     formFieldProxy,
-    type FormFieldProxy,
+    type SuperForm,
     type FormPathLeaves,
-    type SuperForm
+    type FormFieldProxy
   } from 'sveltekit-superforms';
 
   export let superform: SuperForm<T>;
-  export let field: FormPathLeaves<T, string>;
+  export let field: FormPathLeaves<T, number>;
 
   const { value, errors, constraints } = formFieldProxy(
     superform,
     field
-  ) satisfies FormFieldProxy<string>;
+  ) satisfies FormFieldProxy<number>;
   $: label = field.replace(/([a-z])([A-Z])/g, '$1 $2').toLowerCase();
 </script>
 
@@ -22,7 +22,7 @@
   </div>
   <input
     name={field}
-    type="text"
+    type="number"
     aria-invalid={$errors ? 'true' : undefined}
     bind:value={$value}
     class="input input-bordered w-full max-w-xs"

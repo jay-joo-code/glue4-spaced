@@ -1,7 +1,10 @@
 export { default as AppLayout } from './components/AppLayout.svelte';
+export { default as CheckboxInput } from './components/CheckboxInput.svelte';
+export { default as DateInput } from './components/DateInput.svelte';
 export { default as FeedbackButtonModal } from './components/FeedbackButtonModal.svelte';
 export { default as MyCounterButton } from './components/MyCounterButton.svelte';
 export { default as Navbar } from './components/Navbar.svelte';
+export { default as NumberInput } from './components/NumberInput.svelte';
 export { default as PageContainer } from './components/PageContainer.svelte';
 export { default as SectionHero } from './components/SectionHero.svelte';
 export { default as TextInput } from './components/TextInput.svelte';

@@ -25,12 +25,22 @@ export const FOOTER_NAVS: FooterNav[] = [
 ];
 export const ACTION_BUTTONS_AUTHED: ActionButton[] = [
   {
+    label: '+ Add listing',
+    href: '/new',
+    variant: 'primary'
+  },
+  {
     label: 'Sign out',
     href: '/logout',
     variant: 'ghost'
   }
 ];
 export const ACTION_BUTTONS_UNAUTHED: ActionButton[] = [
+  {
+    label: 'Add listing',
+    href: '/login',
+    variant: 'ghost'
+  },
   {
     label: 'Sign in',
     href: '/login',
