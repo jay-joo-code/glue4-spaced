@@ -61,7 +61,9 @@
         aria-labelledby="footerHeading"
       >
         <h2 id="footerHeading" class="sr-only">Footer</h2>
-        <div class="sm:py-18 relative mx-auto w-full max-w-4xl px-4 py-16 md:py-24 lg:py-24">
+        <div
+          class="sm:py-18 relative mx-auto w-full max-w-7xl px-8 md:px-12 py-16 md:py-24 lg:py-24"
+        >
           <div class="xl:grid xl:grid-cols-3 xl:gap-8">
             <div class="xl:col-span-1">
               <a class="text-3xl font-bold text-base-content/70" href="/">{APP_NAME}</a>
