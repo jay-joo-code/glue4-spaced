@@ -1,6 +1,6 @@
 <script lang="ts" generics="T extends Record<string, unknown>">
   import { dev } from '$app/environment';
-  import { FieldConfig } from '@glue/types';
+  import type { FieldConfig } from '@glue/types';
   import { CheckboxInput, DateInput, NumberInput, TextInput } from '@glue/ui';
   import { getTableColumns } from 'drizzle-orm';
   import type { AnyPgTable } from 'drizzle-orm/pg-core';
