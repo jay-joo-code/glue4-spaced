@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { APP_NAME } from '$root/src/lib/config';
+  export let APP_NAME: string;
 </script>
 
 <div class="flex w-full justify-center">

@@ -8,6 +8,8 @@ export { default as Navbar } from './components/Navbar.svelte';
 export { default as NumberInput } from './components/NumberInput.svelte';
 export { default as PageContainer } from './components/PageContainer.svelte';
 export { default as SectionHero } from './components/SectionHero.svelte';
+export { default as SignInPage } from './components/SignInPage.svelte';
+export { default as TermsNotice } from './components/TermsNotice.svelte';
 export { default as TextInput } from './components/TextInput.svelte';
 export { default as Textarea } from './components/Textarea.svelte';
 export { default as UserAvatar } from './components/UserAvatar.svelte';

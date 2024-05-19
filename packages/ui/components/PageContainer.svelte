@@ -1,7 +1,7 @@
 <script lang="ts">
   export let APP_NAME: string;
   export let title: string;
-  export let layout: 'mobile-only' | 'aside-main' = 'mobile-only';
+  export let layout: 'mobile-only' | 'aside-main' | 'fullscreen' = 'mobile-only';
   export let isHoriPadding = true;
   export let isVertPadding = true;
   export let limitWidth = true;
@@ -28,5 +28,9 @@
     >
       <slot />
     </div>
+  </div>
+{:else if layout === 'fullscreen'}
+  <div class="{$$props.class} w-full">
+    <slot />
   </div>
 {/if}
