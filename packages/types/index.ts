@@ -14,3 +14,8 @@ export type ActionButton = {
   href: string;
   variant: 'primary' | 'ghost';
 };
+
+export type FieldConfig = {
+  isHidden?: boolean;
+  label?: string;
+};

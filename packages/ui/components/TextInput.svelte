@@ -8,18 +8,20 @@
 
   export let superform: SuperForm<T>;
   export let field: FormPathLeaves<T, string>;
+  export let label: string = undefined;
 
   const { value, errors, constraints } = formFieldProxy(
     superform,
     field
   ) satisfies FormFieldProxy<string>;
-  $: label = field.replace(/([a-z])([A-Z])/g, '$1 $2').toLowerCase();
 </script>
 
 <label class="form-control w-full max-w-xs">
-  <div class="label">
-    <span class="label-text first-letter:uppercase">{label}</span>
-  </div>
+  {#if label}
+    <div class="label">
+      <span class="label-text first-letter:uppercase">{label}</span>
+    </div>
+  {/if}
   <input
     name={field}
     type="text"

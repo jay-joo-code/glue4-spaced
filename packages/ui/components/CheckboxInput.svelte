@@ -8,12 +8,12 @@
 
   export let superform: SuperForm<T>;
   export let field: FormPathLeaves<T, boolean>;
+  export let label: string = undefined;
 
   const { value, errors, constraints } = formFieldProxy(
     superform,
     field
   ) satisfies FormFieldProxy<boolean>;
-  $: label = field.replace(/([a-z])([A-Z])/g, '$1 $2').toLowerCase();
 </script>
 
 <div class="form-control">
@@ -27,6 +27,8 @@
       {...$constraints}
       {...$$restProps}
     />
-    <span class="label-text first-letter:uppercase font-medium">{label}</span>
+    {#if label}
+      <span class="label-text first-letter:uppercase font-medium">{label}</span>
+    {/if}
   </label>
 </div>

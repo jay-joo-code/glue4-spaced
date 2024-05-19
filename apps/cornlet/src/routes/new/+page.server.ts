@@ -21,7 +21,7 @@ export const load: ServerLoad = async ({ url, locals }) => {
 };
 
 export const actions = {
-  insertListing: async ({ request, url, locals }) => {
+  insertListing: async ({ request }) => {
     const form = await superValidate(request, zod(insertListingSchema));
 
     if (!form.valid) return fail(400, { form });
