@@ -17,7 +17,8 @@ export const userTable = pgTable('user', {
     .notNull()
     .defaultNow()
     .$onUpdate(() => new Date()),
-  email: text('email')
+  email: text('email').unique(),
+  avatarUrl: text('avatar_url')
 });
 
 export const sessionTable = pgTable('session', {

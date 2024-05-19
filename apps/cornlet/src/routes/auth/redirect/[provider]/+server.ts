@@ -7,8 +7,15 @@ import db from '$root/src/db/drizzle.server';
 import { userTable } from '$root/src/db/schema';
 import { eq } from 'drizzle-orm';
 
-interface OAuthUser {
+interface OAuthUserGoogle {
+  sub: string;
+  name: string;
+  given_name: string;
+  family_name: string;
+  picture: string;
   email: string;
+  email_verified: boolean;
+  locale: string;
 }
 
 export const GET: RequestHandler = async ({ url, params, cookies }) => {
@@ -34,38 +41,24 @@ export const GET: RequestHandler = async ({ url, params, cookies }) => {
         Authorization: `Bearer ${tokens.accessToken}`
       }
     });
-    const user: OAuthUser = await response.json();
+    const googleUser: OAuthUserGoogle = await response.json();
 
-    const existingUser = await (
-      await db.select().from(userTable).where(eq(userTable.email, user.email)).limit(1)
+    const user = await (
+      await db
+        .insert(userTable)
+        .values({ email: googleUser.email, avatarUrl: googleUser.picture })
+        .onConflictDoUpdate({ target: userTable.email, set: { avatarUrl: googleUser.picture } })
+        .returning()
     ).at(0);
 
-    if (existingUser) {
-      const session = await lucia.createSession(existingUser.id, {});
-      const sessionCookie = lucia.createSessionCookie(session.id);
-      cookies.set(sessionCookie.name, sessionCookie.value, {
-        path: '.',
-        ...sessionCookie.attributes
-      });
-    } else {
-      const newUser = (
-        await db
-          .insert(userTable)
-          .values({
-            email: user.email
-          })
-          .returning()
-      ).at(0);
+    if (!user) throw new Error('Unable to create a new user');
 
-      if (!newUser) throw new Error('Unable to create a new user');
-
-      const session = await lucia.createSession(newUser.id, {});
-      const sessionCookie = lucia.createSessionCookie(session.id);
-      cookies.set(sessionCookie.name, sessionCookie.value, {
-        path: '.',
-        ...sessionCookie.attributes
-      });
-    }
+    const session = await lucia.createSession(user.id, {});
+    const sessionCookie = lucia.createSessionCookie(session.id);
+    cookies.set(sessionCookie.name, sessionCookie.value, {
+      path: '.',
+      ...sessionCookie.attributes
+    });
 
     return new Response(null, {
       status: 302,
