@@ -14,7 +14,7 @@
   <div class="flex justify-center">
     <div
       class="{$$props.class} w-full {isHoriPadding && 'px-4'} {isVertPadding &&
-        'pt-4 pb-8'} {limitWidth && 'max-w-2xl'}"
+        'pt-12 pb-8'} {limitWidth && 'max-w-2xl'}"
     >
       <slot />
     </div>
@@ -24,7 +24,7 @@
   <div class="w-full {limitWidth && 'flex justify-center'}">
     <div
       class="{$$props.class} flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-4 {limitWidth &&
-        'w-full max-w-4xl'} {isHoriPadding && 'px-4'} {isVertPadding && 'pt-4 pb-8'}"
+        'w-full max-w-4xl'} {isHoriPadding && 'px-4'} {isVertPadding && 'pt-12 pb-8'}"
     >
       <slot />
     </div>
