@@ -1,14 +1,4 @@
-import {
-  boolean,
-  date,
-  numeric,
-  pgEnum,
-  pgTable,
-  real,
-  text,
-  timestamp,
-  uuid
-} from 'drizzle-orm/pg-core';
+import { boolean, date, pgEnum, pgTable, real, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
 export const userTable = pgTable('user', {
   id: uuid('id').defaultRandom().primaryKey(),
@@ -18,7 +8,9 @@ export const userTable = pgTable('user', {
     .defaultNow()
     .$onUpdate(() => new Date()),
   email: text('email').unique(),
-  avatarUrl: text('avatar_url')
+  avatarUrl: text('avatar_url'),
+  firstName: text('first_name'),
+  lastName: text('last_name')
 });
 
 export const sessionTable = pgTable('session', {

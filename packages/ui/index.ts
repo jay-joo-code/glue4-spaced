@@ -10,6 +10,7 @@ export { default as PageContainer } from './components/PageContainer.svelte';
 export { default as SectionHero } from './components/SectionHero.svelte';
 export { default as TextInput } from './components/TextInput.svelte';
 export { default as Textarea } from './components/Textarea.svelte';
+export { default as UserAvatar } from './components/UserAvatar.svelte';
 export { default as IconAdd } from './icons/IconAdd.svelte';
 export { default as IconAddItem } from './icons/IconAddItem.svelte';
 export { default as IconAlertCircle } from './icons/IconAlertCircle.svelte';

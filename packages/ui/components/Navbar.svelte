@@ -1,9 +1,13 @@
 <script lang="ts">
   import type { ActionButton, Nav } from '@glue/types';
+  import type { User } from 'lucia';
+  import UserAvatar from './UserAvatar.svelte';
 
   export let appName: string;
   export let sitemap: Nav[] = [];
   export let actionButtons: ActionButton[] = [];
+  export let user: User = undefined;
+  export let AVATAR_NAVS: Nav[];
 
   // configs
   export let configLimitWidth = true;
@@ -97,6 +101,10 @@
           href={actionButton?.href}>{actionButton?.label}</a
         >
       {/each}
+
+      {#if user}
+        <UserAvatar {user} {AVATAR_NAVS} />
+      {/if}
     </div>
   </div>
 </div>

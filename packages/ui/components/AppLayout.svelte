@@ -5,12 +5,15 @@
   import { format } from 'date-fns';
   import type { ActionButton, FooterNav, Nav } from '@glue/types';
   import { onMount } from 'svelte';
+  import type { User } from 'lucia';
 
   export let APP_NAME: string;
   export let PUBLIC_NAVS: Nav[];
   export let PRIVATE_NAVS: Nav[];
+  export let AVATAR_NAVS: Nav[];
   export let FOOTER_NAVS: FooterNav[];
   export let ACTION_BUTTONS: ActionButton[];
+  export let user: User = undefined;
 
   const toastOptions = {
     dismissable: false,
@@ -37,7 +40,13 @@
 </div>
 
 <div class="w-screen">
-  <Navbar appName={APP_NAME} sitemap={PUBLIC_NAVS} actionButtons={ACTION_BUTTONS} />
+  <Navbar
+    appName={APP_NAME}
+    sitemap={PUBLIC_NAVS}
+    actionButtons={ACTION_BUTTONS}
+    {user}
+    {AVATAR_NAVS}
+  />
 
   <div class="flex flex-col items-center">
     <div class="relative w-full">

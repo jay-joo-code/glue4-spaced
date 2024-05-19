@@ -1,11 +1,10 @@
-import { error, redirect } from '@sveltejs/kit';
-import type { RequestHandler } from './$types';
-import { Google, OAuth2RequestError } from 'arctic';
 import { OAUTH_GOOGLE_CLIENT_ID, OAUTH_GOOGLE_CLIENT_SECRET } from '$env/static/private';
 import { lucia } from '$root/src/db/auth.server';
 import db from '$root/src/db/drizzle.server';
 import { userTable } from '$root/src/db/schema';
-import { eq } from 'drizzle-orm';
+import { error } from '@sveltejs/kit';
+import { Google, OAuth2RequestError } from 'arctic';
+import type { RequestHandler } from './$types';
 
 interface OAuthUserGoogle {
   sub: string;
@@ -46,8 +45,20 @@ export const GET: RequestHandler = async ({ url, params, cookies }) => {
     const user = await (
       await db
         .insert(userTable)
-        .values({ email: googleUser.email, avatarUrl: googleUser.picture })
-        .onConflictDoUpdate({ target: userTable.email, set: { avatarUrl: googleUser.picture } })
+        .values({
+          email: googleUser.email,
+          avatarUrl: googleUser.picture,
+          firstName: googleUser.given_name,
+          lastName: googleUser.family_name
+        })
+        .onConflictDoUpdate({
+          target: userTable.email,
+          set: {
+            avatarUrl: googleUser.picture,
+            firstName: googleUser.given_name,
+            lastName: googleUser.family_name
+          }
+        })
         .returning()
     ).at(0);
 

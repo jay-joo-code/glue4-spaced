@@ -8,6 +8,16 @@ export const PRIVATE_NAVS: Nav[] = [
     href: '/profile/my-reservations'
   }
 ];
+export const AVATAR_NAVS: Nav[] = [
+  {
+    label: 'My listings',
+    href: '/profile/listings'
+  },
+  {
+    label: 'Sign out',
+    href: '/logout'
+  }
+];
 export const FOOTER_NAVS: FooterNav[] = [
   {
     heading: 'Legal',
@@ -28,18 +38,13 @@ export const ACTION_BUTTONS_AUTHED: ActionButton[] = [
     label: '+ Add listing',
     href: '/new',
     variant: 'primary'
-  },
-  {
-    label: 'Sign out',
-    href: '/logout',
-    variant: 'ghost'
   }
 ];
 export const ACTION_BUTTONS_UNAUTHED: ActionButton[] = [
   {
-    label: 'Add listing',
-    href: '/login',
-    variant: 'ghost'
+    label: '+ Add listing',
+    href: '/new',
+    variant: 'primary'
   },
   {
     label: 'Sign in',
