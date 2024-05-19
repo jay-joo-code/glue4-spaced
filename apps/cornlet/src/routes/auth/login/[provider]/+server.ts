@@ -10,6 +10,7 @@ export const GET: RequestHandler = async ({ url, params, cookies }) => {
   const state = generateState();
   const codeVerifier = generateCodeVerifier();
   const REDIRECT_URL = `${url.origin}/auth/redirect/${provider}`;
+  const redirectTo = url.searchParams.get('redirectTo') ?? '/';
 
   // TODO: handle different providers
   const google = new Google(OAUTH_GOOGLE_CLIENT_ID, OAUTH_GOOGLE_CLIENT_SECRET, REDIRECT_URL);
@@ -26,6 +27,14 @@ export const GET: RequestHandler = async ({ url, params, cookies }) => {
   });
 
   cookies.set(`code_verifier_${provider}`, codeVerifier, {
+    path: '/',
+    secure: !dev,
+    httpOnly: true,
+    maxAge: 60 * 10, // 10 min
+    sameSite: 'lax'
+  });
+
+  cookies.set(`oauth_redirect_to_${provider}`, redirectTo, {
     path: '/',
     secure: !dev,
     httpOnly: true,

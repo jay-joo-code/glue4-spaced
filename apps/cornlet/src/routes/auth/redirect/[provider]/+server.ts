@@ -23,6 +23,7 @@ export const GET: RequestHandler = async ({ url, params, cookies }) => {
   const state = url.searchParams.get('state');
   const storedState = cookies.get(`oauth_state_${provider}`) ?? null;
   const storedCodeVerifier = cookies.get(`code_verifier_${provider}`) ?? null;
+  const redirectTo = cookies.get(`oauth_redirect_to_${provider}`) ?? '/';
 
   if (!code || !state || !storedState || !storedCodeVerifier || state !== storedState) {
     return error(400);
@@ -74,7 +75,7 @@ export const GET: RequestHandler = async ({ url, params, cookies }) => {
     return new Response(null, {
       status: 302,
       headers: {
-        Location: '/'
+        Location: redirectTo
       }
     });
   } catch (e) {

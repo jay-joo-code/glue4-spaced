@@ -2,8 +2,11 @@
   import { IconGoogle, TermsNotice } from '@glue/ui';
 
   export let APP_NAME: string;
+  export let redirectTo: string;
   export let variant: 'center-box' | 'split-screen' = 'split-screen';
   export let bgPattern: 'temple' | 'autumn' = 'temple';
+
+  const googleOAuthHref = `/auth/login/google?redirectTo=${redirectTo}`;
 </script>
 
 {#if variant === 'center-box'}
@@ -16,7 +19,7 @@
 
       <!-- oauth -->
       <div class="mt-12 space-y-4">
-        <a type="button" class="btn-outline btn-block btn mt-2 gap-2" href="/auth/login/google">
+        <a type="button" class="btn-outline btn-block btn mt-2 gap-2" href={googleOAuthHref}>
           <IconGoogle /> Sign in with Google
         </a>
       </div>
@@ -44,7 +47,7 @@
         <p class="font-extrabold mt-10 text-3xl">Welcome back</p>
         <p class="text-base-content/80 mt-3 text-sm">Sign in to continue using {APP_NAME}</p>
         <div class="mt-12 space-y-4 w-full">
-          <a type="button" class="btn-outline btn-block btn mt-2 gap-2" href="/auth/login/google">
+          <a type="button" class="btn-outline btn-block btn mt-2 gap-2" href={googleOAuthHref}>
             <IconGoogle /> Sign in with Google
           </a>
         </div>
