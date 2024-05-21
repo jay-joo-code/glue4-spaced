@@ -1,10 +1,13 @@
 <script>
   import { APP_NAME } from '$root/src/lib/config';
-  import { PageContainer } from '@glue/ui';
+  import { PageContainer, SignInPage } from '@glue/ui';
+  import { page } from '$app/stores';
 </script>
 
 <PageContainer {APP_NAME} title="Login">
-  <div class="flex justify-center items-center">
-    <a class="btn" href="/auth/login/google">Sign in with Google</a>
-  </div>
+  <SignInPage
+    {APP_NAME}
+    bgPattern="autumn"
+    redirectTo={$page.url.searchParams.get('redirectTo') ?? '/'}
+  />
 </PageContainer>
