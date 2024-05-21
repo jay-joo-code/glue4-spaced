@@ -4,7 +4,7 @@ import { protectedRouteRedirectUrl } from '$root/src/lib/util/auth';
 import db from '$src/db/drizzle.server';
 import { itemTable, transactionTable } from '$src/db/schema.server';
 import { redirect, type Actions, type ServerLoad } from '@sveltejs/kit';
-import { and, desc, eq, gt, isNull, lt } from 'drizzle-orm';
+import { and, desc, eq, gt, gte, isNull, lt } from 'drizzle-orm';
 import { alias } from 'drizzle-orm/pg-core';
 
 export const load: ServerLoad = async ({ url, locals }) => {
@@ -25,12 +25,13 @@ export const load: ServerLoad = async ({ url, locals }) => {
           eq(transactionTable.isIgnore, false),
           eq(transactionTable.isPendingRefund, false),
           eq(transactionTable.isRecurring, false),
-          isNull(transactionTable.refundId)
+          isNull(transactionTable.refundId),
+          gte(transactionTable.date, '2024-04-08') // date to start tracking from
         )
       )
       .leftJoin(refund, eq(transactionTable.id, refund.refundId))
       .orderBy(desc(transactionTable.usageDate))
-      .limit(50);
+      .limit(200);
 
     const expensesWithRefunds = aggregateRefunds(expenses);
     const weeklyExpenses = groupTransactionsByWeek(expensesWithRefunds);

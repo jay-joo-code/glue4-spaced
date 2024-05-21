@@ -64,7 +64,24 @@ export const groupTransactionsByWeek = (transactions: TransactionWithRefunds[]) 
     transactionGroups.unshift(obj);
   }
 
-  return transactionGroups;
+  const WEEKLY_BUDGET = 250;
+  let budgetRollover = 0;
+  const transactionGroupsWithBudgetTracking = transactionGroups
+    .reverse()
+    .map((transactionGroup) => {
+      const budgetDiff =
+        transactionGroup.weekString === 'Date unset'
+          ? 0
+          : WEEKLY_BUDGET + transactionGroup.totalAmount;
+      budgetRollover += budgetDiff;
+
+      return {
+        ...transactionGroup,
+        budgetDiff,
+        budgetRollover
+      };
+    });
+  return transactionGroupsWithBudgetTracking;
 };
 
 export const formatMoney = (num: number) => {

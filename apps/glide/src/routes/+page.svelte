@@ -1,9 +1,10 @@
 <script lang="ts">
+  import { browser } from '$app/environment';
   import { invalidateAll } from '$app/navigation';
   import TransactionItem from '$lib/components/TransactionItem.svelte';
   import { APP_NAME } from '$lib/config';
   import { formatMoney, parseTransactionsCSV } from '$lib/util/transaction';
-  import { IconNewTab, PageContainer } from '@glue/ui';
+  import { IconNewTab, IconUpKarat, PageContainer } from '@glue/ui';
 
   export let data;
 
@@ -64,6 +65,48 @@
 
   <section class="py-12 mt-8">
     <div class="flex justify-between items-center">
+      <h2 class="text-3xl font-extrabold">Budget tracking</h2>
+    </div>
+
+    <div class="mt-8">
+      {#await data.weeklyExpenses}
+        <span class="loading loading-spinner loading-sm" />
+      {:then weeklyExpenses}
+        {#if weeklyExpenses}
+          <div
+            class="grid grid-cols-6 w-full font-extrabold px-4 border-b-2 border-base-content/20 pb-2 text-sm"
+          >
+            <p class="col-span-3">Week</p>
+            <p class="text-center">Expense</p>
+            <p class="text-center">Budget diff</p>
+            <p class="text-center">Rollover</p>
+          </div>
+
+          {#each weeklyExpenses as { weekString, totalAmount, budgetDiff, budgetRollover } (weekString)}
+            <div class="border-b border-base-content/20 py-1">
+              <a class="btn btn-ghost w-full" href="#{weekString}">
+                <div class="grid grid-cols-6 w-full">
+                  <p class="text-sm font-extrabold text-left text-base-content/60 col-span-3">
+                    {weekString}
+                  </p>
+                  <p class="text-sm font-medium">{formatMoney(totalAmount)}</p>
+                  <p class="text-sm font-medium text-error" class:text-success={budgetDiff > 0}>
+                    {formatMoney(budgetDiff)}
+                  </p>
+                  <p class="text-sm font-medium text-error" class:text-success={budgetRollover > 0}>
+                    {formatMoney(budgetRollover)}
+                  </p>
+                </div>
+              </a>
+            </div>
+          {/each}
+        {/if}
+      {/await}
+    </div>
+  </section>
+
+  <section class="py-12 mt-8">
+    <div class="flex justify-between items-center">
       <h2 class="text-3xl font-extrabold">Pending refund</h2>
     </div>
 
@@ -93,10 +136,11 @@
       {:then weeklyExpenses}
         {#if weeklyExpenses}
           <div class="space-y-8">
-            {#each weeklyExpenses as { weekString, totalAmount, transactions }}
+            {#each weeklyExpenses.slice().reverse() as { weekString, totalAmount, transactions }}
               <div class="">
                 <div
                   class="flex items-center justify-between pl-4 pr-12 bg-base-300 rounded-xl py-2"
+                  id={weekString}
                 >
                   <p class="text-sm font-extrabold text-base-content/60">{weekString}</p>
                   <p class="text-sm font-extrabold text-error">{formatMoney(totalAmount)}</p>
@@ -113,6 +157,15 @@
       {/await}
     </div>
   </section>
+
+  <div class="fixed right-8 bottom-8">
+    <button
+      class="btn btn-circle text-3xl"
+      on:click={() => {
+        if (browser) window.scrollTo(0, 0);
+      }}><IconUpKarat /></button
+    >
+  </div>
 </PageContainer>
 
 <dialog bind:this={dialogAssignRefund} class="modal">
