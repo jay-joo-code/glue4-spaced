@@ -1,4 +1,5 @@
 export { default as AppLayout } from './components/AppLayout.svelte';
+export { default as Autocomplete } from './components/Autocomplete.svelte';
 export { default as CheckboxInput } from './components/CheckboxInput.svelte';
 export { default as DateInput } from './components/DateInput.svelte';
 export { default as FeedbackButtonModal } from './components/FeedbackButtonModal.svelte';

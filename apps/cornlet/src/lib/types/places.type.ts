@@ -1,4 +1,4 @@
-export interface GooglePlaceSuggestion {
+export interface GooglePlaceSuggestion extends Record<string, unknown> {
   description: string;
   matched_substrings: {
     length: number;
