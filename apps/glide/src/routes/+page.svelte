@@ -13,7 +13,6 @@
   const handleFileUpload = async (event: Event & { currentTarget: HTMLInputElement }) => {
     if (event.currentTarget?.files && event.currentTarget?.files?.length > 0) {
       const parsedTransactions = await parseTransactionsCSV(event.currentTarget?.files[0]);
-      console.log('parsedTransactions', parsedTransactions);
       await fetch('/api/upload', {
         method: 'POST',
         headers: {
