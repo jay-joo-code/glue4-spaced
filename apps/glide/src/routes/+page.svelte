@@ -74,9 +74,9 @@
       {:then weeklyExpenses}
         {#if weeklyExpenses}
           <div
-            class="grid grid-cols-6 w-full font-extrabold px-4 border-b-2 border-base-content/20 pb-2 text-sm"
+            class="grid grid-cols-5 w-full font-extrabold px-1 border-b-2 border-base-content/20 pb-2 text-sm"
           >
-            <p class="col-span-3">Week</p>
+            <p class="col-span-2">Week</p>
             <p class="text-center">Expense</p>
             <p class="text-center">Budget diff</p>
             <p class="text-center">Rollover</p>
@@ -84,16 +84,24 @@
 
           {#each weeklyExpenses as { weekString, totalAmount, budgetDiff, budgetRollover } (weekString)}
             <div class="border-b border-base-content/20 py-1">
-              <a class="btn btn-ghost w-full" href="#{weekString}">
-                <div class="grid grid-cols-6 w-full">
-                  <p class="text-sm font-extrabold text-left text-base-content/60 col-span-3">
+              <a class="btn btn-ghost w-full !px-1" href="#{weekString}">
+                <div class="grid grid-cols-5 w-full">
+                  <p
+                    class="text-xs md:text-sm font-extrabold text-left text-base-content/60 col-span-2"
+                  >
                     {weekString}
                   </p>
-                  <p class="text-sm font-medium">{formatMoney(totalAmount)}</p>
-                  <p class="text-sm font-medium text-error" class:text-success={budgetDiff > 0}>
+                  <p class="text-xs md:text-sm font-medium">{formatMoney(totalAmount)}</p>
+                  <p
+                    class="text-xs md:text-sm font-medium text-error"
+                    class:text-success={budgetDiff > 0}
+                  >
                     {formatMoney(budgetDiff)}
                   </p>
-                  <p class="text-sm font-medium text-error" class:text-success={budgetRollover > 0}>
+                  <p
+                    class="text-xs md:text-sm font-medium text-error"
+                    class:text-success={budgetRollover > 0}
+                  >
                     {formatMoney(budgetRollover)}
                   </p>
                 </div>
