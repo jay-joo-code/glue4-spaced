@@ -136,7 +136,9 @@
       {:then weeklyExpenses}
         {#if weeklyExpenses}
           <div class="space-y-8">
-            {#each weeklyExpenses.slice().reverse() as { weekString, totalAmount, transactions }}
+            {#each weeklyExpenses
+              .slice()
+              .reverse() as { weekString, totalAmount, transactions } (weekString)}
               <div class="">
                 <div
                   class="flex items-center justify-between pl-4 pr-12 bg-base-300 rounded-xl py-2"
@@ -146,7 +148,7 @@
                   <p class="text-sm font-extrabold text-error">{formatMoney(totalAmount)}</p>
                 </div>
                 <div class="space-y-2 mt-3">
-                  {#each transactions as transaction}
+                  {#each transactions as transaction (transaction.id)}
                     <TransactionItem {transaction} bind:dialogAssignRefund bind:refundId />
                   {/each}
                 </div>
