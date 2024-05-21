@@ -4,7 +4,7 @@
   import { page } from '$app/stores';
 </script>
 
-<PageContainer {APP_NAME} title="Login">
+<PageContainer {APP_NAME} title="Login" layout="fullscreen">
   <SignInPage
     {APP_NAME}
     bgPattern="autumn"
