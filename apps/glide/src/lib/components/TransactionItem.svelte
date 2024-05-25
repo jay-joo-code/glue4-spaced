@@ -125,16 +125,29 @@
             </a>
           </li>
           {#if dialogAssignRefund}
-            <li>
-              <a
-                on:click={() => {
-                  updateTransaction(transaction.id, {
-                    isPendingRefund: true
-                  });
-                }}
-                >Pending refund
-              </a>
-            </li>
+            {#if transaction.isPendingRefund}
+              <li>
+                <a
+                  on:click={() => {
+                    updateTransaction(transaction.id, {
+                      isPendingRefund: false
+                    });
+                  }}
+                  >Not pending refund
+                </a>
+              </li>
+            {:else}
+              <li>
+                <a
+                  on:click={() => {
+                    updateTransaction(transaction.id, {
+                      isPendingRefund: true
+                    });
+                  }}
+                  >Pending refund
+                </a>
+              </li>
+            {/if}
             <li>
               <a
                 on:click={() => {
