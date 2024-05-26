@@ -1,11 +1,13 @@
 <script lang="ts">
-  import { flip } from 'svelte/animate';
-  import { dndzone } from 'svelte-dnd-action';
-  import { uploadFile } from '@glue/utils';
   import type { DndEvent, Item } from 'svelte-dnd-action';
+  import { dndzone } from 'svelte-dnd-action';
+  import { flip } from 'svelte/animate';
 
   export let photoItems: Item[];
   export let firebase: any;
+  export let handleFileUpload: (files: FileList) => Promise<Item[]>;
+
+  let isLoading = false;
 
   const flipDurationMs = 300;
 
@@ -16,24 +18,25 @@
     photoItems = event.detail.items;
   }
 
-  const handleFileUpload = async (
-    event: Event & { currentTarget: EventTarget & HTMLInputElement }
-  ) => {
+  const onFileUpload = async (event: Event & { currentTarget: EventTarget & HTMLInputElement }) => {
     if (event.currentTarget.files) {
-      const uploadPromises = Array.from(event.currentTarget.files).map((file) =>
-        uploadFile(file, '/v2', firebase)
-      );
-      const urls = await Promise.all(uploadPromises);
-      photoItems = [...photoItems, ...urls.map((url) => ({ id: url }))];
+      isLoading = true;
+      photoItems = await handleFileUpload(event.currentTarget.files);
+      isLoading = false;
     }
   };
 </script>
 
-<input
-  type="file"
-  class="file-input file-input-bordered w-full max-w-xs mt-6"
-  on:input={handleFileUpload}
-/>
+<div class="flex space-x-6 items-center mt-6">
+  <input
+    type="file"
+    class="file-input file-input-bordered w-full max-w-xs"
+    on:input={onFileUpload}
+  />
+  {#if isLoading}
+    <span class="loading loading-spinner loading-sm"></span>
+  {/if}
+</div>
 
 <div
   class="grid grid-cols-2 gap-4 mt-8 !outline-none"
@@ -48,7 +51,7 @@
         src={item.id}
       />
       <button
-        class="absolute -right-2 -top-2 btn-xs text-[0.9rem] btn btn-circle pb-1"
+        class="absolute -right-2 -top-2 btn-xs text-[0.9rem] btn btn-circle pb-1 border border-base-content/10"
         on:click={(event) => {
           photoItems = photoItems.filter((existingItem) => existingItem.id !== item.id);
         }}
