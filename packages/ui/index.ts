@@ -8,6 +8,7 @@ export { default as MyCounterButton } from './components/MyCounterButton.svelte'
 export { default as Navbar } from './components/Navbar.svelte';
 export { default as NumberInput } from './components/NumberInput.svelte';
 export { default as PageContainer } from './components/PageContainer.svelte';
+export { default as PhotoUpload } from './components/PhotoUpload.svelte';
 export { default as SectionHero } from './components/SectionHero.svelte';
 export { default as SignInPage } from './components/SignInPage.svelte';
 export { default as TermsNotice } from './components/TermsNotice.svelte';

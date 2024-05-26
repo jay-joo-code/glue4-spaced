@@ -24,6 +24,7 @@ export const actions = {
   insertListing: async ({ request }) => {
     const form = await superValidate(request, zod(insertListingSchema));
 
+    console.log('form.data', form.valid, form.data);
     if (!form.valid) return fail(400, { form });
 
     await db.insert(listingTable).values(form.data);

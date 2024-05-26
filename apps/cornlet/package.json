@@ -73,6 +73,7 @@
     "replicate": "^0.27.1",
     "resend": "^1.1.0",
     "showdown": "^2.1.0",
+    "svelte-dnd-action": "^0.9.47",
     "svelte-email": "^0.0.4",
     "svelte-intersection-observer": "^1.0.0",
     "universal-cookie": "^4.0.4"

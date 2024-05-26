@@ -59,9 +59,8 @@ export const listingTable = pgTable('listing', {
   price: real('price').notNull(),
   isActive: boolean('is_active').default(true),
   isSold: boolean('is_sold').default(false),
-  isDeleted: boolean('is_deleted').default(false)
-  // imgs: json("imgs").notNullable().default(pgJson.array([])),
-  // thumbnailIdx: decimal("thumbnail_idx", { precision: 64, scale: 0 }).notNullable(),
+  isDeleted: boolean('is_deleted').default(false),
+  photoUrls: text('photo_urls').array().notNull()
   // views: decimal("views", { precision: 64, scale: 0 }).notNullable().default(0),
 });
 
