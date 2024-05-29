@@ -53,6 +53,7 @@
       class="file-input file-input-bordered w-full max-w-xs"
       on:input={onFileUpload}
       class:file-input-error={$errors}
+      multiple
       {...$constraints}
       {...$$restProps}
     />
