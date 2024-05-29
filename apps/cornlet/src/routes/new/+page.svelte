@@ -91,6 +91,7 @@
         label: 'Total rooms in property'
       },
       {
+        variant: 'field',
         column: 'desc',
         label: 'Description',
         component: 'textarea'
@@ -104,13 +105,15 @@
         content: 'Good photos can significantly increase interest in your sublet'
       },
       {
+        variant: 'field',
         component: 'file-upload',
         column: 'photoUrls',
         handleFileUpload: async (files) => {
           const uploadPromises = Array.from(files).map((file) => uploadFile(file, '/v2', firebase));
           const urls = await Promise.all(uploadPromises);
           return urls;
-        }
+        },
+        isHideLabel: true
       }
     ]}
   >
