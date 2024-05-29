@@ -50,7 +50,7 @@
         {:else if block.variant === 'h2'}
           <h2 class="text-2xl font-extrabold !mt-6">{block.content}</h2>
         {:else if block.variant === 'p'}
-          <h2 class="text-sm text-base-content/80">{block.content}</h2>
+          <h2 class="text-sm text-base-content/80 !mb-6">{block.content}</h2>
         {/if}
       {:else if isFormSpaceBlock(block)}
         <div style="margin-bottom: {block.spaceRem}rem;"></div>
