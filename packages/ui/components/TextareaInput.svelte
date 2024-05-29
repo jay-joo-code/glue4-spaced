@@ -23,12 +23,12 @@
       <span class="label-text first-letter:uppercase">{label}</span>
     </div>
   {/if}
-  <input
+  <textarea
     name={field}
-    type="text"
+    rows="7"
     aria-invalid={$errors ? 'true' : undefined}
     bind:value={$value}
-    class="input input-bordered w-full"
+    class="textarea textarea-bordered w-full"
     class:input-error={$errors}
     {...$constraints}
     {...$$restProps}

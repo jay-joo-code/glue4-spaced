@@ -48,16 +48,14 @@
 </script>
 
 <PageContainer {APP_NAME} title="Create new listing">
-  <h1 class="text-3xl font-extrabold mb-8">Create new sublet listing</h1>
-
-  <Autocomplete
+  <!-- <Autocomplete
     bind:value={address}
     suggestions={addressSuggestions}
     getSuggestionLabel={(suggestion) => suggestion.description}
     onSuggestionSelect={(suggestion) => {
       address = suggestion.description;
     }}
-  />
+  /> -->
 
   <Form
     form={data.form}
@@ -78,7 +76,45 @@
         goto('/profile/listings');
       }
     }}
-    fieldConfigs={{
+    formBlocks={[
+      {
+        variant: 'h1',
+        content: 'Create new sublet listing'
+      },
+      {
+        variant: 'space',
+        spaceRem: 2
+      },
+      {
+        variant: 'field',
+        column: 'totalRooms',
+        label: 'Total rooms in property'
+      },
+      {
+        column: 'desc',
+        label: 'Description',
+        component: 'textarea'
+      },
+      {
+        variant: 'h2',
+        content: 'Photos'
+      },
+      {
+        variant: 'p',
+        content: 'Good photos can significantly increase interest in your sublet'
+      },
+      {
+        component: 'file-upload',
+        column: 'photoUrls',
+        handleFileUpload: async (files) => {
+          const uploadPromises = Array.from(files).map((file) => uploadFile(file, '/v2', firebase));
+          const urls = await Promise.all(uploadPromises);
+          return urls;
+        }
+      }
+    ]}
+  >
+    <!-- fieldConfigs={{
       address: {
         isHidden: true
       },
@@ -109,9 +145,8 @@
       price: {
         label: 'Price per month ($)'
       }
-    }}
-  >
-    <div class="my-8">
+    }} -->
+    <!-- <div class="my-8">
       <p class="text-2xl font-extrabold">Photos</p>
       <p class="mt-2 text-sm text-base-content/80">
         Good photos can significantly increase interest in your sublet
@@ -125,6 +160,6 @@
           return [...photoItems, ...urls.map((url) => ({ id: url }))];
         }}
       />
-    </div>
+    </div> -->
   </Form>
 </PageContainer>

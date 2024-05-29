@@ -15,7 +15,53 @@ export type ActionButton = {
   variant: 'primary' | 'ghost';
 };
 
-export type FieldConfig = {
-  isHidden?: boolean;
+export type FormBlock =
+  | FormFieldBlock
+  | FormTextBlock
+  | FormSpaceBlock
+  | FormFileUploadBlock
+  | FormTextareaBlock;
+
+export type FormFieldBlock = {
+  variant: 'field';
+  column: string;
   label?: string;
+  isHideLabel?: boolean;
 };
+
+export type FormTextBlock = {
+  variant: 'h1' | 'h2' | 'p';
+  content: string;
+};
+
+export type FormSpaceBlock = {
+  variant: 'space';
+  spaceRem: number;
+};
+
+export type FormFileUploadBlock = FormFieldBlock & {
+  component: 'file-upload';
+  handleFileUpload: (files: FileList) => Promise<string[]>;
+};
+
+export type FormTextareaBlock = FormFieldBlock & {
+  component: 'textarea';
+};
+
+export function isFormFieldBlock(block: any): block is FormFieldBlock {
+  return block.variant === 'field';
+}
+
+export function isFormTextBlock(block: any): block is FormTextBlock {
+  return ['h1', 'h2', 'p'].includes(block.variant);
+}
+export function isFormSpaceBlock(block: any): block is FormSpaceBlock {
+  return block.variant === 'space';
+}
+
+export function isFormFileUploadBlock(block: any): block is FormFileUploadBlock {
+  return block.component === 'file-upload';
+}
+export function isFormTextareaBlock(block: any): block is FormTextareaBlock {
+  return block.component === 'textarea';
+}
