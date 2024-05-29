@@ -1,5 +1,5 @@
 <script lang="ts" generics="T extends Record<string, unknown>">
-  import PhotoUploadInput from './PhotoUploadInput.svelte';
+  import FileUploadInput from './FileUploadInput.svelte';
 
   import { dev } from '$app/environment';
   import {
@@ -55,7 +55,7 @@
       {:else if isFormSpaceBlock(block)}
         <div style="margin-bottom: {block.spaceRem}rem;"></div>
       {:else if isFormFileUploadBlock(block)}
-        <PhotoUploadInput
+        <FileUploadInput
           {superform}
           field={block.column}
           label={getBlockLabel(block)}
