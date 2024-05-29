@@ -4,8 +4,8 @@
   import { flip } from 'svelte/animate';
 
   export let photoItems: Item[];
-  export let firebase: any;
   export let handleFileUpload: (files: FileList) => Promise<Item[]>;
+  export let name: string;
 
   let isLoading = false;
 
