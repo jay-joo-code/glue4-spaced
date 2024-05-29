@@ -16,7 +16,7 @@
   ) satisfies FormFieldProxy<number>;
 </script>
 
-<label class="form-control w-full max-w-xs">
+<label class="form-control w-full">
   {#if label}
     <div class="label">
       <span class="label-text first-letter:uppercase">{label}</span>
@@ -27,7 +27,7 @@
     type="number"
     aria-invalid={$errors ? 'true' : undefined}
     bind:value={$value}
-    class="input input-bordered w-full max-w-xs"
+    class="input input-bordered w-full"
     class:input-error={$errors}
     {...$constraints}
     {...$$restProps}

@@ -17,7 +17,7 @@
   ) satisfies FormFieldProxy<string>;
 </script>
 
-<label class="form-control w-full max-w-xs">
+<label class="form-control w-full">
   {#if !isHideLabel && label}
     <div class="label">
       <span class="label-text first-letter:uppercase">{label}</span>
