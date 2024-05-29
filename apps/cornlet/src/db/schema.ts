@@ -46,7 +46,7 @@ export const listingTable = pgTable('listing', {
   lat: real('lat').notNull(),
   lng: real('lng').notNull(),
   minsToCampus: real('mins_to_campus').notNull(),
-  propertyType: propertyTypeEnum('property_type'),
+  propertyType: propertyTypeEnum('property_type').notNull(),
   totalRooms: real('total_rooms').notNull(),
   availableRooms: real('available_rooms').notNull(),
   bathrooms: real('bathrooms').notNull(),
@@ -65,3 +65,4 @@ export const listingTable = pgTable('listing', {
 });
 
 export type InsertListing = typeof listingTable.$inferInsert;
+export type SelectListing = typeof listingTable.$inferInsert;
