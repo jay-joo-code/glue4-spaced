@@ -68,6 +68,25 @@
       },
       {
         variant: 'field',
+        column: 'propertyType',
+        component: 'select',
+        options: [
+          {
+            label: 'Apartment',
+            value: 'apt'
+          },
+          {
+            label: 'House',
+            value: 'house'
+          },
+          {
+            label: 'Studio',
+            value: 'studio'
+          }
+        ]
+      },
+      {
+        variant: 'field',
         column: 'totalRooms',
         label: 'Total rooms in property'
       },

@@ -5,12 +5,20 @@
   import {
     isFormFieldBlock,
     isFormFileUploadBlock,
+    isFormSelectBlock,
     isFormSpaceBlock,
     isFormTextBlock,
     isFormTextareaBlock,
     type FormBlock
   } from '@glue/types';
-  import { CheckboxInput, DateInput, NumberInput, TextInput, TextareaInput } from '@glue/ui';
+  import {
+    CheckboxInput,
+    DateInput,
+    NumberInput,
+    TextInput,
+    TextareaInput,
+    SelectInput
+  } from '@glue/ui';
   import { getTableColumns } from 'drizzle-orm';
   import type { AnyPgTable } from 'drizzle-orm/pg-core';
   import SuperDebug, {
@@ -68,6 +76,15 @@
           field={block.column}
           label={getBlockLabel(block)}
           isHideLabel={block.isHideLabel}
+        />
+      {:else if isFormSelectBlock(block)}
+        <SelectInput
+          {superform}
+          field={block.column}
+          label={getBlockLabel(block)}
+          isHideLabel={block.isHideLabel}
+          options={block.options}
+          onOptionSelect={block.onOptionSelect}
         />
       {:else if isFormFieldBlock(block)}
         {#if columns[block.column].columnType === 'PgDateString'}
