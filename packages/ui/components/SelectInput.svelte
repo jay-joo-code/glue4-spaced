@@ -1,13 +1,12 @@
 <script lang="ts" generics="T extends Record<string, unknown>">
   import type { FormSelectOption } from '@glue/types';
+  import { onMount } from 'svelte';
   import {
     formFieldProxy,
     type FormFieldProxy,
     type FormPathLeaves,
     type SuperForm
   } from 'sveltekit-superforms';
-  import { clickOutsideAction } from '@glue/utils';
-  import { onMount } from 'svelte';
 
   export let superform: SuperForm<T>;
   export let field: FormPathLeaves<T, string>;
@@ -24,6 +23,7 @@
   let highlightedIdx = -1;
   let searchText: string = '';
   let isShowOptions = false;
+  let inputElement: HTMLInputElement;
 
   $: selectedOption = options.find((option) => option.value === $value);
   $: filteredOptions = options.filter((option) =>
@@ -38,7 +38,7 @@
     if (onOptionSelect) {
       onOptionSelect(options[highlightedIdx]);
     }
-    isShowOptions = false;
+    inputElement.blur();
   };
 
   function handleKeydown(event: KeyboardEvent) {
@@ -65,13 +65,7 @@
   });
 </script>
 
-<div
-  class="relative"
-  use:clickOutsideAction
-  on:click_outside={() => {
-    isShowOptions = false;
-  }}
->
+<div class="relative">
   <label class="form-control w-full">
     {#if !isHideLabel && label}
       <div class="label">
@@ -85,12 +79,13 @@
       on:focus={(event) => {
         isShowOptions = true;
       }}
-      on:click={() => {
-        isShowOptions = true;
+      on:blur={() => {
+        isShowOptions = false;
       }}
       name={field}
       aria-invalid={$errors ? 'true' : undefined}
       bind:value={searchText}
+      bind:this={inputElement}
       class:input-error={$errors}
       autocomplete="off"
       {...$constraints}
@@ -109,7 +104,8 @@
           <button
             class="w-full justify-start btn btn-ghost"
             class:bg-base-300={highlightedIdx === idx}
-            on:click={() => {
+            on:mousedown={(event) => {
+              event.preventDefault();
               handleOptionSelect(option);
             }}
           >
