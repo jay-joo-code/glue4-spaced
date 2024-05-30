@@ -80,7 +80,7 @@
       type="text"
       class="input input-bordered w-full"
       on:keydown={handleKeydown}
-      on:focus={(event) => {
+      on:focus={() => {
         isShowOptions = true;
       }}
       on:blur={() => {
