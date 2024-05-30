@@ -81,6 +81,8 @@
       }}
       on:blur={() => {
         isShowOptions = false;
+        const latestSelectedOption = options.find((option) => option.value === $value);
+        searchText = latestSelectedOption?.label;
       }}
       name={field}
       aria-invalid={$errors ? 'true' : undefined}
