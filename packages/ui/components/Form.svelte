@@ -1,6 +1,4 @@
 <script lang="ts" generics="T extends Record<string, unknown>">
-  import FileUploadInput from './FileUploadInput.svelte';
-
   import { dev } from '$app/environment';
   import {
     isFormFieldBlock,
@@ -14,10 +12,11 @@
   import {
     CheckboxInput,
     DateInput,
+    FileUploadInput,
     NumberInput,
+    SelectInput,
     TextInput,
-    TextareaInput,
-    SelectInput
+    TextareaInput
   } from '@glue/ui';
   import { getTableColumns } from 'drizzle-orm';
   import type { AnyPgTable } from 'drizzle-orm/pg-core';
