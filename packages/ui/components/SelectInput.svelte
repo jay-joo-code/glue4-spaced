@@ -7,6 +7,7 @@
     type SuperForm
   } from 'sveltekit-superforms';
   import { clickOutsideAction } from '@glue/utils';
+  import { onMount } from 'svelte';
 
   export let superform: SuperForm<T>;
   export let field: FormPathLeaves<T, string>;
@@ -31,10 +32,9 @@
   $: displayOptions =
     !selectedOption || searchText === selectedOption.label ? options : filteredOptions;
 
-  $: if (selectedOption) searchText = selectedOption.label;
-
   const handleOptionSelect = (option: FormSelectOption) => {
     $value = option.value;
+    searchText = option.label;
     if (onOptionSelect) {
       onOptionSelect(options[highlightedIdx]);
     }
@@ -59,6 +59,10 @@
       highlightedIdx = -1;
     }
   }
+
+  onMount(() => {
+    if (selectedOption) searchText = selectedOption.label;
+  });
 </script>
 
 <div
@@ -113,7 +117,9 @@
           </button>
         {/each}
       {:else}
-        <p class="text-sm text-base-content/80">No options matched your search term</p>
+        <div class="py-2 px-3">
+          <p class="text-sm text-base-content/80">No options matched your search term</p>
+        </div>
       {/if}
     </div>
   {/if}
