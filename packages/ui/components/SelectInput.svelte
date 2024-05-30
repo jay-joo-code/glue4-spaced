@@ -32,6 +32,10 @@
   $: displayOptions =
     !selectedOption || searchText === selectedOption.label ? options : filteredOptions;
 
+  $: if (!isShowOptions) {
+    searchText = selectedOption?.label ?? '';
+  }
+
   const handleOptionSelect = (option: FormSelectOption) => {
     $value = option.value;
     searchText = option.label;
@@ -82,7 +86,7 @@
       on:blur={() => {
         isShowOptions = false;
         const latestSelectedOption = options.find((option) => option.value === $value);
-        searchText = latestSelectedOption?.label;
+        searchText = latestSelectedOption?.label ?? '';
       }}
       name={field}
       aria-invalid={$errors ? 'true' : undefined}
