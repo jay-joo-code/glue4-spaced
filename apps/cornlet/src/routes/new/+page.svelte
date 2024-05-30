@@ -13,22 +13,6 @@
 
   let address: string;
   let addressSuggestions: GooglePlaceSuggestion[] = [];
-  let photoItems = dev
-    ? [
-        {
-          id: 'https://firebasestorage.googleapis.com/v0/b/cornlet-prod.appspot.com/o/v2%2Fcornlet-home.png?alt=media&token=c1099aa9-eb84-482e-8207-b89f69c85256',
-          name: 'cornlet'
-        },
-        {
-          id: 'https://firebasestorage.googleapis.com/v0/b/cornlet-prod.appspot.com/o/v2%2Frevy-home.png?alt=media&token=4fc2ca8b-d4eb-431f-a2a0-835a0f08a846',
-          name: 'revy'
-        },
-        {
-          id: 'https://firebasestorage.googleapis.com/v0/b/cornlet-prod.appspot.com/o/v2%2FScreenshot%202024-03-23%20at%2012.07.53%20AM.png?alt=media&token=2fa41cb2-29f8-4bb4-b097-f2166d053c7e',
-          name: 'type'
-        }
-      ]
-    : [];
 
   $: if (address) {
     debouncedFetchAddressSuggestions(address);
@@ -64,13 +48,10 @@
     formOptions={{
       onSubmit: ({ formData }) => {
         if (data.user) formData.set('userId', data.user.id);
-        formData.set('address', address);
-        formData.set('lat', '28492');
-        formData.set('lng', '28492');
-        formData.set('minsToCampus', '28');
-        for (const photoItem of photoItems) {
-          formData.append('photoUrls', photoItem.id);
-        }
+        // formData.set('address', address);
+        // formData.set('lat', '28492');
+        // formData.set('lng', '28492');
+        // formData.set('minsToCampus', '28');
       },
       onUpdated: () => {
         goto('/profile/listings');
