@@ -33,10 +33,6 @@
   $: displayOptions =
     !selectedOption || searchText === selectedOption.label ? options : filteredOptions;
 
-  $: if (!isShowOptions) {
-    searchText = selectedOption?.label ?? '';
-  }
-
   const handleOptionSelect = (option: FormSelectOption) => {
     $value = option.value;
     searchText = option.label;
@@ -58,7 +54,7 @@
     } else if (key === 'Enter') {
       event.preventDefault();
       if (highlightedIdx >= 0) {
-        handleOptionSelect(options[highlightedIdx]);
+        handleOptionSelect(displayOptions[highlightedIdx]);
       }
     } else {
       highlightedIdx = -1;
@@ -87,13 +83,22 @@
       on:blur={() => {
         isShowOptions = false;
         const latestSelectedOption = options.find((option) => option.value === $value);
-        searchText = latestSelectedOption?.label ?? '';
+        if ($constraints.required && !latestSelectedOption) {
+          $errors = ['Please select an option from the dropdown menu'];
+        } else {
+          searchText = latestSelectedOption?.label ?? '';
+          $errors = undefined;
+        }
       }}
       name={field}
       aria-invalid={$errors ? 'true' : undefined}
       bind:value={searchText}
       bind:this={inputElement}
-      on:input={(event) => onSearchTextChange(event.currentTarget.value)}
+      on:input={(event) => {
+        if (onSearchTextChange) {
+          onSearchTextChange(event.currentTarget.value);
+        }
+      }}
       class:input-error={$errors}
       autocomplete="off"
       {...$constraints}
