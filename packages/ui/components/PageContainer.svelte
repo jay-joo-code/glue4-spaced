@@ -8,10 +8,10 @@
   export let isHoriPadding = true;
   export let isVertPadding = true;
   export let limitWidth = true;
-  export let invalidateOnFocus = true;
+  export let isInvalidateOnFocus = true;
 
   onMount(() => {
-    if (invalidateOnFocus) {
+    if (isInvalidateOnFocus) {
       window.addEventListener('gluefocus', () => {
         invalidateAll();
       });

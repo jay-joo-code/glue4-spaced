@@ -9,7 +9,7 @@
   export let data;
 </script>
 
-<PageContainer {APP_NAME} title="Create new listing">
+<PageContainer {APP_NAME} title="Create new listing" isInvalidateOnFocus={false}>
   <!-- <Autocomplete
     bind:value={address}
     suggestions={addressSuggestions}
