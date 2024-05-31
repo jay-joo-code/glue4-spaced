@@ -37,7 +37,7 @@
     $value = option.value;
     searchText = option.label;
     if (onOptionSelect) {
-      onOptionSelect(options[highlightedIdx]);
+      onOptionSelect(displayOptions[highlightedIdx]);
     }
     inputElement.blur();
   };
