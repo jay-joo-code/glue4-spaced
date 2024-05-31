@@ -1,10 +1,28 @@
 <script lang="ts">
+  import { onDestroy, onMount } from 'svelte';
+  import { invalidateAll } from '$app/navigation';
+
   export let APP_NAME: string;
   export let title: string;
   export let layout: 'mobile-only' | 'aside-main' | 'fullscreen' = 'mobile-only';
   export let isHoriPadding = true;
   export let isVertPadding = true;
   export let limitWidth = true;
+  export let invalidateOnFocus = true;
+
+  onMount(() => {
+    if (invalidateOnFocus) {
+      window.addEventListener('gluefocus', () => {
+        invalidateAll();
+      });
+    }
+  });
+
+  onDestroy(() => {
+    window.removeEventListener('gluefocus', () => {
+      invalidateAll();
+    });
+  });
 </script>
 
 <svelte:head>

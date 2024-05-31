@@ -1,10 +1,8 @@
 <script lang="ts">
-  import { invalidateAll } from '$app/navigation';
+  import type { ActionButton, FooterNav, Nav } from '@glue/types';
   import { Navbar } from '@glue/ui';
   import { SvelteToast } from '@zerodevx/svelte-toast';
   import { format } from 'date-fns';
-  import type { ActionButton, FooterNav, Nav } from '@glue/types';
-  import { onMount } from 'svelte';
   import type { User } from 'lucia';
 
   export let APP_NAME: string;
@@ -27,12 +25,6 @@
       '--toastWidth': 'auto'
     }
   };
-
-  onMount(() => {
-    window.addEventListener('focus', () => {
-      invalidateAll();
-    });
-  });
 </script>
 
 <div class="toast-styles">
