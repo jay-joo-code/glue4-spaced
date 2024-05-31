@@ -49,7 +49,7 @@
     {#each formBlocks as block}
       {#if isFormTextBlock(block)}
         {#if block.variant === 'h1'}
-          <h1 class="text-3xl font-extrabold !mt-6">{block.content}</h1>
+          <h1 class="text-4xl font-extrabold !mt-6">{block.content}</h1>
         {:else if block.variant === 'h2'}
           <h2 class="text-2xl font-extrabold !mt-6">{block.content}</h2>
         {:else if block.variant === 'p'}
