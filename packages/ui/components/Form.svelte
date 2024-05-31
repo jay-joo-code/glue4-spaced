@@ -64,6 +64,7 @@
           label={getBlockLabel(block)}
           handleFileUpload={block.handleFileUpload}
           isHideLabel={block.isHideLabel}
+          helperText={block.helperText}
         />
       {:else if isFormTextareaBlock(block)}
         <TextareaInput
@@ -71,6 +72,7 @@
           field={block.column}
           label={getBlockLabel(block)}
           isHideLabel={block.isHideLabel}
+          helperText={block.helperText}
         />
       {:else if isFormSelectBlock(block)}
         <SelectInput
@@ -80,6 +82,7 @@
           isHideLabel={block.isHideLabel}
           options={block.options}
           onOptionSelect={block.onOptionSelect}
+          helperText={block.helperText}
         />
       {:else if isFormAddressBlock(block)}
         <AddressInput
@@ -88,6 +91,7 @@
           label={getBlockLabel(block)}
           isHideLabel={block.isHideLabel}
           onOptionSelect={block.onOptionSelect}
+          helperText={block.helperText}
         />
       {:else if isFormFieldBlock(block)}
         {#if columns[block.column].columnType === 'PgDateString'}
@@ -96,6 +100,7 @@
             field={block.column}
             label={getBlockLabel(block)}
             isHideLabel={block.isHideLabel}
+            helperText={block.helperText}
           />
         {:else if columns[block.column].dataType === 'string'}
           <TextInput
@@ -103,6 +108,7 @@
             field={block.column}
             label={getBlockLabel(block)}
             isHideLabel={block.isHideLabel}
+            helperText={block.helperText}
           />
         {:else if columns[block.column].dataType === 'number'}
           <NumberInput
@@ -110,6 +116,7 @@
             field={block.column}
             label={getBlockLabel(block)}
             isHideLabel={block.isHideLabel}
+            helperText={block.helperText}
           />
         {:else if columns[block.column].dataType === 'boolean'}
           <CheckboxInput
@@ -117,6 +124,7 @@
             field={block.column}
             label={getBlockLabel(block)}
             isHideLabel={block.isHideLabel}
+            helperText={block.helperText}
           />
         {/if}
       {/if}

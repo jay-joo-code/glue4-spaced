@@ -11,6 +11,7 @@
   export let label: string = undefined;
   export let isHideLabel: boolean = false;
   export let onOptionSelect: (option: FormSelectOption) => void = undefined;
+  export let helperText: string = undefined;
 
   const { form } = superform;
   let addressSuggestions: GooglePlaceSuggestion[] = [];
@@ -60,4 +61,5 @@
       debouncedFetchAddressSuggestions(searchText);
     }
   }}
+  {helperText}
 />

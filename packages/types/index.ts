@@ -36,6 +36,7 @@ export type FormFieldBlock = {
   column: string;
   label?: string;
   isHideLabel?: boolean;
+  helperText?: string;
 };
 
 export type FormTextBlock = {

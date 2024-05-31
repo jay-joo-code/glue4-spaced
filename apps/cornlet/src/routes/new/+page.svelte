@@ -4,6 +4,7 @@
   import { listingTable } from '$root/src/db/schema';
   import { APP_NAME } from '$root/src/lib/config';
   import calculateMinsToOrg from '$root/src/lib/util/calculateMinsToOrg.js';
+  import findClosestLocation from '$root/src/lib/util/findClosestLocation.js';
   import { Form, PageContainer } from '@glue/ui';
   import { uploadFile } from '@glue/utils';
   import { superForm, type FormOptions } from 'sveltekit-superforms';
@@ -40,11 +41,17 @@
         variant: 'field',
         column: 'address',
         component: 'address',
-        onOptionSelect: async (option) => {
+        onOptionSelect: async () => {
           // @ts-expect-error: superform table schema getting lost
           const minsToOrg = calculateMinsToOrg($form.lat, $form.lng, 'cornell');
           $form.minsToOrg = minsToOrg;
-        }
+        },
+        helperText: $form.minsToOrg
+          ? // @ts-expect-error: superform table schema getting lost
+            `${findClosestLocation($form.lat, $form.lng, 'cornell')} • ${
+              $form.minsToOrg
+            } mins to campus`
+          : undefined
       },
       {
         variant: 'field',

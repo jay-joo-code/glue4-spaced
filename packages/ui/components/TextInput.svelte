@@ -10,6 +10,7 @@
   export let field: FormPathLeaves<T, string>;
   export let label: string = undefined;
   export let isHideLabel: boolean = false;
+  export let helperText: string = undefined;
 
   const { value, errors, constraints } = formFieldProxy(
     superform,
@@ -34,6 +35,10 @@
     {...$$restProps}
   />
   <div class="label">
-    {#if $errors}<span class="label-text-alt text-error">{$errors}</span>{/if}
+    {#if $errors}
+      <span class="label-text-alt text-error">{$errors}</span>
+    {:else if helperText}
+      <span class="label-text-alt text-base-content/80 first-letter:uppercase">{helperText}</span>
+    {/if}
   </div>
 </label>

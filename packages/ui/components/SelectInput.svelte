@@ -15,6 +15,7 @@
   export let options: FormSelectOption[];
   export let onOptionSelect: (option: FormSelectOption) => void = undefined;
   export let onSearchTextChange: (searchText: string) => void = undefined;
+  export let helperText: string = undefined;
 
   const { value, errors, constraints } = formFieldProxy(
     superform,
@@ -105,7 +106,11 @@
       {...$$restProps}
     />
     <div class="label">
-      {#if $errors}<span class="label-text-alt text-error">{$errors}</span>{/if}
+      {#if $errors}
+        <span class="label-text-alt text-error">{$errors}</span>
+      {:else if helperText}
+        <span class="label-text-alt text-base-content/80 first-letter:uppercase">{helperText}</span>
+      {/if}
     </div>
   </label>
   {#if isShowOptions}
