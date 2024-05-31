@@ -13,7 +13,7 @@
   export let configLimitWidth = true;
 </script>
 
-<div class="flex justify-center">
+<div class="flex justify-center border-b border-base-content/10">
   <div class="navbar bg-base-100 z-20 relative md:px-8" class:max-w-7xl={configLimitWidth}>
     <div class="navbar-start">
       <!-- mobile burger nav -->
