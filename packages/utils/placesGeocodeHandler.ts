@@ -11,11 +11,12 @@ const placesAutocompleteHandler = async ({
 }: RequestEvent & { GOOGLE_MAPS_API_KEY: string }) => {
   if (!locals.user) return redirect(302, protectedRouteRedirectUrl(url));
   const address = url.searchParams.get('address') ?? '';
+  console.log('address', address);
   const query = queryString.stringify({
-    input: address,
+    address,
     key: GOOGLE_MAPS_API_KEY
   });
-  const requestUrl = `https://maps.googleapis.com/maps/api/place/autocomplete/json?${query}`;
+  const requestUrl = `https://maps.googleapis.com/maps/api/geocode/json?${query}`;
   const response = await (await fetch(requestUrl)).json();
   return json(response);
 };

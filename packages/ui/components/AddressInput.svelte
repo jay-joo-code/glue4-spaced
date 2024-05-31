@@ -1,9 +1,10 @@
 <script lang="ts" generics="T extends Record<string, unknown>">
-  import type { GooglePlaceSuggestion } from '@glue/types';
+  import type { GooglePlaceSuggestion, GoogleGeocodeResponse } from '@glue/types';
   import type { FormSelectOption } from '@glue/types';
   import debounce from 'just-debounce-it';
   import { type FormPathLeaves, type SuperForm } from 'sveltekit-superforms';
   import SelectInput from './SelectInput.svelte';
+  import queryString from 'query-string';
 
   export let superform: SuperForm<T>;
   export let field: FormPathLeaves<T, string>;
@@ -11,20 +12,37 @@
   export let isHideLabel: boolean = false;
   export let onOptionSelect: (option: FormSelectOption) => void = undefined;
 
+  const { form } = superform;
   let addressSuggestions: GooglePlaceSuggestion[] = [];
 
   const fetchAddressSuggestions = async (address: string) => {
     if (!address || address.length === 0) return [];
-    const query = Object.entries({
-      address
-    })
-      .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
-      .join('&');
-    const response = await (await fetch(`/api/places/address-autocomplete?${query}`)).json();
+    const response = await (
+      await fetch(`/api/places/address-autocomplete?${queryString.stringify({ address })}`)
+    ).json();
     addressSuggestions = response && response.status === 'OK' ? response.predictions : [];
   };
 
   const debouncedFetchAddressSuggestions = debounce(fetchAddressSuggestions, 500);
+
+  const handleOptionSelect = async (option: FormSelectOption) => {
+    if (onOptionSelect) {
+      onOptionSelect(option);
+    }
+
+    const address = option.value;
+    const response: GoogleGeocodeResponse = await (
+      await fetch(`/api/places/geocode?${queryString.stringify({ address })}`)
+    ).json();
+
+    if (response.status === 'OK' && response.results?.length > 0) {
+      const { lat, lng } = response.results[0].geometry.location;
+      // @ts-expect-error: limitation of sveltekit typescript generics
+      $form.lat = lat;
+      // @ts-expect-error: limitation of sveltekit typescript generics
+      $form.lng = lng;
+    }
+  };
 </script>
 
 <SelectInput
@@ -32,7 +50,7 @@
   {field}
   {label}
   {isHideLabel}
-  {onOptionSelect}
+  onOptionSelect={handleOptionSelect}
   options={addressSuggestions.map((suggestion) => ({
     label: suggestion.description,
     value: suggestion.description

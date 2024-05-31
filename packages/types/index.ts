@@ -119,3 +119,35 @@ export interface GooglePlaceSuggestion extends Record<string, unknown> {
   }[];
   types: string[];
 }
+
+export interface GoogleGeocodeAddressComponent {
+  long_name: string;
+  short_name: string;
+  types: string[];
+}
+
+export interface GoogleGeocodeGeometry {
+  bounds: {
+    northeast: { lat: number; lng: number };
+    southwest: { lat: number; lng: number };
+  };
+  location: { lat: number; lng: number };
+  location_type: string;
+  viewport: {
+    northeast: { lat: number; lng: number };
+    southwest: { lat: number; lng: number };
+  };
+}
+
+export interface GoogleGeocodeResult {
+  address_components: GoogleGeocodeAddressComponent[];
+  formatted_address: string;
+  geometry: GoogleGeocodeGeometry;
+  place_id: string;
+  types: string[];
+}
+
+export interface GoogleGeocodeResponse {
+  results: GoogleGeocodeResult[];
+  status: string;
+}
