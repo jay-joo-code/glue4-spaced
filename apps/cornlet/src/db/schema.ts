@@ -45,7 +45,7 @@ export const listingTable = pgTable('listing', {
   address: text('address').notNull(),
   lat: real('lat').notNull(),
   lng: real('lng').notNull(),
-  minsToCampus: real('mins_to_campus').notNull(),
+  minsToOrg: real('mins_to_org').notNull(),
   propertyType: propertyTypeEnum('property_type').notNull(),
   totalRooms: real('total_rooms').notNull(),
   availableRooms: real('available_rooms').notNull(),

@@ -26,10 +26,6 @@
   const debouncedFetchAddressSuggestions = debounce(fetchAddressSuggestions, 500);
 
   const handleOptionSelect = async (option: FormSelectOption) => {
-    if (onOptionSelect) {
-      onOptionSelect(option);
-    }
-
     const address = option.value;
     const response: GoogleGeocodeResponse = await (
       await fetch(`/api/places/geocode?${queryString.stringify({ address })}`)
@@ -41,6 +37,10 @@
       $form.lat = lat;
       // @ts-expect-error: limitation of sveltekit typescript generics
       $form.lng = lng;
+    }
+
+    if (onOptionSelect) {
+      onOptionSelect(option);
     }
   };
 </script>

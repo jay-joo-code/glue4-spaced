@@ -11,30 +11,24 @@
     type FormBlock
   } from '@glue/types';
   import {
+    AddressInput,
     CheckboxInput,
     DateInput,
     FileUploadInput,
     NumberInput,
     SelectInput,
     TextInput,
-    TextareaInput,
-    AddressInput
+    TextareaInput
   } from '@glue/ui';
   import { getTableColumns } from 'drizzle-orm';
   import type { AnyPgTable } from 'drizzle-orm/pg-core';
-  import SuperDebug, {
-    superForm,
-    type FormOptions,
-    type SuperValidated
-  } from 'sveltekit-superforms';
+  import SuperDebug, { type SuperForm } from 'sveltekit-superforms';
 
-  export let form: SuperValidated<T>;
+  export let superform: SuperForm<T>;
   export let table: AnyPgTable;
   export let actionPath: string;
-  export let formOptions: FormOptions | undefined = undefined;
   export let formBlocks: FormBlock[] = [];
 
-  const superform = superForm(form, formOptions);
   const { enhance } = superform;
 
   $: columns = getTableColumns(table);
