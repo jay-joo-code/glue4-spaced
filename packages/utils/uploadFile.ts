@@ -1,37 +1,36 @@
 import Compressor from 'compressorjs';
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 
 // REJECT: Upload error
 // RESOLVE: Img download url
 // TODO: replace any with firebase type
-const uploadFile = (file: File, directory: string, firebase: any) =>
+const uploadFile = (file: File, directory: string) =>
   new Promise<string>((resolve, reject) => {
-    const storage = firebase.storage();
-    const storageRef = storage.ref();
+    const storage = getStorage();
     const path = `${directory}/${file.name}`;
+    const storageRef = ref(storage, path);
 
     // compress file
     new Compressor(file, {
       quality: 0.6,
       convertSize: 1,
       success(result) {
-        const uploadTask = storageRef.child(path).put(result);
+        const uploadTask = uploadBytesResumable(storageRef, result);
         uploadTask.on(
           'state_changed',
           (snapshot) => {},
-          (e) => {
-            // TODO: handle errors
-            reject(e);
+          (error) => {
+            reject(error);
           },
           () => {
-            uploadTask.snapshot.ref.getDownloadURL().then((src) => {
-              resolve(src);
+            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+              resolve(downloadURL);
             });
           }
         );
       },
-      error(err) {
-        // TODO: handle errors
-        reject(err);
+      error(error) {
+        reject(error);
       }
     });
   });

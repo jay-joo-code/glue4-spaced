@@ -62,7 +62,7 @@
     "date-picker-svelte": "^2.2.5",
     "drizzle-orm": "^0.30.10",
     "drizzle-zod": "^0.5.1",
-    "firebase": "^7.24.0",
+    "firebase": "^10.12.2",
     "highlight-words": "^1.2.1",
     "just-debounce-it": "^3.2.0",
     "meilisearch": "^0.30.0",

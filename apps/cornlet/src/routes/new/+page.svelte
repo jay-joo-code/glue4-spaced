@@ -1,6 +1,5 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
-  import firebase from '$lib/firebase';
   import { listingTable } from '$root/src/db/schema';
   import { APP_NAME } from '$root/src/lib/config';
   import calculateMinsToOrg from '$root/src/lib/util/calculateMinsToOrg.js';
@@ -96,7 +95,7 @@
         component: 'file-upload',
         column: 'photoUrls',
         handleFileUpload: async (files) => {
-          const uploadPromises = Array.from(files).map((file) => uploadFile(file, '/v2', firebase));
+          const uploadPromises = Array.from(files).map((file) => uploadFile(file, '/v2'));
           const urls = await Promise.all(uploadPromises);
           return urls;
         },

@@ -1,4 +1,5 @@
-import firebase from 'firebase/app';
+import { initializeApp } from 'firebase/app';
+
 import 'firebase/storage';
 
 const firebaseConfig = {
@@ -12,6 +13,6 @@ const firebaseConfig = {
   measurementId: 'G-045Z67SPL6'
 };
 
-firebase.initializeApp(firebaseConfig);
+const firebase = initializeApp(firebaseConfig);
 
 export default firebase;
