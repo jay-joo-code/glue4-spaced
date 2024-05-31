@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { browser } from '$app/environment';
   import { onDestroy, onMount } from 'svelte';
   import { invalidateAll } from '$app/navigation';
 
@@ -19,9 +20,11 @@
   });
 
   onDestroy(() => {
-    window.removeEventListener('gluefocus', () => {
-      invalidateAll();
-    });
+    if (browser) {
+      window.removeEventListener('gluefocus', () => {
+        invalidateAll();
+      });
+    }
   });
 </script>
 
