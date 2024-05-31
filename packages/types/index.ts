@@ -28,7 +28,8 @@ export type FormBlock =
   | FormSpaceBlock
   | FormFileUploadBlock
   | FormTextareaBlock
-  | FormSelectBlock;
+  | FormSelectBlock
+  | FormAddressBlock;
 
 export type FormFieldBlock = {
   variant: 'field';
@@ -60,6 +61,12 @@ export type FormSelectBlock = FormFieldBlock & {
   component: 'select';
   options?: FormSelectOption[];
   onOptionSelect?: (option: FormSelectOption) => void;
+  onSearchTextChange?: (searchText: string) => void;
+};
+
+export type FormAddressBlock = FormFieldBlock & {
+  component: 'address';
+  onOptionSelect?: (option: FormSelectOption) => void;
 };
 
 export function isFormFieldBlock(block: any): block is FormFieldBlock {
@@ -84,4 +91,31 @@ export function isFormTextareaBlock(block: any): block is FormTextareaBlock {
 
 export function isFormSelectBlock(block: any): block is FormSelectBlock {
   return block.component === 'select';
+}
+
+export function isFormAddressBlock(block: any): block is FormAddressBlock {
+  return block.component === 'address';
+}
+
+export interface GooglePlaceSuggestion extends Record<string, unknown> {
+  description: string;
+  matched_substrings: {
+    length: number;
+    offset: number;
+  }[];
+  place_id: string;
+  reference: string;
+  structured_formatting: {
+    main_text: string;
+    main_text_matched_substrings: {
+      length: number;
+      offset: number;
+    }[];
+    secondary_text: string;
+  };
+  terms: {
+    offset: number;
+    value: string;
+  }[];
+  types: string[];
 }

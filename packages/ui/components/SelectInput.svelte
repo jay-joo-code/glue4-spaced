@@ -14,6 +14,7 @@
   export let isHideLabel: boolean = false;
   export let options: FormSelectOption[];
   export let onOptionSelect: (option: FormSelectOption) => void = undefined;
+  export let onSearchTextChange: (searchText: string) => void = undefined;
 
   const { value, errors, constraints } = formFieldProxy(
     superform,
@@ -92,6 +93,7 @@
       aria-invalid={$errors ? 'true' : undefined}
       bind:value={searchText}
       bind:this={inputElement}
+      on:input={(event) => onSearchTextChange(event.currentTarget.value)}
       class:input-error={$errors}
       autocomplete="off"
       {...$constraints}

@@ -1,3 +1,4 @@
+export { default as AddressInput } from './components/AddressInput.svelte';
 export { default as AppLayout } from './components/AppLayout.svelte';
 export { default as Autocomplete } from './components/Autocomplete.svelte';
 export { default as CheckboxInput } from './components/CheckboxInput.svelte';

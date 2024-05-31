@@ -1,6 +1,7 @@
 <script lang="ts" generics="T extends Record<string, unknown>">
   import { dev } from '$app/environment';
   import {
+    isFormAddressBlock,
     isFormFieldBlock,
     isFormFileUploadBlock,
     isFormSelectBlock,
@@ -16,7 +17,8 @@
     NumberInput,
     SelectInput,
     TextInput,
-    TextareaInput
+    TextareaInput,
+    AddressInput
   } from '@glue/ui';
   import { getTableColumns } from 'drizzle-orm';
   import type { AnyPgTable } from 'drizzle-orm/pg-core';
@@ -83,6 +85,14 @@
           label={getBlockLabel(block)}
           isHideLabel={block.isHideLabel}
           options={block.options}
+          onOptionSelect={block.onOptionSelect}
+        />
+      {:else if isFormAddressBlock(block)}
+        <AddressInput
+          {superform}
+          field={block.column}
+          label={getBlockLabel(block)}
+          isHideLabel={block.isHideLabel}
           onOptionSelect={block.onOptionSelect}
         />
       {:else if isFormFieldBlock(block)}

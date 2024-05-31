@@ -1,34 +1,12 @@
 <script lang="ts">
-  import { uploadFile } from '@glue/utils';
-  import { browser, dev } from '$app/environment';
   import { goto } from '$app/navigation';
+  import firebase from '$lib/firebase';
   import { listingTable } from '$root/src/db/schema';
   import { APP_NAME } from '$root/src/lib/config';
-  import type { GooglePlaceSuggestion } from '$root/src/lib/types/places.type.js';
-  import { Autocomplete, Form, PageContainer, PhotoUpload } from '@glue/ui';
-  import firebase from '$lib/firebase';
-  import debounce from 'just-debounce-it';
+  import { Form, PageContainer } from '@glue/ui';
+  import { uploadFile } from '@glue/utils';
 
   export let data;
-
-  let address: string;
-  let addressSuggestions: GooglePlaceSuggestion[] = [];
-
-  $: if (address) {
-    debouncedFetchAddressSuggestions(address);
-  }
-
-  const fetchAddressSuggestions = async (address: string) => {
-    if (!browser || !address || address.length === 0) return [];
-    const query = Object.entries({
-      address
-    })
-      .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
-      .join('&');
-    const response = await (await fetch(`/api/places/address-autocomplete?${query}`)).json();
-    addressSuggestions = response && response.status === 'OK' ? response.predictions : [];
-  };
-  const debouncedFetchAddressSuggestions = debounce(fetchAddressSuggestions, 500);
 </script>
 
 <PageContainer {APP_NAME} title="Create new listing">
@@ -65,6 +43,11 @@
       {
         variant: 'space',
         spaceRem: 2
+      },
+      {
+        variant: 'field',
+        column: 'address',
+        component: 'address'
       },
       {
         variant: 'field',
