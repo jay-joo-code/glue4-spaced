@@ -1,6 +1,6 @@
 <script lang="ts" generics="T extends Record<string, unknown>">
   import type { GooglePlaceSuggestion, GoogleGeocodeResponse } from '@glue/types';
-  import type { FormSelectOption } from '@glue/types';
+  import type { FormSelectOption, HelperTextStatus } from '@glue/types';
   import debounce from 'just-debounce-it';
   import { type FormPathLeaves, type SuperForm } from 'sveltekit-superforms';
   import SelectInput from './SelectInput.svelte';
@@ -12,6 +12,7 @@
   export let isHideLabel: boolean = false;
   export let onOptionSelect: (option: FormSelectOption) => void = undefined;
   export let helperText: string = undefined;
+  export let helperTextStatus: HelperTextStatus = undefined;
 
   const { form } = superform;
   let addressSuggestions: GooglePlaceSuggestion[] = [];
@@ -62,4 +63,5 @@
     }
   }}
   {helperText}
+  {helperTextStatus}
 />

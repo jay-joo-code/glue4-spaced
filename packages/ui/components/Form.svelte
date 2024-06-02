@@ -75,6 +75,7 @@
           handleFileUpload={block.handleFileUpload}
           isHideLabel={block.isHideLabel}
           helperText={block.helperText}
+          helperTextStatus={block.helperTextStatus}
         />
       {:else if isFormTextareaBlock(block)}
         <TextareaInput
@@ -83,6 +84,7 @@
           label={getBlockLabel(block)}
           isHideLabel={block.isHideLabel}
           helperText={block.helperText}
+          helperTextStatus={block.helperTextStatus}
         />
       {:else if isFormSelectBlock(block)}
         <SelectInput
@@ -93,6 +95,7 @@
           options={block.options}
           onOptionSelect={block.onOptionSelect}
           helperText={block.helperText}
+          helperTextStatus={block.helperTextStatus}
         />
       {:else if isFormAddressBlock(block)}
         <AddressInput
@@ -102,6 +105,7 @@
           isHideLabel={block.isHideLabel}
           onOptionSelect={block.onOptionSelect}
           helperText={block.helperText}
+          helperTextStatus={block.helperTextStatus}
         />
       {:else if isFormToggleBlock(block)}
         <ToggleInput
@@ -110,6 +114,7 @@
           label={getBlockLabel(block)}
           isHideLabel={block.isHideLabel}
           helperText={block.helperText}
+          helperTextStatus={block.helperTextStatus}
         />
       {:else if isFormFieldBlock(block)}
         {#if columns[block.column].columnType === 'PgDateString'}
@@ -119,6 +124,7 @@
             label={getBlockLabel(block)}
             isHideLabel={block.isHideLabel}
             helperText={block.helperText}
+            helperTextStatus={block.helperTextStatus}
           />
         {:else if columns[block.column].dataType === 'string'}
           <TextInput
@@ -127,6 +133,7 @@
             label={getBlockLabel(block)}
             isHideLabel={block.isHideLabel}
             helperText={block.helperText}
+            helperTextStatus={block.helperTextStatus}
           />
         {:else if columns[block.column].dataType === 'number'}
           <NumberInput
@@ -135,6 +142,7 @@
             label={getBlockLabel(block)}
             isHideLabel={block.isHideLabel}
             helperText={block.helperText}
+            helperTextStatus={block.helperTextStatus}
           />
         {:else if columns[block.column].dataType === 'boolean'}
           <CheckboxInput
@@ -143,6 +151,7 @@
             label={getBlockLabel(block)}
             isHideLabel={block.isHideLabel}
             helperText={block.helperText}
+            helperTextStatus={block.helperTextStatus}
           />
         {/if}
       {/if}

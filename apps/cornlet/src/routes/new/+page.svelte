@@ -10,11 +10,11 @@
   import { Form, PageContainer } from '@glue/ui';
   import { uploadFile } from '@glue/utils';
   import { onMount } from 'svelte';
-  import { superForm, type FormOptions } from 'sveltekit-superforms';
+  import { superForm } from 'sveltekit-superforms';
 
   export let data;
 
-  const formOptions: FormOptions = {
+  const superform = superForm(data.form, {
     onSubmit: ({ formData }) => {
       if (data.user) formData.set('userId', data.user.id);
     },
@@ -23,8 +23,7 @@
         goto('/profile/listings');
       }
     }
-  };
-  const superform = superForm(data.form, formOptions);
+  });
   const { form } = superform;
 
   onMount(() => {
@@ -60,7 +59,8 @@
             `${findClosestLocation($form.lat, $form.lng, 'cornell')} • ${
               $form.minsToOrg
             } mins to campus`
-          : undefined
+          : undefined,
+        helperTextStatus: 'success'
       },
       {
         variant: 'field',

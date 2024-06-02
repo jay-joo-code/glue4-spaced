@@ -1,4 +1,5 @@
 <script lang="ts" generics="T extends Record<string, unknown>">
+  import type { HelperTextStatus } from '@glue/types';
   import {
     formFieldProxy,
     type FormFieldProxy,
@@ -11,6 +12,7 @@
   export let label: string = undefined;
   export let isHideLabel: boolean = false;
   export let helperText: string = undefined;
+  export let helperTextStatus: HelperTextStatus = undefined;
 
   const { value, errors, constraints } = formFieldProxy(
     superform,
@@ -38,8 +40,11 @@
       {/if}
       {#if helperText}
         <div class="">
-          <span class="label-text-alt text-base-content/80 first-letter:uppercase"
-            >{helperText}</span
+          <span
+            class="label-text-alt text-base-content/80 first-letter:uppercase"
+            class:text-success={helperTextStatus === 'success'}
+            class:text-warning={helperTextStatus === 'warning'}
+            class:text-error={helperTextStatus === 'error'}>{helperText}</span
           >
         </div>
       {/if}

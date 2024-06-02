@@ -22,6 +22,8 @@ export type FormSelectOption = {
   [key: string]: any;
 };
 
+export type HelperTextStatus = 'success' | 'warning' | 'error';
+
 export type FormBlock =
   | FormFieldBlock
   | FormTextBlock
@@ -38,6 +40,7 @@ export type FormFieldBlock = {
   label?: string;
   isHideLabel?: boolean;
   helperText?: string;
+  helperTextStatus?: HelperTextStatus;
 };
 
 export type FormTextBlock = {
