@@ -76,7 +76,7 @@
             value: 'house'
           },
           {
-            label: 'Studio hehe',
+            label: 'Studio',
             value: 'studio'
           }
         ]
