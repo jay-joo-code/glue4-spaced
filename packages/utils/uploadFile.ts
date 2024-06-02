@@ -4,9 +4,9 @@ import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/
 // REJECT: Upload error
 // RESOLVE: Img download url
 // TODO: replace any with firebase type
-const uploadFile = (file: File, directory: string) =>
+const uploadFile = (file: File, directory: string, firebase: any) =>
   new Promise<string>((resolve, reject) => {
-    const storage = getStorage();
+    const storage = getStorage(firebase);
     const path = `${directory}/${file.name}`;
     const storageRef = ref(storage, path);
 

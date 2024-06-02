@@ -1,7 +1,5 @@
 import { initializeApp } from 'firebase/app';
 
-import 'firebase/storage';
-
 const firebaseConfig = {
   apiKey: 'AIzaSyAQ9olIfEWy0ydA0yJU52qfH0paJn9MXIM',
   authDomain: 'cornlet-prod.firebaseapp.com',

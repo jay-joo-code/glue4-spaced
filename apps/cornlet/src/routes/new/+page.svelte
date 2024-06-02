@@ -2,6 +2,7 @@
   import { goto } from '$app/navigation';
   import { listingTable } from '$root/src/db/schema';
   import { APP_NAME } from '$root/src/lib/config';
+  import firebase from '$root/src/lib/firebase.js';
   import calculateMinsToOrg from '$root/src/lib/util/calculateMinsToOrg.js';
   import findClosestLocation from '$root/src/lib/util/findClosestLocation.js';
   import { Form, PageContainer } from '@glue/ui';
@@ -95,7 +96,9 @@
         component: 'file-upload',
         column: 'photoUrls',
         handleFileUpload: async (files) => {
-          const uploadPromises = Array.from(files).map((file) => uploadFile(file, '/v2'));
+          const uploadPromises = Array.from(files).map((file) =>
+            uploadFile(file, `/v2/${$form.id}`, firebase)
+          );
           const urls = await Promise.all(uploadPromises);
           return urls;
         },

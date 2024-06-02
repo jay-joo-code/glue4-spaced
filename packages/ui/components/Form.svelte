@@ -24,14 +24,16 @@
   } from '@glue/ui';
   import { getTableColumns } from 'drizzle-orm';
   import type { AnyPgTable } from 'drizzle-orm/pg-core';
+  import { onMount } from 'svelte';
   import SuperDebug, { type SuperForm } from 'sveltekit-superforms';
+  import { v4 as uuidv4 } from 'uuid';
 
   export let superform: SuperForm<T>;
   export let table: AnyPgTable;
   export let actionPath: string;
   export let formBlocks: FormBlock[] = [];
 
-  const { enhance } = superform;
+  const { enhance, form } = superform;
 
   $: columns = getTableColumns(table);
 
@@ -40,6 +42,12 @@
       return '';
     return block.label || block.column.replace(/([a-z])([A-Z])/g, '$1 $2').toLowerCase();
   };
+
+  onMount(() => {
+    if (form && columns.id?.columnType === 'PgUUID') {
+      $form.id = uuidv4();
+    }
+  });
 </script>
 
 {#if dev}
