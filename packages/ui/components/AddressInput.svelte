@@ -13,6 +13,7 @@
   export let onOptionSelect: (option: FormSelectOption) => void = undefined;
   export let helperText: string = undefined;
   export let helperTextStatus: HelperTextStatus = undefined;
+  export let inputClass: string = undefined;
 
   const { form } = superform;
   let addressSuggestions: GooglePlaceSuggestion[] = [];
@@ -64,4 +65,5 @@
   }}
   {helperText}
   {helperTextStatus}
+  {inputClass}
 />

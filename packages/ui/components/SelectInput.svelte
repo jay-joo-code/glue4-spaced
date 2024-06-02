@@ -17,6 +17,7 @@
   export let onSearchTextChange: (searchText: string) => void = undefined;
   export let helperText: string = undefined;
   export let helperTextStatus: HelperTextStatus = undefined;
+  export let inputClass: string = undefined;
 
   const { value, errors, constraints } = formFieldProxy(
     superform,
@@ -77,7 +78,7 @@
     {/if}
     <input
       type="text"
-      class="input input-bordered w-full"
+      class="{inputClass} input input-bordered w-full"
       on:keydown={handleKeydown}
       on:focus={() => {
         isShowOptions = true;

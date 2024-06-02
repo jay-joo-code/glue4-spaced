@@ -12,6 +12,7 @@
   export let label: string = undefined;
   export let helperText: string = undefined;
   export let helperTextStatus: HelperTextStatus = undefined;
+  export let inputClass: string = undefined;
 
   const { value, errors, constraints } = formFieldProxy(
     superform,
@@ -30,7 +31,7 @@
     type="number"
     aria-invalid={$errors ? 'true' : undefined}
     bind:value={$value}
-    class="input input-bordered w-full"
+    class="{inputClass} input input-bordered w-full"
     class:input-error={$errors}
     {...$constraints}
     {...$$restProps}

@@ -41,6 +41,8 @@ export type FormFieldBlock = {
   isHideLabel?: boolean;
   helperText?: string;
   helperTextStatus?: HelperTextStatus;
+  containerClass?: string;
+  inputClass?: string;
 };
 
 export type FormTextBlock = {

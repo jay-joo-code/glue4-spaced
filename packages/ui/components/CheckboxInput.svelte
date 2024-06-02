@@ -13,6 +13,7 @@
   export let label: string = undefined;
   export let helperText: string = undefined;
   export let helperTextStatus: HelperTextStatus = undefined;
+  export let inputClass: string = undefined;
 
   const { value, errors, constraints } = formFieldProxy(
     superform,

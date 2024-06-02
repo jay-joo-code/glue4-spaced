@@ -84,18 +84,21 @@
       {
         variant: 'field',
         column: 'totalRooms',
-        label: 'Total rooms in property'
+        label: 'Total rooms in property',
+        inputClass: 'max-w-[6rem]'
       },
       {
         variant: 'field',
         column: 'availableRooms',
-        label: 'Rooms available'
+        label: 'Rooms available',
+        inputClass: 'max-w-[6rem]'
       },
       {
         variant: 'field',
         column: 'bathrooms',
         label: 'Number of bathrooms',
-        helperText: '0.5 bathrooms is a "half bathroom" without a tub or shower.'
+        helperText: '0.5 bathrooms is a "half bathroom" without a tub or shower.',
+        inputClass: 'max-w-[6rem]'
       },
       {
         variant: 'h2',
@@ -110,17 +113,20 @@
         column: 'price',
         label: 'Price per month ($)',
         helperText:
-          'Successful sublet listings often have a price much lower than the original lease rent'
+          'Successful sublet listings often have a price much lower than the original lease rent',
+        inputClass: 'max-w-[10rem]'
       },
       {
         variant: 'field',
         column: 'start',
-        label: 'Start date'
+        label: 'Start date',
+        inputClass: 'max-w-[12rem]'
       },
       {
         variant: 'field',
         column: 'end',
-        label: 'End date'
+        label: 'End date',
+        inputClass: 'max-w-[12rem]'
       },
       {
         variant: 'field',
@@ -138,15 +144,18 @@
       },
       {
         variant: 'field',
-        column: 'femaleRoommates'
+        column: 'femaleRoommates',
+        inputClass: 'max-w-[6rem]'
       },
       {
         variant: 'field',
-        column: 'maleRoommates'
+        column: 'maleRoommates',
+        inputClass: 'max-w-[6rem]'
       },
       {
         variant: 'field',
-        column: 'nonbinaryRoommates'
+        column: 'nonbinaryRoommates',
+        inputClass: 'max-w-[6rem]'
       },
       {
         variant: 'h2',

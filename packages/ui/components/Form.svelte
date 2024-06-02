@@ -67,93 +67,104 @@
         {/if}
       {:else if isFormSpaceBlock(block)}
         <div style="margin-bottom: {block.spaceRem}rem;"></div>
-      {:else if isFormFileUploadBlock(block)}
-        <FileUploadInput
-          {superform}
-          field={block.column}
-          label={getBlockLabel(block)}
-          handleFileUpload={block.handleFileUpload}
-          isHideLabel={block.isHideLabel}
-          helperText={block.helperText}
-          helperTextStatus={block.helperTextStatus}
-        />
-      {:else if isFormTextareaBlock(block)}
-        <TextareaInput
-          {superform}
-          field={block.column}
-          label={getBlockLabel(block)}
-          isHideLabel={block.isHideLabel}
-          helperText={block.helperText}
-          helperTextStatus={block.helperTextStatus}
-        />
-      {:else if isFormSelectBlock(block)}
-        <SelectInput
-          {superform}
-          field={block.column}
-          label={getBlockLabel(block)}
-          isHideLabel={block.isHideLabel}
-          options={block.options}
-          onOptionSelect={block.onOptionSelect}
-          helperText={block.helperText}
-          helperTextStatus={block.helperTextStatus}
-        />
-      {:else if isFormAddressBlock(block)}
-        <AddressInput
-          {superform}
-          field={block.column}
-          label={getBlockLabel(block)}
-          isHideLabel={block.isHideLabel}
-          onOptionSelect={block.onOptionSelect}
-          helperText={block.helperText}
-          helperTextStatus={block.helperTextStatus}
-        />
-      {:else if isFormToggleBlock(block)}
-        <ToggleInput
-          {superform}
-          field={block.column}
-          label={getBlockLabel(block)}
-          isHideLabel={block.isHideLabel}
-          helperText={block.helperText}
-          helperTextStatus={block.helperTextStatus}
-        />
       {:else if isFormFieldBlock(block)}
-        {#if columns[block.column].columnType === 'PgDateString'}
-          <DateInput
-            {superform}
-            field={block.column}
-            label={getBlockLabel(block)}
-            isHideLabel={block.isHideLabel}
-            helperText={block.helperText}
-            helperTextStatus={block.helperTextStatus}
-          />
-        {:else if columns[block.column].dataType === 'string'}
-          <TextInput
-            {superform}
-            field={block.column}
-            label={getBlockLabel(block)}
-            isHideLabel={block.isHideLabel}
-            helperText={block.helperText}
-            helperTextStatus={block.helperTextStatus}
-          />
-        {:else if columns[block.column].dataType === 'number'}
-          <NumberInput
-            {superform}
-            field={block.column}
-            label={getBlockLabel(block)}
-            isHideLabel={block.isHideLabel}
-            helperText={block.helperText}
-            helperTextStatus={block.helperTextStatus}
-          />
-        {:else if columns[block.column].dataType === 'boolean'}
-          <CheckboxInput
-            {superform}
-            field={block.column}
-            label={getBlockLabel(block)}
-            isHideLabel={block.isHideLabel}
-            helperText={block.helperText}
-            helperTextStatus={block.helperTextStatus}
-          />
-        {/if}
+        <div class={block.containerClass}>
+          {#if isFormFileUploadBlock(block)}
+            <FileUploadInput
+              {superform}
+              field={block.column}
+              label={getBlockLabel(block)}
+              handleFileUpload={block.handleFileUpload}
+              isHideLabel={block.isHideLabel}
+              helperText={block.helperText}
+              helperTextStatus={block.helperTextStatus}
+              inputClass={block.inputClass}
+            />
+          {:else if isFormTextareaBlock(block)}
+            <TextareaInput
+              {superform}
+              field={block.column}
+              label={getBlockLabel(block)}
+              isHideLabel={block.isHideLabel}
+              helperText={block.helperText}
+              helperTextStatus={block.helperTextStatus}
+              inputClass={block.inputClass}
+            />
+          {:else if isFormSelectBlock(block)}
+            <SelectInput
+              {superform}
+              field={block.column}
+              label={getBlockLabel(block)}
+              isHideLabel={block.isHideLabel}
+              options={block.options}
+              onOptionSelect={block.onOptionSelect}
+              helperText={block.helperText}
+              helperTextStatus={block.helperTextStatus}
+              inputClass={block.inputClass}
+            />
+          {:else if isFormAddressBlock(block)}
+            <AddressInput
+              {superform}
+              field={block.column}
+              label={getBlockLabel(block)}
+              isHideLabel={block.isHideLabel}
+              onOptionSelect={block.onOptionSelect}
+              helperText={block.helperText}
+              helperTextStatus={block.helperTextStatus}
+              inputClass={block.inputClass}
+            />
+          {:else if isFormToggleBlock(block)}
+            <ToggleInput
+              {superform}
+              field={block.column}
+              label={getBlockLabel(block)}
+              isHideLabel={block.isHideLabel}
+              helperText={block.helperText}
+              helperTextStatus={block.helperTextStatus}
+              inputClass={block.inputClass}
+            />
+          {:else if columns[block.column].columnType === 'PgDateString'}
+            <DateInput
+              {superform}
+              field={block.column}
+              label={getBlockLabel(block)}
+              isHideLabel={block.isHideLabel}
+              helperText={block.helperText}
+              helperTextStatus={block.helperTextStatus}
+              inputClass={block.inputClass}
+            />
+          {:else if columns[block.column].dataType === 'string'}
+            <TextInput
+              {superform}
+              field={block.column}
+              label={getBlockLabel(block)}
+              isHideLabel={block.isHideLabel}
+              helperText={block.helperText}
+              helperTextStatus={block.helperTextStatus}
+              inputClass={block.inputClass}
+            />
+          {:else if columns[block.column].dataType === 'number'}
+            <NumberInput
+              {superform}
+              field={block.column}
+              label={getBlockLabel(block)}
+              isHideLabel={block.isHideLabel}
+              helperText={block.helperText}
+              helperTextStatus={block.helperTextStatus}
+              inputClass={block.inputClass}
+            />
+          {:else if columns[block.column].dataType === 'boolean'}
+            <CheckboxInput
+              {superform}
+              field={block.column}
+              label={getBlockLabel(block)}
+              isHideLabel={block.isHideLabel}
+              helperText={block.helperText}
+              helperTextStatus={block.helperTextStatus}
+              inputClass={block.inputClass}
+            />
+          {/if}
+        </div>
       {/if}
     {/each}
   </div>

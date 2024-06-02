@@ -13,6 +13,7 @@
   export let isHideLabel: boolean = false;
   export let helperText: string = undefined;
   export let helperTextStatus: HelperTextStatus = undefined;
+  export let inputClass: string = undefined;
 
   const { value, errors, constraints } = formFieldProxy(
     superform,
@@ -25,7 +26,7 @@
     <input
       name={field}
       type="checkbox"
-      class="toggle"
+      class="{inputClass} toggle"
       bind:checked={$value}
       class:input-error={$errors}
       class:toggle-success={$value}

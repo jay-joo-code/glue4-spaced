@@ -12,6 +12,7 @@
   export let label: string = undefined;
   export let helperText: string = undefined;
   export let helperTextStatus: HelperTextStatus = undefined;
+  export let inputClass: string = undefined;
 
   const { value, errors, constraints } = formFieldProxy(
     superform,
@@ -19,7 +20,7 @@
   ) satisfies FormFieldProxy<string>;
 </script>
 
-<label class="form-control w-full max-w-xs">
+<label class="form-control w-full">
   {#if label}
     <div class="label">
       <span class="label-text first-letter:uppercase">{label}</span>
@@ -30,7 +31,7 @@
     type="date"
     aria-invalid={$errors ? 'true' : undefined}
     bind:value={$value}
-    class="input input-bordered w-full max-w-xs"
+    class="{inputClass} input input-bordered w-full"
     class:input-error={$errors}
     {...$constraints}
     {...$$restProps}

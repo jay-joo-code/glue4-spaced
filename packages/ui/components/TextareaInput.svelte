@@ -13,6 +13,7 @@
   export let isHideLabel: boolean = false;
   export let helperText: string = undefined;
   export let helperTextStatus: HelperTextStatus = undefined;
+  export let inputClass: string = undefined;
 
   const { value, errors, constraints } = formFieldProxy(
     superform,
@@ -31,7 +32,7 @@
     rows="7"
     aria-invalid={$errors ? 'true' : undefined}
     bind:value={$value}
-    class="textarea textarea-bordered w-full"
+    class="{inputClass} textarea textarea-bordered w-full"
     class:input-error={$errors}
     {...$constraints}
     {...$$restProps}

@@ -17,6 +17,8 @@
   export let isHideLabel: boolean = false;
   export let helperText: string = undefined;
   export let helperTextStatus: HelperTextStatus = undefined;
+  export let inputClass: string = undefined;
+  export let inputClass: string = undefined;
 
   const { value, errors, constraints } = formFieldProxy(superform, field) satisfies FormFieldProxy<
     string[]
@@ -53,7 +55,7 @@
     <input
       name={field}
       type="file"
-      class="file-input file-input-bordered w-full max-w-xs"
+      class="{inputClass} file-input file-input-bordered w-full max-w-xs"
       on:input={onFileUpload}
       class:file-input-error={$errors}
       multiple

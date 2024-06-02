@@ -1,10 +1,10 @@
 <script lang="ts" generics="T extends Record<string, unknown>">
   import type { HelperTextStatus } from '@glue/types';
   import {
-      formFieldProxy,
-      type FormFieldProxy,
-      type FormPathLeaves,
-      type SuperForm
+    formFieldProxy,
+    type FormFieldProxy,
+    type FormPathLeaves,
+    type SuperForm
   } from 'sveltekit-superforms';
 
   export let superform: SuperForm<T>;
@@ -13,6 +13,7 @@
   export let isHideLabel: boolean = false;
   export let helperText: string = undefined;
   export let helperTextStatus: HelperTextStatus = undefined;
+  export let inputClass: string = undefined;
 
   const { value, errors, constraints } = formFieldProxy(
     superform,
@@ -31,7 +32,7 @@
     type="text"
     aria-invalid={$errors ? 'true' : undefined}
     bind:value={$value}
-    class="input input-bordered w-full"
+    class="{inputClass} input input-bordered w-full"
     class:input-error={$errors}
     {...$constraints}
     {...$$restProps}
