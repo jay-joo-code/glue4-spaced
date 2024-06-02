@@ -7,7 +7,8 @@ import { message, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 
 const insertListingSchema = createInsertSchema(listingTable, {
-  bathrooms: (schema) => schema.bathrooms.step(0.5)
+  bathrooms: (schema) => schema.bathrooms.step(0.5),
+  propertyType: (schema) => schema.propertyType.default('studio')
 });
 
 export const load: ServerLoad = async ({ url, locals }) => {
@@ -24,7 +25,6 @@ export const actions = {
   insertListing: async ({ request }) => {
     const form = await superValidate(request, zod(insertListingSchema));
 
-    console.log('form.data', form.valid, form.data);
     if (!form.valid) return fail(400, { form });
 
     await db.insert(listingTable).values(form.data);

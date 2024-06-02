@@ -84,14 +84,13 @@
       on:blur={() => {
         isShowOptions = false;
         const latestSelectedOption = options.find((option) => option.value === $value);
-        if ($constraints.required && !latestSelectedOption) {
+        if ($constraints?.required && !latestSelectedOption) {
           $errors = ['Please select an option from the dropdown menu'];
         } else {
           searchText = latestSelectedOption?.label ?? '';
           $errors = undefined;
         }
       }}
-      name={field}
       aria-invalid={$errors ? 'true' : undefined}
       bind:value={searchText}
       bind:this={inputElement}

@@ -54,7 +54,7 @@
   <SuperDebug data={superform.form} />
 {/if}
 
-<form method="POST" action={actionPath} use:enhance>
+<form method="POST" action={actionPath} use:enhance enctype="multipart/form-data">
   <div class="space-y-2">
     {#each formBlocks as block}
       {#if isFormTextBlock(block)}

@@ -55,9 +55,10 @@
       on:input={onFileUpload}
       class:file-input-error={$errors}
       multiple
-      {...$constraints}
       {...$$restProps}
     />
+    <!-- TODO: handle required, min, max validation -->
+    <!-- {...$constraints} -->
     {#if isLoading}
       <span class="loading loading-spinner loading-sm"></span>
     {/if}

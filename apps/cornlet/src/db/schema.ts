@@ -61,7 +61,7 @@ export const listingTable = pgTable('listing', {
   isSold: boolean('is_sold').default(false),
   isDeleted: boolean('is_deleted').default(false),
   photoUrls: text('photo_urls').array().notNull(),
-  isRequireVerification: boolean('is_require_verification').notNull()
+  isRequireVerification: boolean('is_require_verification').default(false)
 });
 
 export type InsertListing = typeof listingTable.$inferInsert;
