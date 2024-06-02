@@ -8,6 +8,7 @@
     isFormSpaceBlock,
     isFormTextBlock,
     isFormTextareaBlock,
+    isFormToggleBlock,
     type FormBlock
   } from '@glue/types';
   import {
@@ -18,7 +19,8 @@
     NumberInput,
     SelectInput,
     TextInput,
-    TextareaInput
+    TextareaInput,
+    ToggleInput
   } from '@glue/ui';
   import { getTableColumns } from 'drizzle-orm';
   import type { AnyPgTable } from 'drizzle-orm/pg-core';
@@ -49,9 +51,9 @@
     {#each formBlocks as block}
       {#if isFormTextBlock(block)}
         {#if block.variant === 'h1'}
-          <h1 class="text-4xl font-extrabold !mt-6">{block.content}</h1>
+          <h1 class="text-4xl font-extrabold !mt-8">{block.content}</h1>
         {:else if block.variant === 'h2'}
-          <h2 class="text-2xl font-extrabold !mt-6">{block.content}</h2>
+          <h2 class="text-2xl font-extrabold !mt-16">{block.content}</h2>
         {:else if block.variant === 'p'}
           <h2 class="text-sm text-base-content/80 !mb-6">{block.content}</h2>
         {/if}
@@ -91,6 +93,14 @@
           label={getBlockLabel(block)}
           isHideLabel={block.isHideLabel}
           onOptionSelect={block.onOptionSelect}
+          helperText={block.helperText}
+        />
+      {:else if isFormToggleBlock(block)}
+        <ToggleInput
+          {superform}
+          field={block.column}
+          label={getBlockLabel(block)}
+          isHideLabel={block.isHideLabel}
           helperText={block.helperText}
         />
       {:else if isFormFieldBlock(block)}

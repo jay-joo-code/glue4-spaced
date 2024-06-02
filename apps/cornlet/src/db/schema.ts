@@ -60,8 +60,8 @@ export const listingTable = pgTable('listing', {
   isActive: boolean('is_active').default(true),
   isSold: boolean('is_sold').default(false),
   isDeleted: boolean('is_deleted').default(false),
-  photoUrls: text('photo_urls').array().notNull()
-  // views: decimal("views", { precision: 64, scale: 0 }).notNullable().default(0),
+  photoUrls: text('photo_urls').array().notNull(),
+  isRequireVerification: boolean('is_require_verification').notNull()
 });
 
 export type InsertListing = typeof listingTable.$inferInsert;

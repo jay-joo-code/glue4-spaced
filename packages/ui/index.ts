@@ -17,6 +17,7 @@ export { default as TermsNotice } from './components/TermsNotice.svelte';
 export { default as TextInput } from './components/TextInput.svelte';
 export { default as Textarea } from './components/Textarea.svelte';
 export { default as TextareaInput } from './components/TextareaInput.svelte';
+export { default as ToggleInput } from './components/ToggleInput.svelte';
 export { default as UserAvatar } from './components/UserAvatar.svelte';
 export { default as IconAdd } from './icons/IconAdd.svelte';
 export { default as IconAddItem } from './icons/IconAddItem.svelte';

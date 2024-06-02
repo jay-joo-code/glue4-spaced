@@ -29,7 +29,8 @@ export type FormBlock =
   | FormFileUploadBlock
   | FormTextareaBlock
   | FormSelectBlock
-  | FormAddressBlock;
+  | FormAddressBlock
+  | FormToggleBlock;
 
 export type FormFieldBlock = {
   variant: 'field';
@@ -70,6 +71,10 @@ export type FormAddressBlock = FormFieldBlock & {
   onOptionSelect?: (option: FormSelectOption) => void;
 };
 
+export type FormToggleBlock = FormFieldBlock & {
+  component: 'toggle';
+};
+
 export function isFormFieldBlock(block: any): block is FormFieldBlock {
   return block.variant === 'field';
 }
@@ -96,6 +101,10 @@ export function isFormSelectBlock(block: any): block is FormSelectBlock {
 
 export function isFormAddressBlock(block: any): block is FormAddressBlock {
   return block.component === 'address';
+}
+
+export function isFormToggleBlock(block: any): block is FormToggleBlock {
+  return block.component === 'toggle';
 }
 
 export interface GooglePlaceSuggestion extends Record<string, unknown> {

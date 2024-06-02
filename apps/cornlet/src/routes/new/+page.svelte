@@ -100,6 +100,21 @@
           return urls;
         },
         isHideLabel: true
+      },
+      {
+        variant: 'h2',
+        content: 'Settings'
+      },
+      {
+        variant: 'p',
+        content: 'Configure settings for your sublet listing'
+      },
+      {
+        variant: 'field',
+        component: 'toggle',
+        column: 'isRequireVerification',
+        label: 'Only receive messages from Cornellians',
+        helperText: 'Enabling can reduce the number of messages you receive'
       }
     ]}
   />
