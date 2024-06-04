@@ -6,7 +6,7 @@
   import firebase from '$root/src/lib/firebase.js';
   import calculateMinsToOrg from '$root/src/lib/util/calculateMinsToOrg.js';
   import dummyListingData from '$root/src/lib/util/dummyListingData.js';
-  import findClosestLocation from '$root/src/lib/util/findClosestLocation.js';
+  import locationText from '$root/src/lib/util/locationText.js';
   import { Form, PageContainer } from '@glue/ui';
   import { uploadFile } from '@glue/utils';
   import { onMount } from 'svelte';
@@ -15,9 +15,7 @@
   export let data;
 
   const superform = superForm(data.form, {
-    onSubmit: ({ formData }) => {
-      if (data.user) formData.set('userId', data.user.id);
-    },
+    dataType: 'json',
     onUpdated: ({ form }) => {
       if (form.valid) {
         goto('/profile/listings');
@@ -28,6 +26,7 @@
 
   onMount(() => {
     if (dev) $form = dummyListingData;
+    if (data.user) $form.userId = data.user.id;
   });
 </script>
 
@@ -50,16 +49,13 @@
         column: 'address',
         component: 'address',
         onOptionSelect: async () => {
-          // @ts-expect-error: superform table schema getting lost
           const minsToOrg = calculateMinsToOrg($form.lat, $form.lng, 'cornell');
           $form.minsToOrg = minsToOrg;
         },
-        helperText: $form.minsToOrg
-          ? // @ts-expect-error: superform table schema getting lost
-            `${findClosestLocation($form.lat, $form.lng, 'cornell')} • ${
-              $form.minsToOrg
-            } mins to campus`
-          : undefined,
+        helperText:
+          $form.lat && $form.lng && $form.minsToOrg
+            ? locationText($form.lat, $form.lng, $form.minsToOrg, 'cornell')
+            : undefined,
         helperTextStatus: 'success'
       },
       {
