@@ -19,12 +19,9 @@
   export let helperTextStatus: HelperTextStatus = undefined;
   export let inputClass: string = undefined;
 
-  const { value, errors, constraints } = formFieldProxy(superform, field) satisfies FormFieldProxy<
-    string[]
-  >;
+  const { value, errors } = formFieldProxy(superform, field) satisfies FormFieldProxy<string[]>;
 
   let isLoading = false;
-
   const flipDurationMs = 300;
 
   function handleDndConsider(event: CustomEvent<DndEvent<Item>>) {
