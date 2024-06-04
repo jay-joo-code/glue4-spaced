@@ -12,7 +12,6 @@ export const PUT: RequestHandler = async ({ request, url, params, locals }) => {
   try {
     const requestBody = await request.json();
     const { listingId } = params;
-    console.log('requestBody, listingId', requestBody, listingId);
 
     const listing = await db
       .update(listingTable)
