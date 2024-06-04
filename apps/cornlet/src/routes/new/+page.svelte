@@ -6,7 +6,7 @@
   import firebase from '$root/src/lib/firebase.js';
   import calculateMinsToOrg from '$root/src/lib/util/calculateMinsToOrg.js';
   import dummyListingData from '$root/src/lib/util/dummyListingData.js';
-  import locationText from '$root/src/lib/util/locationText.js';
+  import listingLocation from '$root/src/lib/util/listingLocation.js';
   import { Form, PageContainer } from '@glue/ui';
   import { uploadFile } from '@glue/utils';
   import { onMount } from 'svelte';
@@ -54,7 +54,7 @@
         },
         helperText:
           $form.lat && $form.lng && $form.minsToOrg
-            ? locationText($form.lat, $form.lng, $form.minsToOrg, 'cornell')
+            ? listingLocation($form.lat, $form.lng, $form.minsToOrg, 'cornell')
             : undefined,
         helperTextStatus: 'success'
       },
