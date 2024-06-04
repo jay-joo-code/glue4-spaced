@@ -12,7 +12,7 @@
   {:then listings}
     {#if listings}
       {#each listings as listing}
-        <ListingItem {listing} />
+        <ListingItem {listing} currentUserId={data.user?.id} />
       {/each}
     {/if}
   {/await}
