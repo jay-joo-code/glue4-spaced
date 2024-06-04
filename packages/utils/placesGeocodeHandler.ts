@@ -11,7 +11,6 @@ const placesAutocompleteHandler = async ({
 }: RequestEvent & { GOOGLE_MAPS_API_KEY: string }) => {
   if (!locals.user) return redirect(302, protectedRouteRedirectUrl(url));
   const address = url.searchParams.get('address') ?? '';
-  console.log('address', address);
   const query = queryString.stringify({
     address,
     key: GOOGLE_MAPS_API_KEY
