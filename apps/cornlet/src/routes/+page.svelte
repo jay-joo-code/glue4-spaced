@@ -6,7 +6,7 @@
   export let data;
 </script>
 
-<PageContainer {APP_NAME} title="Home">
+<PageContainer {APP_NAME} title="Home" limitWidth={false} class="max-w-3xl">
   {#await data.listings}
     <span class="loading loading-spinner loading-sm" />
   {:then listings}

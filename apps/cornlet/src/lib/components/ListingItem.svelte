@@ -3,7 +3,7 @@
   import listingTitle from '$lib/util/listingTitle';
   import listingLocation from '$lib/util/listingLocation';
   import listingDateRange from '$lib/util/listingDateRange';
-  import { IconCalendar, IconMap, IconNewTab } from '@glue/ui';
+  import { IconCalendar, IconEditPen, IconMap, IconNewTab } from '@glue/ui';
   import { formatDistanceToNowStrict } from 'date-fns';
 
   export let listing: SelectListing;
@@ -25,81 +25,107 @@
 </script>
 
 {#if listing}
-  <a href={currentUserId === listing.userId ? `/edit/${listing.id}` : `/listing/${listing.id}`}>
-    <div class="grid grid-cols-10 gap-4">
+  {#if currentUserId === listing.userId}
+    <div class="grid grid-cols-10 gap-4 p-3 rounded-xl">
       <div class="col-span-4">
-        <img class="w-full object-cover rounded-lg" src={listing.photoUrls[0]} />
+        <img
+          class="w-full object-cover rounded-lg max-h-[180px] {!isAvailable && 'opacity-60'}"
+          src={listing.photoUrls[0]}
+        />
       </div>
 
-      <div class="col-span-6 flex flex-col justify-between">
-        {#if currentUserId === listing.userId}
-          <div class="">
-            <h2 class="font-extrabold">{listing.address}</h2>
-            <div class="flex space-x-2 items-center mt-2 text-base-content/80">
-              <IconCalendar />
-              <p class="text-xs tracking-wider">
-                {listingDateRange(listing)}
-              </p>
-            </div>
+      <div class="col-span-6 flex flex-col justify-between items-start">
+        <div class="">
+          <h2 class="font-extrabold sm:text-2xl">{listing.address}</h2>
+          <div class="flex space-x-2 items-center mt-2 text-base-content/80">
+            <IconCalendar />
+            <p class="text-xs tracking-wider sm:text-sm">
+              {listingDateRange(listing)}
+            </p>
           </div>
 
-          <div class="flex items-center gap-3 justify-start">
-            <div class="form-control">
-              <label class="label p-0 cursor-pointer flex justify-start space-x-2">
-                <input
-                  type="checkbox"
-                  class="toggle toggle-xs"
-                  bind:checked={isAvailable}
-                  class:toggle-success={isAvailable}
-                  on:input={handleIsAvailableChange}
-                  on:click={(event) => event.stopImmediatePropagation()}
-                />
-                <div class="">
-                  <span class="label-text tracking-wide font-medium"
-                    >{isAvailable ? 'Available' : 'Sold'}</span
-                  >
-                </div>
-              </label>
-            </div>
-
-            {#if isAvailable}
-              <a href="/listing/${listing.id}" target="_blank" rel="noreferrer">
-                <button class="btn btn-xs btn-outline btn-secondary">Visit <IconNewTab /></button>
-              </a>
-            {/if}
+          <div class="flex items-center space-x-2 sm:space-x-3 mt-3 sm:mt-4">
+            <a href="/edit/${listing.id}">
+              <button class="btn btn-xs sm:btn-sm btn-outline btn-secondary"
+                ><IconEditPen /> Edit</button
+              >
+            </a>
+            <a href="/listing/${listing.id}" target="_blank" rel="noreferrer">
+              <button class="btn btn-xs sm:btn-sm btn-outline btn-secondary"
+                >Visit <IconNewTab /></button
+              >
+            </a>
           </div>
-        {:else}
+        </div>
+
+        <div
+          class="form-control mt-4 bg-base-200 inline-block py-1 px-3 rounded-xl"
+          on:click={(event) => event.stopImmediatePropagation()}
+        >
+          <label class="label p-0 cursor-pointer flex justify-start space-x-2">
+            <input
+              type="checkbox"
+              class="toggle toggle-xs sm:toggle-sm"
+              bind:checked={isAvailable}
+              class:toggle-success={isAvailable}
+              on:input={handleIsAvailableChange}
+            />
+            <div class="">
+              <span class="label-text tracking-wide font-medium"
+                >{isAvailable ? 'Available' : 'Sold'}</span
+              >
+            </div>
+          </label>
+        </div>
+      </div>
+    </div>
+  {:else}
+    <a href="/listing/{listing.id}">
+      <div class="grid grid-cols-10 gap-4 hover:bg-base-200 rounded-xl p-3">
+        <div class="col-span-4">
+          <img
+            class="w-full object-cover rounded-lg max-h-[180px] {!isAvailable && 'opacity-60'}"
+            src={listing.photoUrls[0]}
+          />
+        </div>
+
+        <div class="col-span-6 flex flex-col justify-between">
           <div class="">
-            <h2 class="font-extrabold text-xl">
+            <h2 class="font-extrabold text-xl sm:text-2xl">
               {listingTitle(listing)}
             </h2>
-            <div class="flex space-x-2 items-center mt-2 text-base-content/80">
-              <IconMap />
-              <p class="text-xs text-base-content/80 first-letter:uppercase">
+            <div class="flex items-center mt-2 sm:mt-3 text-base-content/80 text-xs sm:text-sm">
+              <span class="hidden sm:block mr-2">
+                <IconMap />
+              </span>
+              <p class="first-letter:uppercase">
                 {listingLocation(listing.lat, listing.lng, listing.minsToOrg, 'cornell')}
               </p>
             </div>
-            <div class="flex space-x-2 items-center mt-2 text-base-content/80">
-              <IconCalendar />
-              <p class="text-xs tracking-wider">
+            <div class="flex items-center mt-1 sm:mt-2 text-base-content/80 text-xs sm:text-sm">
+              <span class="hidden sm:block mr-2">
+                <IconCalendar />
+              </span>
+              <p class="tracking-wider">
                 {listingDateRange(listing)}
               </p>
             </div>
           </div>
 
-          <div class="flex justify-between items-center">
-            <p class="">
+          <div class="flex justify-between items-center mt-4">
+            <p class="sm:text-xl">
               <span class="font-extrabold">${listing.price}</span>
               <span class="font-medium text-base-content/80">/ month</span>
             </p>
+
             {#if listing.updatedAt}
               <p class="text-xs text-base-content/80">
                 {formatDistanceToNowStrict(new Date(listing.updatedAt))} ago
               </p>
             {/if}
           </div>
-        {/if}
+        </div>
       </div>
-    </div>
-  </a>
+    </a>
+  {/if}
 {/if}

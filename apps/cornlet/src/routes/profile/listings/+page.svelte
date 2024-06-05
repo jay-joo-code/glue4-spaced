@@ -6,7 +6,7 @@
   export let data;
 </script>
 
-<PageContainer {APP_NAME} title="My listings">
+<PageContainer {APP_NAME} title="My listings" limitWidth={false} class="max-w-3xl">
   <h1 class="text-3xl font-extrabold mb-8">My listings</h1>
 
   {#await data.myListings}
