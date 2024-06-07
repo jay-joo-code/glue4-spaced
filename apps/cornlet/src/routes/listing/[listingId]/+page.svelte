@@ -37,7 +37,7 @@
       <div class="mt-6">
         <div class="w-full carousel rounded-lg border border-base-content/10">
           {#each listing.photoUrls as photoUrl}
-            <div class="carousel-item w-[80%]">
+            <div class="carousel-item w-[80%] border-r border-base-content/30">
               <img class="w-full object-cover" src={photoUrl} />
             </div>
           {/each}
