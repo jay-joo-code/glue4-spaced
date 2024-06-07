@@ -43,9 +43,7 @@
   <div class="flex flex-col items-center">
     <div class="relative w-full">
       <!-- body content -->
-      <div class="min-h-[82vh]">
-        <slot />
-      </div>
+      <slot />
 
       <!-- footer -->
       <footer

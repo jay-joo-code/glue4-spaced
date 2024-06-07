@@ -26,7 +26,7 @@
 
 {#if listing}
   {#if currentUserId === listing.userId}
-    <div class="grid grid-cols-10 gap-4 p-3 rounded-xl">
+    <div class="grid grid-cols-10 gap-4 py-3 md:px-3 rounded-xl">
       <div class="col-span-4">
         <img
           class="w-full object-cover rounded-lg max-h-[180px] {!isAvailable && 'opacity-60'}"
@@ -45,12 +45,12 @@
           </div>
 
           <div class="flex items-center space-x-2 sm:space-x-3 mt-3 sm:mt-4">
-            <a href="/edit/${listing.id}">
+            <a href="/edit/{listing.id}">
               <button class="btn btn-xs sm:btn-sm btn-outline btn-secondary"
                 ><IconEditPen /> Edit</button
               >
             </a>
-            <a href="/listing/${listing.id}" target="_blank" rel="noreferrer">
+            <a href="/listing/{listing.id}" target="_blank" rel="noreferrer">
               <button class="btn btn-xs sm:btn-sm btn-outline btn-secondary"
                 >Visit <IconNewTab /></button
               >
@@ -81,7 +81,7 @@
     </div>
   {:else}
     <a href="/listing/{listing.id}">
-      <div class="grid grid-cols-10 gap-4 hover:bg-base-200 rounded-xl p-3">
+      <div class="grid grid-cols-10 gap-4 hover:bg-base-200 rounded-xl py-3 md:px-3">
         <div class="col-span-4">
           <img
             class="w-full object-cover rounded-lg max-h-[180px] {!isAvailable && 'opacity-60'}"
@@ -94,7 +94,7 @@
             <h2 class="font-extrabold text-xl sm:text-2xl">
               {listingTitle(listing)}
             </h2>
-            <div class="flex items-center mt-2 sm:mt-3 text-base-content/80 text-xs sm:text-sm">
+            <div class="flex items-center mt-1 sm:mt-3 text-base-content/80 text-xs sm:text-sm">
               <span class="hidden sm:block mr-2">
                 <IconMap />
               </span>
