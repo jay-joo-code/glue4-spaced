@@ -8,11 +8,48 @@
     IconCalendar,
     IconChevronLeft,
     IconHome,
-    PageContainer,
-    UserAvatar
+    PageContainer
   } from '@glue/ui';
+  import { onMount } from 'svelte';
+  import { Loader } from '@googlemaps/js-api-loader';
+  import { PUBLIC_GOOGLE_MAPS_API_KEY } from '$env/static/public';
 
   export let data;
+
+  onMount(async () => {
+    const loader = new Loader({
+      apiKey: PUBLIC_GOOGLE_MAPS_API_KEY,
+      version: 'weekly'
+    });
+    const listing = await data.listing;
+    if (listing) {
+      loader.importLibrary('maps').then(({ Map, Circle }) => {
+        const map = new Map(document.getElementById('map'), {
+          center: {
+            lat: listing.lat,
+            lng: listing.lng
+          },
+          zoom: 16,
+          mapTypeControl: false,
+          streetViewControl: false,
+          gestureHandling: 'greedy'
+        });
+        new Circle({
+          map,
+          strokeColor: '#FF0000',
+          strokeOpacity: 0.4,
+          strokeWeight: 2,
+          fillColor: '#FF0000',
+          fillOpacity: 0.1,
+          center: {
+            lat: listing.lat,
+            lng: listing.lng
+          },
+          radius: 100
+        });
+      });
+    }
+  });
 </script>
 
 <PageContainer title="View sublet listing" {APP_NAME}>
@@ -108,7 +145,8 @@
         {listingLocation(listing.lat, listing.lng, listing.minsToOrg, 'cornell')}
       </p>
 
-      <div class="w-full aspect-square bg-base-200 rounded-xl mt-6" />
+      <div id="map" class="w-full aspect-square bg-base-200 rounded-xl mt-6" />
+
       <div class="flex justify-center mt-3">
         <p class="text-center text-xs text-base-content/80 w-3/4">
           The exact location is not available for security and privacy purposes
