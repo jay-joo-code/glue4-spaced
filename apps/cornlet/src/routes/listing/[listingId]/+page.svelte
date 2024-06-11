@@ -81,86 +81,121 @@
         </div>
       </div>
 
-      <h1 class="text-3xl mt-6 font-extrabold">{listingTitle(listing)}</h1>
+      <div class="md:grid md:grid-cols-5 md:gap-8 mt-6 md:mt-10">
+        <div class="md:col-span-3">
+          <h1 class="text-3xl font-extrabold md:text-5xl">{listingTitle(listing)}</h1>
 
-      <div class="flex space-x-3 mt-8 text-base-content/90">
-        <span class="mt-0.5 text-xl">
-          <IconCalendar />
-        </span>
+          <div class="flex space-x-3 mt-8 md:mt-12 text-base-content/90">
+            <span class="mt-0.5 text-xl md:text-2xl">
+              <IconCalendar />
+            </span>
 
-        <p class="font-medium text-sm tracking-wide">{listingDateRange(listing)}</p>
-      </div>
-
-      <div class="flex space-x-3 mt-4 text-base-content/90">
-        <span class="mt-0.5 text-xl -ml-0.5">
-          <IconBathroomShower />
-        </span>
-
-        <div>
-          <p class="font-medium">{listing.bathrooms} bathrooms</p>
-          {#if !Number.isInteger(listing.bathrooms)}
-            <p class="text-xs mt-1 text-base-content/80">
-              0.5 bathrooms is a "half bathroom" with just a toilet and sink, with no tub or shower.
-            </p>
-          {/if}
-        </div>
-      </div>
-
-      {#if listing.maleRoommates + listing.femaleRoommates + listing.nonbinaryRoommates === 0}
-        <div class="flex space-x-3 mt-4 text-base-content/90">
-          <span class="mt-0.5 text-xl">
-            <IconHome />
-          </span>
-
-          <div class="">
-            <p class="font-medium">Entire place</p>
-            <p class="text-xs mt-1 text-base-content/80">
-              You will have the entire place to yourself for the duration of the sublet
-            </p>
+            <p class="font-medium text-sm tracking-wide md:text-lg">{listingDateRange(listing)}</p>
           </div>
-        </div>
-      {:else}
-        <!-- TODO: -->
-      {/if}
 
-      {#if listing.host}
-        <h2 class="text-xl mt-12 font-extrabold">Host</h2>
-        <div class="mt-4 flex justify-between">
-          <div class="flex items-center space-x-4">
-            <!-- TODO: host avatar -->
-            <div class="avatar">
-              <div class="w-10 rounded-full">
-                <img src={listing.host.avatarUrl} />
+          <div class="flex space-x-3 mt-4 text-base-content/90">
+            <span class="mt-0.5 md:mt-0 text-xl -ml-0.5 md:text-2xl">
+              <IconBathroomShower />
+            </span>
+
+            <div>
+              <p class="font-medium md:text-lg">{listing.bathrooms} bathrooms</p>
+              {#if !Number.isInteger(listing.bathrooms)}
+                <p class="text-xs mt-1 text-base-content/80 md:text-sm">
+                  0.5 bathrooms is a "half bathroom" with just a toilet and sink, with no tub or
+                  shower.
+                </p>
+              {/if}
+            </div>
+          </div>
+
+          {#if listing.maleRoommates + listing.femaleRoommates + listing.nonbinaryRoommates === 0}
+            <div class="flex space-x-3 mt-4 text-base-content/90">
+              <span class="mt-0.5 text-xl md:text-2xl">
+                <IconHome />
+              </span>
+
+              <div class="">
+                <p class="font-medium md:text-lg">Entire place</p>
+                <p class="text-xs md:text-sm mt-1 text-base-content/80">
+                  You will have the entire place to yourself for the duration of the sublet
+                </p>
               </div>
             </div>
-            <p class="font-extrabold">{listing.host.firstName}</p>
+          {:else}
+            <!-- TODO: -->
+          {/if}
+
+          {#if listing.host}
+            <div class="md:hidden">
+              <h2 class="text-xl mt-12 font-extrabold">Host</h2>
+              <div class="mt-4 flex justify-between">
+                <div class="flex items-center space-x-4">
+                  <div class="avatar">
+                    <div class="w-10 rounded-full">
+                      <img src={listing.host.avatarUrl} />
+                    </div>
+                  </div>
+                  <p class="font-extrabold">{listing.host.firstName}</p>
+                </div>
+
+                <button class="btn btn-primary btn-sm">Message</button>
+              </div>
+            </div>
+          {/if}
+
+          <h2 class="text-xl mt-12 font-extrabold md:text-3xl">Location</h2>
+          <p class="text-base-content/80 mt-2 text-sm md:mt-6 first-letter:uppercase">
+            {listingLocation(listing.lat, listing.lng, listing.minsToOrg, 'cornell')}
+          </p>
+
+          <div id="map" class="w-full aspect-square bg-base-200 rounded-xl mt-6" />
+
+          <div class="flex justify-center mt-3 md:mt-5">
+            <p class="text-center text-xs text-base-content/80 w-3/4 md:text-sm">
+              The exact location is not available for security and privacy purposes
+            </p>
           </div>
 
-          <button class="btn btn-primary btn-sm">Message</button>
+          <h2 class="text-xl mt-12 font-extrabold md:text-3xl">Description</h2>
+          <p class="mt-4 text-sm text-base-content/80 md:text-md md:mt-6">{listing.desc}</p>
         </div>
-      {/if}
 
-      <h2 class="text-xl mt-12 font-extrabold">Location</h2>
-      <p class="text-base-content/80 mt-2 text-sm first-letter:uppercase">
-        {listingLocation(listing.lat, listing.lng, listing.minsToOrg, 'cornell')}
-      </p>
-
-      <div id="map" class="w-full aspect-square bg-base-200 rounded-xl mt-6" />
-
-      <div class="flex justify-center mt-3">
-        <p class="text-center text-xs text-base-content/80 w-3/4">
-          The exact location is not available for security and privacy purposes
-        </p>
+        <!-- desktop: right side panel -->
+        <div class="hidden md:flex justify-end items-start w-full col-span-2">
+          <div
+            class="max-w-xs w-full border border-base-content/10 rounded-xl divide-y divide-base-content/10 sticky top-24"
+          >
+            <div class="p-4">
+              <p class="text-lg">
+                <span class="font-extrabold">${listing.price}</span>
+                <span class="opacity-80">/ month</span>
+              </p>
+            </div>
+            <div class="p-4">
+              {#if listing.host}
+                <div class="flex justify-between">
+                  <div class="flex items-center space-x-4">
+                    <div class="avatar">
+                      <div class="w-10 rounded-full">
+                        <img src={listing.host.avatarUrl} />
+                      </div>
+                    </div>
+                    <p class="font-extrabold">{listing.host.firstName}</p>
+                  </div>
+                </div>
+                <button class="mt-5 btn-block btn btn-primary btn-sm">Message host</button>
+              {/if}
+            </div>
+          </div>
+        </div>
       </div>
-
-      <h2 class="text-xl mt-12 font-extrabold">Description</h2>
-      <p class="mt-4 text-sm text-base-content/80">{listing.desc}</p>
 
       <div class="my-16" />
 
       <!-- mobile: fixed bottom panel -->
       <div
-        class="fixed bottom-0 left-0 right-0 border-t border-base-content/10 bg-base-100 z-10 p-4 pb-6 flex items-center justify-between"
+        class="fixed bottom-0 left-0 right-0 border-t border-base-content/10 bg-base-100 z-10 p-4 pb-6 flex items-center justify-between md:hidden"
       >
         <div class="">
           <p class="text-lg">
