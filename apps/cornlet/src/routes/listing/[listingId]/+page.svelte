@@ -149,12 +149,15 @@
             {listingLocation(listing.lat, listing.lng, listing.minsToOrg, 'cornell')}
           </p>
 
-          <div id="map" class="w-full aspect-square bg-base-200 rounded-xl mt-6" />
+          <!-- map -->
+          <div class="w-full max-w-xl mt-6">
+            <div id="map" class="aspect-square bg-base-200 rounded-xl" />
 
-          <div class="flex justify-center mt-3 md:mt-5">
-            <p class="text-center text-xs text-base-content/80 w-3/4 md:text-sm">
-              The exact location is not available for security and privacy purposes
-            </p>
+            <div class="flex justify-center mt-3 md:mt-5">
+              <p class="text-center text-xs text-base-content/80 w-3/4 md:w-2/3 md:text-sm">
+                The exact location is not available for security and privacy purposes
+              </p>
+            </div>
           </div>
 
           <h2 class="text-xl mt-12 font-extrabold md:text-3xl">Description</h2>
