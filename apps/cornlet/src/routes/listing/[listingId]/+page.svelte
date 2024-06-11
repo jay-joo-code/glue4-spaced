@@ -157,6 +157,19 @@
       <p class="mt-4 text-sm text-base-content/80">{listing.desc}</p>
 
       <div class="my-16" />
+
+      <!-- mobile: fixed bottom panel -->
+      <div
+        class="fixed bottom-0 left-0 right-0 border-t border-base-content/10 bg-base-100 z-10 p-4 pb-6 flex items-center justify-between"
+      >
+        <div class="">
+          <p class="text-lg">
+            <span class="font-extrabold">${listing.price}</span>
+            <span class="opacity-80">/ month</span>
+          </p>
+        </div>
+        <button class="btn btn-primary btn-sm">Message host</button>
+      </div>
     {/if}
   {/await}
 </PageContainer>
