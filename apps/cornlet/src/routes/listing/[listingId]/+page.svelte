@@ -16,6 +16,8 @@
 
   export let data;
 
+  let dialogSeeAllPhotos: HTMLDialogElement;
+
   onMount(async () => {
     const loader = new Loader({
       apiKey: PUBLIC_GOOGLE_MAPS_API_KEY,
@@ -60,24 +62,85 @@
   {:then listing}
     {#if listing}
       <button
-        class="btn btn-sm"
+        class="btn btn-sm md:btn-md"
         on:click={() => {
           history.back();
         }}
       >
-        <span class="text-lg">
+        <span class="text-lg md:text-xl">
           <IconChevronLeft />
         </span>
         back</button
       >
 
-      <div class="mt-6">
-        <div class="w-full carousel rounded-lg border border-base-content/10">
+      <div class="mt-6 md:mt-12">
+        <!-- mobile: carousel -->
+        <div class="w-full carousel rounded-lg border border-base-content/10 md:hidden">
           {#each listing.photoUrls as photoUrl}
             <div class="carousel-item w-[80%] border-r border-base-content/30">
               <img class="w-full object-cover" src={photoUrl} />
             </div>
           {/each}
+        </div>
+
+        <!-- desktop: gallery -->
+        <div class="relative hidden md:block">
+          <div class="grid grid-cols-4 grid-rows-2 min-h-[50vh] gap-3">
+            <div
+              class="row-span-2 col-span-2 border border-base-content/10 rounded-l-xl overflow-hidden"
+            >
+              <img class="object-cover w-full h-full" src={listing.photoUrls[0]} />
+            </div>
+
+            <div class="border border-base-content/10">
+              {#if listing.photoUrls.length < 2}
+                <div class="w-full h-full bg-primary/10 flex justify-center items-center">
+                  <p class="text-sm text-base-content/80">No image</p>
+                </div>
+              {:else}
+                <img class="object-cover w-full h-full" src={listing.photoUrls[1]} />
+              {/if}
+            </div>
+
+            <div class="rounded-tr-xl border border-base-content/10 overflow-hidden">
+              {#if listing.photoUrls.length < 3}
+                <div class="w-full h-full bg-primary/10 flex justify-center items-center">
+                  <p class="text-sm text-base-content/80">No image</p>
+                </div>
+              {:else}
+                <img class="object-cover w-full h-full" src={listing.photoUrls[2]} />
+              {/if}
+            </div>
+
+            <div class="border border-base-content/10">
+              {#if listing.photoUrls.length < 4}
+                <div class="w-full h-full bg-primary/10 flex justify-center items-center">
+                  <p class="text-sm text-base-content/80">No image</p>
+                </div>
+              {:else}
+                <img class="object-cover w-full h-full" src={listing.photoUrls[3]} />
+              {/if}
+            </div>
+
+            <div class="rounded-br-xl border border-base-content/10 overflow-hidden">
+              {#if listing.photoUrls.length < 5}
+                <div class="w-full h-full bg-primary/10 flex justify-center items-center">
+                  <p class="text-sm text-base-content/80">No image</p>
+                </div>
+              {:else}
+                <img class="object-cover w-full h-full" src={listing.photoUrls[4]} />
+              {/if}
+            </div>
+          </div>
+
+          <div class="absolute bottom-6 right-6">
+            <button
+              class="btn btn-secondary"
+              on:click={() => {
+                dialogSeeAllPhotos.showModal();
+              }}>See all photos</button
+            >
+          </div>
         </div>
       </div>
 
@@ -85,46 +148,50 @@
         <div class="md:col-span-3">
           <h1 class="text-3xl font-extrabold md:text-5xl">{listingTitle(listing)}</h1>
 
-          <div class="flex space-x-3 mt-8 md:mt-12 text-base-content/90">
-            <span class="mt-0.5 text-xl md:text-2xl">
-              <IconCalendar />
-            </span>
-
-            <p class="font-medium text-sm tracking-wide md:text-lg">{listingDateRange(listing)}</p>
-          </div>
-
-          <div class="flex space-x-3 mt-4 text-base-content/90">
-            <span class="mt-0.5 md:mt-0 text-xl -ml-0.5 md:text-2xl">
-              <IconBathroomShower />
-            </span>
-
-            <div>
-              <p class="font-medium md:text-lg">{listing.bathrooms} bathrooms</p>
-              {#if !Number.isInteger(listing.bathrooms)}
-                <p class="text-xs mt-1 text-base-content/80 md:text-sm">
-                  0.5 bathrooms is a "half bathroom" with just a toilet and sink, with no tub or
-                  shower.
-                </p>
-              {/if}
-            </div>
-          </div>
-
-          {#if listing.maleRoommates + listing.femaleRoommates + listing.nonbinaryRoommates === 0}
-            <div class="flex space-x-3 mt-4 text-base-content/90">
+          <div class="mt-8 md:mt-12 space-y-4 md:space-y-6">
+            <div class="flex space-x-3 text-base-content/90">
               <span class="mt-0.5 text-xl md:text-2xl">
-                <IconHome />
+                <IconCalendar />
               </span>
 
-              <div class="">
-                <p class="font-medium md:text-lg">Entire place</p>
-                <p class="text-xs md:text-sm mt-1 text-base-content/80">
-                  You will have the entire place to yourself for the duration of the sublet
-                </p>
+              <p class="font-medium text-sm tracking-wide md:text-lg">
+                {listingDateRange(listing)}
+              </p>
+            </div>
+
+            <div class="flex space-x-3 text-base-content/90">
+              <span class="mt-0.5 md:mt-0 text-xl -ml-0.5 md:text-2xl">
+                <IconBathroomShower />
+              </span>
+
+              <div>
+                <p class="font-medium md:text-lg">{listing.bathrooms} bathrooms</p>
+                {#if !Number.isInteger(listing.bathrooms)}
+                  <p class="text-xs mt-1 text-base-content/80 md:text-sm">
+                    0.5 bathrooms is a "half bathroom" with just a toilet and sink, with no tub or
+                    shower.
+                  </p>
+                {/if}
               </div>
             </div>
-          {:else}
-            <!-- TODO: -->
-          {/if}
+
+            {#if listing.maleRoommates + listing.femaleRoommates + listing.nonbinaryRoommates === 0}
+              <div class="flex space-x-3 text-base-content/90">
+                <span class="mt-0.5 text-xl md:text-2xl">
+                  <IconHome />
+                </span>
+
+                <div class="">
+                  <p class="font-medium md:text-lg">Entire place</p>
+                  <p class="text-xs md:text-sm mt-1 text-base-content/80">
+                    You will have the entire place to yourself for the duration of the sublet
+                  </p>
+                </div>
+              </div>
+            {:else}
+              <!-- TODO: -->
+            {/if}
+          </div>
 
           {#if listing.host}
             <div class="md:hidden">
@@ -211,3 +278,30 @@
     {/if}
   {/await}
 </PageContainer>
+
+<dialog bind:this={dialogSeeAllPhotos} class="modal">
+  <div class="modal-box relative box-border max-h-[70vh] w-full max-w-[80vw]">
+    <h2 class="text-3xl font-extrabold">All listing photos</h2>
+
+    <div class="grid grid-cols-2 gap-4 mt-8">
+      {#await data.listing}
+        <div class="flex justify-center">
+          <span class="loading loading-spinner loading-sm" />
+        </div>
+      {:then listing}
+        {#if listing}
+          {#each listing.photoUrls as photoUrl}
+            <img
+              class="w-full h-full rounded-lg object-cover border border-base-content/10"
+              src={photoUrl}
+            />
+          {/each}
+        {/if}
+      {/await}
+    </div>
+  </div>
+
+  <form method="dialog" class="modal-backdrop">
+    <button>close</button>
+  </form>
+</dialog>
