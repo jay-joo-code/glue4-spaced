@@ -14,6 +14,7 @@
   export let helperText: string = undefined;
   export let helperTextStatus: HelperTextStatus = undefined;
   export let inputClass: string = undefined;
+  export let inputProps: Record<string, any> = {};
 
   const { value, errors, constraints } = formFieldProxy(
     superform,
@@ -36,13 +37,14 @@
     class:input-error={$errors}
     {...$constraints}
     {...$$restProps}
+    {...inputProps}
   />
   <div class="label">
     {#if $errors}
       <span class="label-text-alt text-error">{$errors}</span>
     {:else if helperText}
       <span
-        class="label-text-alt text-base-content/80 first-letter:uppercase"
+        class="label-text-alt text-base-content/80 first-letter:uppercase leading-relaxed"
         class:text-success={helperTextStatus === 'success'}
         class:text-warning={helperTextStatus === 'warning'}
         class:text-error={helperTextStatus === 'error'}>{helperText}</span

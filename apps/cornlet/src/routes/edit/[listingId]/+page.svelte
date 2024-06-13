@@ -50,7 +50,10 @@
           $form.lat && $form.lng && $form.minsToOrg
             ? listingLocation($form.lat, $form.lng, $form.minsToOrg, 'cornell')
             : undefined,
-        helperTextStatus: 'success'
+        helperTextStatus: 'success',
+        inputProps: {
+          disabled: true
+        }
       },
       {
         variant: 'field',
@@ -69,7 +72,12 @@
             label: 'Studio',
             value: 'studio'
           }
-        ]
+        ],
+        inputProps: {
+          disabled: true
+        },
+        helperText:
+          'Please create a new listing if you would like to change the address or property type'
       },
       {
         variant: 'field',

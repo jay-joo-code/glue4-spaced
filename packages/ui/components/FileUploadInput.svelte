@@ -18,6 +18,7 @@
   export let helperText: string = undefined;
   export let helperTextStatus: HelperTextStatus = undefined;
   export let inputClass: string = undefined;
+  export let inputProps: Record<string, any> = {};
 
   const { value, errors } = formFieldProxy(superform, field) satisfies FormFieldProxy<string[]>;
 
@@ -56,6 +57,7 @@
       class:file-input-error={$errors}
       multiple
       {...$$restProps}
+      {...inputProps}
     />
     <!-- TODO: handle required, min, max validation -->
     <!-- {...$constraints} -->
@@ -68,7 +70,7 @@
       <span class="label-text-alt text-error">{$errors}</span>
     {:else if helperText}
       <span
-        class="label-text-alt text-base-content/80 first-letter:uppercase"
+        class="label-text-alt text-base-content/80 first-letter:uppercase leading-relaxed"
         class:text-success={helperTextStatus === 'success'}
         class:text-warning={helperTextStatus === 'warning'}
         class:text-error={helperTextStatus === 'error'}>{helperText}</span

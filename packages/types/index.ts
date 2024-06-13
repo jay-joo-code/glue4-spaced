@@ -43,6 +43,7 @@ export type FormFieldBlock = {
   helperTextStatus?: HelperTextStatus;
   containerClass?: string;
   inputClass?: string;
+  inputProps?: Record<string, any>;
 };
 
 export type FormTextBlock = {

@@ -80,6 +80,7 @@
               helperText={block.helperText}
               helperTextStatus={block.helperTextStatus}
               inputClass={block.inputClass}
+              inputProps={block.inputProps}
             />
           {:else if isFormTextareaBlock(block)}
             <TextareaInput
@@ -90,6 +91,7 @@
               helperText={block.helperText}
               helperTextStatus={block.helperTextStatus}
               inputClass={block.inputClass}
+              inputProps={block.inputProps}
             />
           {:else if isFormSelectBlock(block)}
             <SelectInput
@@ -102,6 +104,7 @@
               helperText={block.helperText}
               helperTextStatus={block.helperTextStatus}
               inputClass={block.inputClass}
+              inputProps={block.inputProps}
             />
           {:else if isFormAddressBlock(block)}
             <AddressInput
@@ -113,6 +116,7 @@
               helperText={block.helperText}
               helperTextStatus={block.helperTextStatus}
               inputClass={block.inputClass}
+              inputProps={block.inputProps}
             />
           {:else if isFormToggleBlock(block)}
             <ToggleInput
@@ -123,6 +127,7 @@
               helperText={block.helperText}
               helperTextStatus={block.helperTextStatus}
               inputClass={block.inputClass}
+              inputProps={block.inputProps}
             />
           {:else if columns[block.column].columnType === 'PgDateString'}
             <DateInput
@@ -133,6 +138,7 @@
               helperText={block.helperText}
               helperTextStatus={block.helperTextStatus}
               inputClass={block.inputClass}
+              inputProps={block.inputProps}
             />
           {:else if columns[block.column].dataType === 'string'}
             <TextInput
@@ -143,6 +149,7 @@
               helperText={block.helperText}
               helperTextStatus={block.helperTextStatus}
               inputClass={block.inputClass}
+              inputProps={block.inputProps}
             />
           {:else if columns[block.column].dataType === 'number'}
             <NumberInput
@@ -153,6 +160,7 @@
               helperText={block.helperText}
               helperTextStatus={block.helperTextStatus}
               inputClass={block.inputClass}
+              inputProps={block.inputProps}
             />
           {:else if columns[block.column].dataType === 'boolean'}
             <CheckboxInput
@@ -163,6 +171,7 @@
               helperText={block.helperText}
               helperTextStatus={block.helperTextStatus}
               inputClass={block.inputClass}
+              inputProps={block.inputProps}
             />
           {/if}
         </div>

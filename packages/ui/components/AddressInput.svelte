@@ -14,6 +14,7 @@
   export let helperText: string = undefined;
   export let helperTextStatus: HelperTextStatus = undefined;
   export let inputClass: string = undefined;
+  export let inputProps: Record<string, any> = {};
 
   const { form } = superform;
   let addressSuggestions: GooglePlaceSuggestion[] = [];
@@ -66,4 +67,5 @@
   {helperText}
   {helperTextStatus}
   {inputClass}
+  {inputProps}
 />
