@@ -7,7 +7,7 @@
 </script>
 
 <PageContainer {APP_NAME} title="My listings" limitWidth={false} class="max-w-3xl">
-  <h1 class="text-3xl font-extrabold mb-8">My listings</h1>
+  <h1 class="text-3xl font-extrabold mb-8 md:ml-3">My listings</h1>
 
   {#await data.myListings}
     <span class="loading loading-spinner loading-sm" />
