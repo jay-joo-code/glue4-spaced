@@ -32,6 +32,7 @@
   export let table: AnyPgTable;
   export let actionPath: string;
   export let formBlocks: FormBlock[] = [];
+  export let mode: 'create' | 'debounced-edit' = 'create';
 
   const { enhance, form } = superform;
 
