@@ -62,7 +62,7 @@
   {:then listing}
     {#if listing}
       <button
-        class="btn btn-sm md:btn-md"
+        class="btn btn-sm"
         on:click={() => {
           history.back();
         }}
