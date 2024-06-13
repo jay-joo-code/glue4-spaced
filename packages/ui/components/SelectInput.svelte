@@ -65,7 +65,11 @@
   }
 
   onMount(() => {
-    if (selectedOption) searchText = selectedOption.label;
+    if (selectedOption) {
+      searchText = selectedOption.label;
+    } else if ($value) {
+      searchText = $value;
+    }
   });
 </script>
 
