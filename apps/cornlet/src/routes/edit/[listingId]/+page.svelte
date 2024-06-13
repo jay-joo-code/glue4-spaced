@@ -28,6 +28,7 @@
     {superform}
     table={listingTable}
     actionPath="?/insertListing"
+    mode="debounced-edit"
     formBlocks={[
       {
         variant: 'h1',

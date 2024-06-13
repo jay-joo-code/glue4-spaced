@@ -45,7 +45,7 @@
   };
 
   onMount(() => {
-    if (form && columns.id?.columnType === 'PgUUID') {
+    if (form && columns.id?.columnType === 'PgUUID' && mode === 'create') {
       $form.id = uuidv4();
     }
   });
