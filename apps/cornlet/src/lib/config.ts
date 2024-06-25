@@ -1,4 +1,6 @@
+import { listingTable } from '$root/src/db/schema';
 import type { ActionButton, FooterNav, Nav } from '@glue/types';
+import type { AnyPgTable } from 'drizzle-orm/pg-core';
 
 export const APP_NAME = 'Cornlet';
 export const PUBLIC_NAVS: Nav[] = [];
@@ -57,3 +59,9 @@ export const IS_BETA = true;
 export const SENTRY_DSN_PUBLIC = '';
 export const ADMIN_EMAIL = 'glide.contact.team@gmail.com';
 // export const PROD_DOMAIN = 'https://www.revycarpool.com';
+
+export const ENDPOINT_CONFIGS: Record<string, { table: AnyPgTable }> = {
+  listing: {
+    table: listingTable
+  }
+};
