@@ -25,16 +25,21 @@
   import { getTableColumns } from 'drizzle-orm';
   import type { AnyPgTable } from 'drizzle-orm/pg-core';
   import { onMount } from 'svelte';
-  import SuperDebug, { type SuperForm } from 'sveltekit-superforms';
+  import SuperDebug, { superForm, type FormOptions, type SuperForm } from 'sveltekit-superforms';
   import { v4 as uuidv4 } from 'uuid';
 
-  export let superform: SuperForm<T>;
+  export let form: Record<string, unknown> = undefined;
   export let table: AnyPgTable;
   export let actionPath: string;
   export let formBlocks: FormBlock[] = [];
   export let mode: 'create' | 'debounced-edit' = 'create';
+  export let superformsConfigs: FormOptions;
 
-  const { enhance, form } = superform;
+  const superform = superForm(form, {
+    dataType: 'json',
+    ...superformsConfigs
+  });
+  const { enhance, form: formData } = superform;
 
   $: columns = getTableColumns(table);
 
@@ -45,8 +50,8 @@
   };
 
   onMount(() => {
-    if (form && columns.id?.columnType === 'PgUUID' && mode === 'create') {
-      $form.id = uuidv4();
+    if (formData && columns.id?.columnType === 'PgUUID' && mode === 'create') {
+      $formData.id = uuidv4();
     }
   });
 </script>

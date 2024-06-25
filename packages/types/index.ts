@@ -1,3 +1,5 @@
+import type { Writable } from 'svelte/store';
+
 export type Nav = {
   label: string;
   href?: string;
@@ -22,6 +24,8 @@ export type FormSelectOption = {
   [key: string]: any;
 };
 
+export type HelperText = ({ formData }: { formData: Writable<any> }) => string;
+
 export type HelperTextStatus = 'success' | 'warning' | 'error';
 
 export type FormBlock =
@@ -39,7 +43,7 @@ export type FormFieldBlock = {
   column: string;
   label?: string;
   isHideLabel?: boolean;
-  helperText?: string;
+  helperText?: HelperText;
   helperTextStatus?: HelperTextStatus;
   containerClass?: string;
   inputClass?: string;
@@ -58,23 +62,37 @@ export type FormSpaceBlock = {
 
 export type FormFileUploadBlock = FormFieldBlock & {
   component: 'file-upload';
-  handleFileUpload: (files: FileList) => Promise<string[]>;
+  handleFileUpload: ({
+    files,
+    formData
+  }: {
+    files: FileList;
+    formData: Writable<any>;
+  }) => Promise<string[]>;
 };
 
 export type FormTextareaBlock = FormFieldBlock & {
   component: 'textarea';
 };
 
+export type OnOptionSelect = ({
+  option,
+  formData
+}: {
+  option: FormSelectOption;
+  formData: Writable<any>;
+}) => void;
+
 export type FormSelectBlock = FormFieldBlock & {
   component: 'select';
   options?: FormSelectOption[];
-  onOptionSelect?: (option: FormSelectOption) => void;
+  onOptionSelect?: OnOptionSelect;
   onSearchTextChange?: (searchText: string) => void;
 };
 
 export type FormAddressBlock = FormFieldBlock & {
   component: 'address';
-  onOptionSelect?: (option: FormSelectOption) => void;
+  onOptionSelect?: OnOptionSelect;
 };
 
 export type FormToggleBlock = FormFieldBlock & {

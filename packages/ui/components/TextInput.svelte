@@ -1,5 +1,5 @@
 <script lang="ts" generics="T extends Record<string, unknown>">
-  import type { HelperTextStatus } from '@glue/types';
+  import type { HelperText, HelperTextStatus } from '@glue/types';
   import {
     formFieldProxy,
     type FormFieldProxy,
@@ -11,7 +11,7 @@
   export let field: FormPathLeaves<T, string>;
   export let label: string = undefined;
   export let isHideLabel: boolean = false;
-  export let helperText: string = undefined;
+  export let helperText: HelperText = undefined;
   export let helperTextStatus: HelperTextStatus = undefined;
   export let inputClass: string = undefined;
   export let inputProps: Record<string, any> = {};
@@ -20,6 +20,8 @@
     superform,
     field
   ) satisfies FormFieldProxy<string>;
+
+  const { form } = superform;
 </script>
 
 <label class="form-control w-full">
@@ -47,7 +49,7 @@
         class="label-text-alt text-base-content/80 first-letter:uppercase leading-relaxed"
         class:text-success={helperTextStatus === 'success'}
         class:text-warning={helperTextStatus === 'warning'}
-        class:text-error={helperTextStatus === 'error'}>{helperText}</span
+        class:text-error={helperTextStatus === 'error'}>{helperText({ formData: form })}</span
       >
     {/if}
   </div>

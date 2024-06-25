@@ -1,17 +1,22 @@
 <script lang="ts" generics="T extends Record<string, unknown>">
-  import type { GooglePlaceSuggestion, GoogleGeocodeResponse } from '@glue/types';
-  import type { FormSelectOption, HelperTextStatus } from '@glue/types';
+  import type {
+    GoogleGeocodeResponse,
+    GooglePlaceSuggestion,
+    HelperText,
+    HelperTextStatus,
+    OnOptionSelect
+  } from '@glue/types';
   import debounce from 'just-debounce-it';
+  import queryString from 'query-string';
   import { type FormPathLeaves, type SuperForm } from 'sveltekit-superforms';
   import SelectInput from './SelectInput.svelte';
-  import queryString from 'query-string';
 
   export let superform: SuperForm<T>;
   export let field: FormPathLeaves<T, string>;
   export let label: string = undefined;
   export let isHideLabel: boolean = false;
-  export let onOptionSelect: (option: FormSelectOption) => void = undefined;
-  export let helperText: string = undefined;
+  export let onOptionSelect: OnOptionSelect = undefined;
+  export let helperText: HelperText = undefined;
   export let helperTextStatus: HelperTextStatus = undefined;
   export let inputClass: string = undefined;
   export let inputProps: Record<string, any> = {};
@@ -29,7 +34,7 @@
 
   const debouncedFetchAddressSuggestions = debounce(fetchAddressSuggestions, 500);
 
-  const handleOptionSelect = async (option: FormSelectOption) => {
+  const handleOptionSelect: OnOptionSelect = async ({ option, formData }) => {
     const address = option.value;
     const response: GoogleGeocodeResponse = await (
       await fetch(`/api/places/geocode?${queryString.stringify({ address })}`)
@@ -44,7 +49,7 @@
     }
 
     if (onOptionSelect) {
-      onOptionSelect(option);
+      onOptionSelect({ option, formData });
     }
   };
 </script>

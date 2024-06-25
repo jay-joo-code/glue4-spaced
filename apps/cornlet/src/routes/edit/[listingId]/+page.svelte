@@ -7,28 +7,24 @@
   import listingLocation from '$root/src/lib/util/listingLocation.js';
   import { Form, PageContainer } from '@glue/ui';
   import { uploadFile } from '@glue/utils';
-  import { superForm } from 'sveltekit-superforms';
+  import { get } from 'svelte/store';
 
   export let data;
-
-  const superform = superForm(data.form, {
-    dataType: 'json',
-    onUpdated: ({ form }) => {
-      if (form.valid) {
-        goto('/profile/listings');
-      }
-    }
-  });
-  const { form } = superform;
-  $: console.log('$form', $form);
 </script>
 
 <PageContainer {APP_NAME} title="Edit listing" class="max-w-2xl">
   <Form
-    {superform}
+    form={data.form}
     table={listingTable}
     actionPath="?/insertListing"
     mode="debounced-edit"
+    superformsConfigs={{
+      onUpdated: ({ form }) => {
+        if (form.valid) {
+          goto('/profile/listings');
+        }
+      }
+    }}
     formBlocks={[
       {
         variant: 'h1',
@@ -42,14 +38,19 @@
         variant: 'field',
         column: 'address',
         component: 'address',
-        onOptionSelect: async () => {
-          const minsToOrg = calculateMinsToOrg($form.lat, $form.lng, 'cornell');
-          $form.minsToOrg = minsToOrg;
+        onOptionSelect: async ({ formData }) => {
+          const minsToOrg = calculateMinsToOrg(get(formData).lat, get(formData).lng, 'cornell');
+          formData.update((form) => ({ ...form, minsToOrg }));
         },
-        helperText:
-          $form.lat && $form.lng && $form.minsToOrg
-            ? listingLocation($form.lat, $form.lng, $form.minsToOrg, 'cornell')
-            : undefined,
+        helperText: ({ formData }) =>
+          get(formData).lat && get(formData).lng && get(formData).minsToOrg
+            ? listingLocation(
+                get(formData).lat,
+                get(formData).lng,
+                get(formData).minsToOrg,
+                'cornell'
+              )
+            : '',
         helperTextStatus: 'success',
         inputProps: {
           disabled: true
@@ -76,7 +77,7 @@
         inputProps: {
           disabled: true
         },
-        helperText:
+        helperText: () =>
           'Please create a new listing if you would like to change the address or property type'
       },
       {
@@ -95,7 +96,7 @@
         variant: 'field',
         column: 'bathrooms',
         label: 'Number of bathrooms',
-        helperText: '0.5 bathrooms is a "half bathroom" without a tub or shower.',
+        helperText: () => '0.5 bathrooms is a "half bathroom" without a tub or shower.',
         inputClass: 'max-w-[6rem]'
       },
       {
@@ -110,7 +111,7 @@
         variant: 'field',
         column: 'price',
         label: 'Price per month ($)',
-        helperText:
+        helperText: () =>
           'Successful sublet listings often have a price much lower than the original lease rent',
         inputClass: 'max-w-[10rem]'
       },
@@ -168,11 +169,12 @@
         component: 'file-upload',
         column: 'photoUrls',
         handleFileUpload: async (files) => {
-          const uploadPromises = Array.from(files).map((file) =>
-            uploadFile(file, `/v2/${$form.id}`, firebase)
-          );
-          const urls = await Promise.all(uploadPromises);
-          return urls;
+          // const uploadPromises = Array.from(files).map((file) =>
+          //   uploadFile(file, `/v2/${$form.id}`, firebase)
+          // );
+          // const urls = await Promise.all(uploadPromises);
+          // return urls;
+          return [];
         },
         isHideLabel: true
       },
@@ -189,7 +191,7 @@
         component: 'toggle',
         column: 'isRequireVerification',
         label: 'Only receive messages from Cornellians',
-        helperText: 'Enabling can reduce the number of messages you receive'
+        helperText: () => 'Enabling can reduce the number of messages you receive'
       }
     ]}
   /></PageContainer
