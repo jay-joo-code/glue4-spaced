@@ -1,4 +1,5 @@
 import type { Writable } from 'svelte/store';
+import { type SuperForm } from 'sveltekit-superforms';
 
 export type Nav = {
   label: string;
@@ -24,7 +25,7 @@ export type FormSelectOption = {
   [key: string]: any;
 };
 
-export type HelperText = ({ formData }: { formData: Writable<any> }) => string;
+export type HelperText = string | (({ superform }: { superform: SuperForm<any> }) => string);
 
 export type HelperTextStatus = 'success' | 'warning' | 'error';
 

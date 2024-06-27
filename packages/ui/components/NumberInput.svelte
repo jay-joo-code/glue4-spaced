@@ -1,4 +1,6 @@
 <script lang="ts" generics="T extends Record<string, unknown>">
+  import FormHelperText from './FormHelperText.svelte';
+
   import type { HelperText, HelperTextStatus } from '@glue/types';
   import {
     formFieldProxy,
@@ -43,12 +45,7 @@
     {#if $errors}
       <span class="label-text-alt text-error">{$errors}</span>
     {:else if helperText}
-      <span
-        class="label-text-alt text-base-content/80 first-letter:uppercase leading-relaxed"
-        class:text-success={helperTextStatus === 'success'}
-        class:text-warning={helperTextStatus === 'warning'}
-        class:text-error={helperTextStatus === 'error'}>{helperText({ formData: form })}</span
-      >
+      <FormHelperText {helperText} {helperTextStatus} {superform} />
     {/if}
   </div>
 </label>
