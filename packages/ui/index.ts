@@ -6,6 +6,7 @@ export { default as DateInput } from './components/DateInput.svelte';
 export { default as FeedbackButtonModal } from './components/FeedbackButtonModal.svelte';
 export { default as FileUploadInput } from './components/FileUploadInput.svelte';
 export { default as Form } from './components/Form.svelte';
+export { default as FormHelperText } from './components/FormHelperText.svelte';
 export { default as Navbar } from './components/Navbar.svelte';
 export { default as NumberInput } from './components/NumberInput.svelte';
 export { default as PageContainer } from './components/PageContainer.svelte';

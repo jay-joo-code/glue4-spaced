@@ -1,10 +1,15 @@
 <script lang="ts">
-  import { HelperText, HelperTextStatus } from '@glue/types';
+  import type { HelperText, HelperTextStatus } from '@glue/types';
   import { type SuperForm } from 'sveltekit-superforms';
 
   export let helperText: HelperText;
   export let helperTextStatus: HelperTextStatus;
   export let superform: SuperForm<any>;
+
+  const { form } = superform;
+
+  $: displayText =
+    $form && typeof helperText === 'function' ? helperText({ superform }) : helperText;
 </script>
 
 <span
@@ -13,5 +18,5 @@
   class:text-warning={helperTextStatus === 'warning'}
   class:text-error={helperTextStatus === 'error'}
 >
-  {typeof helperText === 'function' ? helperText({ superform }) : helperText}
+  {displayText}
 </span>

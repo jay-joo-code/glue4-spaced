@@ -2,11 +2,9 @@
   import { goto } from '$app/navigation';
   import { listingTable } from '$root/src/db/schema';
   import { APP_NAME } from '$root/src/lib/config';
-  import firebase from '$root/src/lib/firebase.js';
   import calculateMinsToOrg from '$root/src/lib/util/calculateMinsToOrg.js';
   import listingLocation from '$root/src/lib/util/listingLocation.js';
   import { Form, PageContainer } from '@glue/ui';
-  import { uploadFile } from '@glue/utils';
   import { get } from 'svelte/store';
 
   export let data;
@@ -38,19 +36,17 @@
         variant: 'field',
         column: 'address',
         component: 'address',
-        onOptionSelect: async ({ formData }) => {
-          const minsToOrg = calculateMinsToOrg(get(formData).lat, get(formData).lng, 'cornell');
-          formData.update((form) => ({ ...form, minsToOrg }));
+        onOptionSelect: async ({ superform }) => {
+          const { form } = superform;
+          const minsToOrg = calculateMinsToOrg(get(form).lat, get(form).lng, 'cornell');
+          form.update((formData) => ({ ...formData, minsToOrg }));
         },
-        helperText: ({ formData }) =>
-          get(formData).lat && get(formData).lng && get(formData).minsToOrg
-            ? listingLocation(
-                get(formData).lat,
-                get(formData).lng,
-                get(formData).minsToOrg,
-                'cornell'
-              )
-            : '',
+        helperText: ({ superform }) => {
+          const { form } = superform;
+          return get(form).lat && get(form).lng && get(form).minsToOrg
+            ? listingLocation(get(form).lat, get(form).lng, get(form).minsToOrg, 'cornell')
+            : '';
+        },
         helperTextStatus: 'success',
         inputProps: {
           disabled: true
@@ -77,7 +73,7 @@
         inputProps: {
           disabled: true
         },
-        helperText: () =>
+        helperText:
           'Please create a new listing if you would like to change the address or property type'
       },
       {
@@ -96,7 +92,7 @@
         variant: 'field',
         column: 'bathrooms',
         label: 'Number of bathrooms',
-        helperText: () => '0.5 bathrooms is a "half bathroom" without a tub or shower.',
+        helperText: '0.5 bathrooms is a "half bathroom" without a tub or shower.',
         inputClass: 'max-w-[6rem]'
       },
       {
@@ -111,7 +107,7 @@
         variant: 'field',
         column: 'price',
         label: 'Price per month ($)',
-        helperText: () =>
+        helperText:
           'Successful sublet listings often have a price much lower than the original lease rent',
         inputClass: 'max-w-[10rem]'
       },
@@ -191,7 +187,7 @@
         component: 'toggle',
         column: 'isRequireVerification',
         label: 'Only receive messages from Cornellians',
-        helperText: () => 'Enabling can reduce the number of messages you receive'
+        helperText: 'Enabling can reduce the number of messages you receive'
       }
     ]}
   /></PageContainer

@@ -78,10 +78,10 @@ export type FormTextareaBlock = FormFieldBlock & {
 
 export type OnOptionSelect = ({
   option,
-  formData
+  superform
 }: {
   option: FormSelectOption;
-  formData: Writable<any>;
+  superform: SuperForm<any>;
 }) => void;
 
 export type FormSelectBlock = FormFieldBlock & {

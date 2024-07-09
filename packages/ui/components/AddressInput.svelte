@@ -34,7 +34,7 @@
 
   const debouncedFetchAddressSuggestions = debounce(fetchAddressSuggestions, 500);
 
-  const handleOptionSelect: OnOptionSelect = async ({ option, formData }) => {
+  const handleOptionSelect: OnOptionSelect = async ({ option, superform }) => {
     const address = option.value;
     const response: GoogleGeocodeResponse = await (
       await fetch(`/api/places/geocode?${queryString.stringify({ address })}`)
@@ -49,7 +49,7 @@
     }
 
     if (onOptionSelect) {
-      onOptionSelect({ option, formData });
+      onOptionSelect({ option, superform });
     }
   };
 </script>

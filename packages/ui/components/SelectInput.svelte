@@ -30,7 +30,6 @@
   let searchText: string = '';
   let isShowOptions = false;
   let inputElement: HTMLInputElement;
-  const { form } = superform;
 
   $: selectedOption = options.find((option) => option.value === $value);
   $: filteredOptions = options.filter((option) =>
@@ -43,7 +42,7 @@
     $value = option.value;
     searchText = option.label;
     if (onOptionSelect) {
-      onOptionSelect({ option, formData: form });
+      onOptionSelect({ option, superform });
     }
     inputElement.blur();
   };
