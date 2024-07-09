@@ -1,16 +1,9 @@
 import db from '$root/src/db/drizzle.server';
-import { listingTable } from '$root/src/db/schema';
+import { editListingValidator, listingTable } from '$root/src/db/schema';
 import { protectedRouteRedirectUrl } from '$root/src/lib/util/auth';
-import { fail, redirect, type Actions, type ServerLoad } from '@sveltejs/kit';
+import { redirect, type ServerLoad } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
-import { createSelectSchema } from 'drizzle-zod';
-import { message, superValidate } from 'sveltekit-superforms';
-import { zod } from 'sveltekit-superforms/adapters';
-
-const editListingSchema = createSelectSchema(listingTable, {
-  bathrooms: (schema) => schema.bathrooms.step(0.5),
-  propertyType: (schema) => schema.propertyType.default('studio')
-});
+import { superValidate } from 'sveltekit-superforms';
 
 export const load: ServerLoad = async ({ url, locals, params }) => {
   if (!locals.user) {
@@ -23,7 +16,7 @@ export const load: ServerLoad = async ({ url, locals, params }) => {
         await db.select().from(listingTable).where(eq(listingTable.id, params.listingId))
       ).at(0);
       if (listing) {
-        return await superValidate(listing, zod(editListingSchema));
+        return await superValidate(listing, editListingValidator);
       }
     }
   };

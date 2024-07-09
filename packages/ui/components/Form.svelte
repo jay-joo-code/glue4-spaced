@@ -1,4 +1,4 @@
-<script lang="ts" generics="T extends Record<string, unknown>">
+<script lang="ts">
   import { dev } from '$app/environment';
   import {
     isFormAddressBlock,
@@ -27,33 +27,63 @@
   import { onMount } from 'svelte';
   import SuperDebug, { superForm, type FormOptions, type SuperForm } from 'sveltekit-superforms';
   import { v4 as uuidv4 } from 'uuid';
+  import debounce from 'just-debounce-it';
+  import { toast } from '@zerodevx/svelte-toast';
+  import { get } from 'svelte/store';
 
   export let form: Record<string, unknown> = undefined;
   export let table: AnyPgTable;
-  export let actionPath: string;
+  export let actionPath: string = undefined;
   export let formBlocks: FormBlock[] = [];
   export let mode: 'create' | 'debounced-edit' = 'create';
   export let superformsConfigs: FormOptions;
+  export let updateEndpoint: (superform: SuperForm<Record<string, unknown>, any>) => string =
+    undefined;
 
   const superform = superForm(form, {
     dataType: 'json',
     ...superformsConfigs
   });
-  const { enhance, form: formData } = superform;
-
-  $: columns = getTableColumns(table);
-
+  const { enhance, form: formData, validateForm, tainted } = superform;
   const getBlockLabel = (block: FormBlock): string => {
     if (!isFormFieldBlock(block) && !isFormFileUploadBlock(block) && !isFormTextareaBlock(block))
       return '';
     return block.label || block.column.replace(/([a-z])([A-Z])/g, '$1 $2').toLowerCase();
   };
 
+  const update = async () => {
+    const validationResult = await validateForm({ update: true });
+    if (validationResult.valid) {
+      const endpoint = updateEndpoint(superform);
+      const body = structuredClone(get(formData));
+      delete body.createdAt;
+      delete body.updatedAt;
+      const response = await fetch(endpoint, {
+        method: 'PUT',
+        body: JSON.stringify(body)
+      });
+      if (response.ok) {
+        toast.push('✅ Changes autosaved', {
+          id: Math.random()
+        });
+      } else {
+        toast.push('There was an error with saving your changes');
+      }
+    }
+  };
+  const debouncedUpdate = debounce(update, 500);
+
   onMount(() => {
     if (formData && columns.id?.columnType === 'PgUUID' && mode === 'create') {
       $formData.id = uuidv4();
     }
   });
+
+  $: columns = getTableColumns(table);
+  $: if ($tainted && $formData && mode === 'debounced-edit') {
+    $tainted = undefined;
+    debouncedUpdate();
+  }
 </script>
 
 {#if dev}

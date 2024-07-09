@@ -1,4 +1,6 @@
 import { boolean, date, pgEnum, pgTable, real, text, timestamp, uuid } from 'drizzle-orm/pg-core';
+import { createSelectSchema } from 'drizzle-zod';
+import { zod } from 'sveltekit-superforms/adapters';
 
 export const userTable = pgTable('user', {
   id: uuid('id').defaultRandom().primaryKey(),
@@ -66,3 +68,10 @@ export const listingTable = pgTable('listing', {
 
 export type InsertListing = typeof listingTable.$inferInsert;
 export type SelectListing = typeof listingTable.$inferInsert;
+
+export const editListingSchema = createSelectSchema(listingTable, {
+  bathrooms: (schema) => schema.bathrooms.step(0.5),
+  propertyType: (schema) => schema.propertyType.default('studio')
+});
+
+export const editListingValidator = zod(editListingSchema);

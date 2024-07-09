@@ -1,6 +1,6 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
-  import { listingTable } from '$root/src/db/schema';
+  import { editListingValidator, listingTable } from '$root/src/db/schema';
   import { APP_NAME } from '$root/src/lib/config';
   import calculateMinsToOrg from '$root/src/lib/util/calculateMinsToOrg.js';
   import listingLocation from '$root/src/lib/util/listingLocation.js';
@@ -14,14 +14,15 @@
   <Form
     form={data.form}
     table={listingTable}
-    actionPath="?/insertListing"
+    updateEndpoint={(superform) => `/api/crud/listing/${get(superform.form).id}`}
     mode="debounced-edit"
     superformsConfigs={{
       onUpdated: ({ form }) => {
         if (form.valid) {
           goto('/profile/listings');
         }
-      }
+      },
+      validators: editListingValidator
     }}
     formBlocks={[
       {
