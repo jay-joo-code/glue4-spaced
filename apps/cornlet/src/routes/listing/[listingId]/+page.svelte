@@ -228,7 +228,11 @@
           </div>
 
           <h2 class="text-xl mt-12 font-extrabold md:text-3xl">Description</h2>
-          <p class="mt-4 text-sm text-base-content/80 md:text-md md:mt-6">{listing.desc}</p>
+          <p
+            class="mt-4 text-sm text-base-content/80 leading-normal md:text-md md:mt-6 whitespace-pre-wrap"
+          >
+            {listing.desc}
+          </p>
         </div>
 
         <!-- desktop: right side panel -->
