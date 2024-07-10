@@ -2,10 +2,12 @@
   import { goto } from '$app/navigation';
   import { editListingValidator, listingTable } from '$root/src/db/schema';
   import { APP_NAME } from '$root/src/lib/config';
+  import firebase from '$root/src/lib/firebase.js';
   import calculateMinsToOrg from '$root/src/lib/util/calculateMinsToOrg.js';
   import listingLocation from '$root/src/lib/util/listingLocation.js';
   import { Form, PageContainer } from '@glue/ui';
   import { get } from 'svelte/store';
+  import { uploadFile } from '@glue/utils';
 
   export let data;
 </script>
@@ -165,13 +167,12 @@
         variant: 'field',
         component: 'file-upload',
         column: 'photoUrls',
-        handleFileUpload: async (files) => {
-          // const uploadPromises = Array.from(files).map((file) =>
-          //   uploadFile(file, `/v2/${$form.id}`, firebase)
-          // );
-          // const urls = await Promise.all(uploadPromises);
-          // return urls;
-          return [];
+        handleFileUpload: async ({ files, superform }) => {
+          const uploadPromises = Array.from(files).map((file) =>
+            uploadFile(file, `/v2/${get(superform.form).id}`, firebase)
+          );
+          const urls = await Promise.all(uploadPromises);
+          return urls;
         },
         isHideLabel: true
       },

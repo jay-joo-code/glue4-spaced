@@ -63,13 +63,7 @@ export type FormSpaceBlock = {
 
 export type FormFileUploadBlock = FormFieldBlock & {
   component: 'file-upload';
-  handleFileUpload: ({
-    files,
-    formData
-  }: {
-    files: FileList;
-    formData: Writable<any>;
-  }) => Promise<string[]>;
+  handleFileUpload: HandleFileUpload;
 };
 
 export type FormTextareaBlock = FormFieldBlock & {
@@ -186,3 +180,11 @@ export interface GoogleGeocodeResponse {
   results: GoogleGeocodeResult[];
   status: string;
 }
+
+export type HandleFileUpload = ({
+  files,
+  superform
+}: {
+  files: FileList;
+  superform: SuperForm<any>;
+}) => Promise<string[]>;

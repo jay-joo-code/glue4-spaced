@@ -1,18 +1,17 @@
 <script lang="ts" generics="T extends Record<string, unknown>">
   import FormHelperText from './FormHelperText.svelte';
-
-  import type { HelperText, HelperTextStatus } from '@glue/types';
+  import type { HandleFileUpload, HelperText, HelperTextStatus } from '@glue/types';
+  import type { DndEvent, Item } from 'svelte-dnd-action';
+  import { dndzone } from 'svelte-dnd-action';
+  import { flip } from 'svelte/animate';
   import {
     formFieldProxy,
     type FormFieldProxy,
     type FormPathLeaves,
     type SuperForm
   } from 'sveltekit-superforms';
-  import type { DndEvent } from 'svelte-dnd-action';
-  import { dndzone } from 'svelte-dnd-action';
-  import { flip } from 'svelte/animate';
 
-  export let handleFileUpload: (files: FileList) => Promise<string[]>;
+  export let handleFileUpload: HandleFileUpload;
   export let superform: SuperForm<T>;
   export let field: FormPathLeaves<T, string[]>;
   export let label: string = undefined;
@@ -22,23 +21,22 @@
   export let inputClass: string = undefined;
   export let inputProps: Record<string, any> = {};
 
-  const { value, errors } = formFieldProxy(superform, field) satisfies FormFieldProxy<string[]>;
-  const { form } = superform;
-
+  const { value, errors, constraints } = formFieldProxy(superform, field) satisfies FormFieldProxy<
+    string[]
+  >;
   let isLoading = false;
   const flipDurationMs = 300;
 
-  function handleDndConsider(event: CustomEvent<DndEvent<Item>>) {
+  const handleDndConsider = (event: CustomEvent<DndEvent<Item>>) => {
     $value = event.detail.items.map((item) => item.id);
-  }
-  function handleDndFinalize(event: CustomEvent<DndEvent<Item>>) {
+  };
+  const handleDndFinalize = (event: CustomEvent<DndEvent<Item>>) => {
     $value = event.detail.items.map((item) => item.id);
-  }
-
+  };
   const onFileUpload = async (event: Event & { currentTarget: EventTarget & HTMLInputElement }) => {
     if (event.currentTarget.files) {
       isLoading = true;
-      const newUrls = await handleFileUpload(event.currentTarget.files);
+      const newUrls = await handleFileUpload({ files: event.currentTarget.files, superform });
       $value = [...$value, ...newUrls];
       isLoading = false;
     }
