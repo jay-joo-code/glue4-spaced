@@ -8,11 +8,13 @@
     IconCalendar,
     IconChevronLeft,
     IconHome,
+    IconPerson,
     PageContainer
   } from '@glue/ui';
   import { onMount } from 'svelte';
   import { Loader } from '@googlemaps/js-api-loader';
   import { PUBLIC_GOOGLE_MAPS_API_KEY } from '$env/static/public';
+  import roommateDesc from '$root/src/lib/util/roommateDesc';
 
   export let data;
 
@@ -189,7 +191,21 @@
                 </div>
               </div>
             {:else}
-              <!-- TODO: -->
+              <div class="flex space-x-3 text-base-content/90">
+                <span class="mt-0.5 text-xl md:text-2xl">
+                  <IconPerson />
+                </span>
+
+                <div class="">
+                  <p class="font-medium md:text-lg">
+                    {listing.maleRoommates + listing.femaleRoommates + listing.nonbinaryRoommates} roommates
+                    during sublet
+                  </p>
+                  <p class="text-xs md:text-sm mt-1 text-base-content/80">
+                    {roommateDesc(listing)}
+                  </p>
+                </div>
+              </div>
             {/if}
           </div>
 
