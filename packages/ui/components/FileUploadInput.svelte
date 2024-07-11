@@ -76,7 +76,7 @@
 </label>
 
 <div
-  class="grid grid-cols-2 gap-4 mt-8 !outline-none"
+  class="grid grid-cols-2 gap-4 mt-8 !outline-none lg:grid-cols-3 xl:grid-cols-4"
   use:dndzone={{ items: $value.map((url) => ({ id: url })), flipDurationMs }}
   on:consider={handleDndConsider}
   on:finalize={handleDndFinalize}
@@ -84,7 +84,7 @@
   {#each $value.map((url) => ({ id: url })) as item (item.id)}
     <div class="relative" animate:flip={{ duration: flipDurationMs }}>
       <img
-        class="object-cover w-full h-48 sm:h-52 lg:h-64 rounded-lg border border-base-content/10 hover:shadow-xl hover:opacity-70"
+        class="object-cover w-full rounded-lg border border-base-content/10 hover:shadow-xl hover:opacity-70 aspect-[4/3]"
         src={item.id}
       />
       <button
