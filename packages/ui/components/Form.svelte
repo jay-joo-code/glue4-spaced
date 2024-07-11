@@ -39,6 +39,8 @@
   export let superformsConfigs: FormOptions;
   export let updateEndpoint: (superform: SuperForm<Record<string, unknown>, any>) => string =
     undefined;
+  export let devDummyData: any = undefined;
+  export let userId: string = undefined;
 
   const superform = superForm(form, {
     dataType: 'json',
@@ -74,8 +76,16 @@
   const debouncedUpdate = debounce(update, 500);
 
   onMount(() => {
+    if (dev && devDummyData) {
+      $formData = devDummyData;
+    }
+
     if (formData && columns.id?.columnType === 'PgUUID' && mode === 'create') {
       $formData.id = uuidv4();
+    }
+
+    if (formData && columns.userId && mode === 'create' && userId) {
+      $formData.userId = userId;
     }
   });
 

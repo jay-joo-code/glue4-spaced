@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { dev } from '$app/environment';
   import { goto } from '$app/navigation';
   import { listingTable } from '$root/src/db/schema';
   import { APP_NAME } from '$root/src/lib/config';
@@ -9,32 +8,25 @@
   import listingLocation from '$root/src/lib/util/listingLocation.js';
   import { Form, PageContainer } from '@glue/ui';
   import { uploadFile } from '@glue/utils';
-  import { onMount } from 'svelte';
-  import { superForm } from 'sveltekit-superforms';
+  import { get } from 'svelte/store';
 
   export let data;
-
-  const superform = superForm(data.form, {
-    dataType: 'json',
-    onUpdated: ({ form }) => {
-      if (form.valid) {
-        goto('/profile/listings');
-      }
-    }
-  });
-  const { form } = superform;
-
-  onMount(() => {
-    if (dev) $form = dummyListingData;
-    if (data.user) $form.userId = data.user.id;
-  });
 </script>
 
 <PageContainer {APP_NAME} title="Create new listing" isInvalidateOnFocus={false}>
   <Form
-    {superform}
+    form={data.form}
     table={listingTable}
     actionPath="?/insertListing"
+    superformsConfigs={{
+      onUpdated: ({ form }) => {
+        if (form.valid) {
+          goto('/profile/listings');
+        }
+      }
+    }}
+    userId={data.user?.id}
+    devDummyData={dummyListingData}
     formBlocks={[
       {
         variant: 'h1',
@@ -48,14 +40,17 @@
         variant: 'field',
         column: 'address',
         component: 'address',
-        onOptionSelect: async () => {
-          const minsToOrg = calculateMinsToOrg($form.lat, $form.lng, 'cornell');
-          $form.minsToOrg = minsToOrg;
+        onOptionSelect: async ({ superform }) => {
+          const { form } = superform;
+          const minsToOrg = calculateMinsToOrg(get(form).lat, get(form).lng, 'cornell');
+          form.update((formData) => ({ ...formData, minsToOrg }));
         },
-        helperText:
-          $form.lat && $form.lng && $form.minsToOrg
-            ? listingLocation($form.lat, $form.lng, $form.minsToOrg, 'cornell')
-            : undefined,
+        helperText: ({ superform }) => {
+          const { form } = superform;
+          return get(form).lat && get(form).lng && get(form).minsToOrg
+            ? listingLocation(get(form).lat, get(form).lng, get(form).minsToOrg, 'cornell')
+            : '';
+        },
         helperTextStatus: 'success'
       },
       {
@@ -165,9 +160,9 @@
         variant: 'field',
         component: 'file-upload',
         column: 'photoUrls',
-        handleFileUpload: async (files) => {
+        handleFileUpload: async ({ files, superform }) => {
           const uploadPromises = Array.from(files).map((file) =>
-            uploadFile(file, `/v2/${$form.id}`, firebase)
+            uploadFile(file, `/v2/${get(superform.form).id}`, firebase)
           );
           const urls = await Promise.all(uploadPromises);
           return urls;
