@@ -4,16 +4,11 @@
   import type { DndEvent, Item } from 'svelte-dnd-action';
   import { dndzone } from 'svelte-dnd-action';
   import { flip } from 'svelte/animate';
-  import {
-    formFieldProxy,
-    type FormFieldProxy,
-    type FormPathLeaves,
-    type SuperForm
-  } from 'sveltekit-superforms';
+  import { arrayProxy, type SuperForm, type FormPathArrays } from 'sveltekit-superforms';
 
   export let handleFileUpload: HandleFileUpload;
   export let superform: SuperForm<T>;
-  export let field: FormPathLeaves<T, string[]>;
+  export let field: FormPathArrays<T, string[]>;
   export let label: string = undefined;
   export let isHideLabel: boolean = false;
   export let helperText: HelperText = undefined;
@@ -21,23 +16,22 @@
   export let inputClass: string = undefined;
   export let inputProps: Record<string, any> = {};
 
-  const { value, errors, constraints } = formFieldProxy(superform, field) satisfies FormFieldProxy<
-    string[]
-  >;
+  const { values, errors } = arrayProxy(superform, field);
   let isLoading = false;
   const flipDurationMs = 300;
 
   const handleDndConsider = (event: CustomEvent<DndEvent<Item>>) => {
-    $value = event.detail.items.map((item) => item.id);
+    $values = event.detail.items.map((item) => item.id);
   };
   const handleDndFinalize = (event: CustomEvent<DndEvent<Item>>) => {
-    $value = event.detail.items.map((item) => item.id);
+    $values = event.detail.items.map((item) => item.id);
   };
   const onFileUpload = async (event: Event & { currentTarget: EventTarget & HTMLInputElement }) => {
     if (event.currentTarget.files) {
       isLoading = true;
       const newUrls = await handleFileUpload({ files: event.currentTarget.files, superform });
-      $value = [...$value, ...newUrls];
+      // @ts-expect-error: type gymnastics
+      $values = [...$values, ...newUrls];
       isLoading = false;
     }
   };
@@ -60,8 +54,6 @@
       {...$$restProps}
       {...inputProps}
     />
-    <!-- TODO: handle required, min, max validation -->
-    <!-- {...$constraints} -->
     {#if isLoading}
       <span class="loading loading-spinner loading-sm"></span>
     {/if}
@@ -77,11 +69,11 @@
 
 <div
   class="grid grid-cols-2 gap-4 mt-8 !outline-none lg:grid-cols-3 xl:grid-cols-4"
-  use:dndzone={{ items: $value.map((url) => ({ id: url })), flipDurationMs }}
+  use:dndzone={{ items: $values.map((url) => ({ id: url })), flipDurationMs }}
   on:consider={handleDndConsider}
   on:finalize={handleDndFinalize}
 >
-  {#each $value.map((url) => ({ id: url })) as item (item.id)}
+  {#each $values.map((url) => ({ id: url })) as item (item.id)}
     <div class="relative" animate:flip={{ duration: flipDurationMs }}>
       <img
         class="object-cover w-full rounded-lg border border-base-content/10 hover:shadow-xl hover:opacity-70 aspect-[4/3]"
@@ -90,7 +82,7 @@
       <button
         class="absolute -right-2 -top-2 btn-xs text-[0.9rem] btn btn-circle pb-1 border border-base-content/10"
         on:click={(event) => {
-          $value = $value.filter((existingUrl) => existingUrl !== item.id);
+          $values = $values.filter((existingUrl) => existingUrl !== item.id);
         }}
       >
         <!-- NOTE: Using svg in children of dnd action throws errors -->

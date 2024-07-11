@@ -71,7 +71,12 @@ export type SelectListing = typeof listingTable.$inferInsert;
 
 export const editListingSchema = createSelectSchema(listingTable, {
   bathrooms: (schema) => schema.bathrooms.step(0.5),
-  propertyType: (schema) => schema.propertyType.default('studio')
+  propertyType: (schema) => schema.propertyType.default('studio'),
+  photoUrls: (schema) =>
+    schema.photoUrls.min(3, 'At least 3 photos are required').max(10, 'Max 10 photos are allowed'),
+  nonbinaryRoommates: (schema) => schema.bathrooms.step(1),
+  femaleRoommates: (schema) => schema.bathrooms.step(1),
+  maleRoommates: (schema) => schema.bathrooms.step(1)
 });
 
 export const editListingValidator = zod(editListingSchema);
