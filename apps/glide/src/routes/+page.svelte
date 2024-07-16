@@ -155,6 +155,26 @@
         {/await}
       </section>
 
+      <section class="py-12 mt-8">
+        <div class="flex justify-between items-center">
+          <h2 class="text-3xl font-extrabold">Recently ignored</h2>
+        </div>
+
+        {#await data.recentlyIgnoredExpenses}
+          <span class="loading loading-spinner loading-sm" />
+        {:then recentlyIgnoredExpenses}
+          <div class="mt-4">
+            {#if recentlyIgnoredExpenses && recentlyIgnoredExpenses.length > 0}
+              {#each recentlyIgnoredExpenses as transaction}
+                <TransactionItem {transaction} bind:dialogAssignRefund bind:refundId />
+              {/each}
+            {:else}
+              <p class="text-sm text-base-content/80">No recently ignored expenses</p>
+            {/if}
+          </div>
+        {/await}
+      </section>
+
       <section class="py-12">
         <div class="flex justify-between items-center">
           <h2 class="text-3xl font-extrabold">Expenses</h2>

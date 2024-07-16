@@ -106,12 +106,26 @@ export const load: ServerLoad = async ({ url, locals }) => {
     return pendingRefunds;
   };
 
+  const fetchRecentlyIgnoredExpenses = async () => {
+    if (!locals.user) return;
+
+    const expenses = await db
+      .select()
+      .from(transactionTable)
+      .where(and(eq(transactionTable.userId, locals.user.id), eq(transactionTable.isIgnore, true)))
+      .orderBy(desc(transactionTable.updatedAt))
+      .limit(6);
+
+    return expenses;
+  };
+
   return {
     weeklyExpenses: fetchWeeklyExpenses(),
     items: fetchItems(),
     refundCandidates: fetchRefundCandidates(),
     pendingRefunds: fetchPendingRefunds(),
-    dateUnsetExpenses: fetchDateUnsetExpenses()
+    dateUnsetExpenses: fetchDateUnsetExpenses(),
+    recentlyIgnoredExpenses: fetchRecentlyIgnoredExpenses()
   };
 };
 
