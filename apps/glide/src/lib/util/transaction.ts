@@ -141,7 +141,10 @@ export const parseTransactionsCSV = (file: File): Promise<Omit<InsertTransaction
               const amount = Number(transaction.Amount);
               const balance = transaction['Balance'];
               const identifier = transactionIdentifier(postingDateString, name, amount, balance);
-              const isIgnore = name.includes('VENMO') || name.includes('Wealthfront');
+              const isIgnore =
+                name.includes('VENMO') ||
+                name.includes('Wealthfront') ||
+                name.includes('PALANTIR TECHNOL');
 
               const transactionData = {
                 amount,
