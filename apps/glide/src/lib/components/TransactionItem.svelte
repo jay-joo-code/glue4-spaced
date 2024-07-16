@@ -114,16 +114,29 @@
           tabindex="0"
           class="dropdown-content z-[1] menu p-2 shadow bg-base-300 rounded-box w-52"
         >
-          <li>
-            <a
-              on:click={() => {
-                updateTransaction(transaction.id, {
-                  isIgnore: true
-                });
-              }}
-              >Ignore
-            </a>
-          </li>
+          {#if transaction.isIgnore}
+            <li>
+              <a
+                on:click={() => {
+                  updateTransaction(transaction.id, {
+                    isIgnore: false
+                  });
+                }}
+                >Unignore
+              </a>
+            </li>
+          {:else}
+            <li>
+              <a
+                on:click={() => {
+                  updateTransaction(transaction.id, {
+                    isIgnore: true
+                  });
+                }}
+                >Ignore
+              </a>
+            </li>
+          {/if}
           {#if dialogAssignRefund}
             {#if transaction.isPendingRefund}
               <li>
