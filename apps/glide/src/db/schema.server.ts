@@ -72,7 +72,7 @@ export const transactionTable = pgTable('transaction', {
   merchantLogoUrl: text('logo_url'),
   isIgnore: boolean('is_ignore').default(false),
   source: text('source').notNull(),
-  identifier: text('identifier').unique().notNull(), // immutable contact of date_name_amount
+  identifier: text('identifier').unique().notNull(), // immutable unique transaction. concat of postingDate_name_amount_balance
   isPendingRefund: boolean('is_pending_refund').default(false),
   displayName: text('display_name').notNull(),
   isRecurring: boolean('is_recurring').default(false),

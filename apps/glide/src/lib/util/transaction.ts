@@ -5,7 +5,7 @@ import type {
   VenmoTransaction
 } from '$lib/types/transaction.type';
 import type { InsertTransaction, SelectTransaction } from '$root/src/db/schema.server';
-import { endOfWeek, format, parse, startOfWeek } from 'date-fns';
+import { endOfWeek, format, isAfter, parse, startOfDay, startOfWeek } from 'date-fns';
 import Papa from 'papaparse';
 
 export const groupTransactionsByWeek = (transactions: TransactionWithRefunds[]) => {
@@ -101,11 +101,12 @@ export const formatMoney = (num: number) => {
 };
 
 export const transactionIdentifier = (
-  dateString: string | undefined,
+  postingDateString: string | undefined,
   name: string,
-  amount: number
+  amount: number,
+  balance: string
 ) => {
-  return `${dateString}_${name}_${amount}`;
+  return `${postingDateString}_${name}_${amount}_${balance}`;
 };
 
 export const parseTransactionsCSV = (file: File): Promise<Omit<InsertTransaction, 'userId'>[]> => {
@@ -115,11 +116,11 @@ export const parseTransactionsCSV = (file: File): Promise<Omit<InsertTransaction
       header: true,
       skipEmptyLines: false,
       complete: (results) => {
-        console.log('results', results);
         const CHASE_FIELDS = 'Details,Posting Date,Description,Amount,Type,Balance,Check or Slip #';
         const VENDMO_FIELDS_SUBSTR = 'Account Statement - (@jj534)';
+        const inputCsvFields = results.meta.fields?.join(',');
 
-        if (results.meta.fields?.join(',') === CHASE_FIELDS) {
+        if (inputCsvFields?.includes(CHASE_FIELDS)) {
           const dateRegex = /(\d{2}\/\d{2})$/;
           const transactions = (results.data as ChaseTransaction[])
             .filter(
@@ -131,29 +132,32 @@ export const parseTransactionsCSV = (file: File): Promise<Omit<InsertTransaction
             .map((transaction) => {
               const match = transaction.Description.match(dateRegex);
               const postingDate = parse(transaction['Posting Date'], 'MM/dd/yyyy', new Date());
-              const date = match ? parse(match[0], 'MM/dd', postingDate) : undefined;
-              const dateString = date ? format(date, 'yyyy-MM-dd') : undefined;
+              const postingDateString = format(postingDate, 'yyyy-MM-dd');
+              const date = match ? parse(match[0], 'MM/dd', postingDate) : postingDate;
+              const dateString = format(date, 'yyyy-MM-dd');
               const name = transaction.Description.replace(dateRegex, '')
                 .replace(/\s+/g, ' ')
                 .trim();
               const amount = Number(transaction.Amount);
+              const balance = transaction['Balance'];
+              const identifier = transactionIdentifier(postingDateString, name, amount, balance);
+              const isIgnore = name.includes('VENMO') || name.includes('Wealthfront');
 
-              return {
+              const transactionData = {
                 amount,
                 date: dateString,
                 usageDate: dateString,
                 name,
                 source: 'chase',
-                identifier: transactionIdentifier(dateString, name, amount),
-                displayName: name
+                identifier,
+                displayName: name,
+                isIgnore
               };
+
+              return transactionData;
             })
-            .filter(
-              (transaction) =>
-                !transaction.name.includes('VENMO PAYMENT') &&
-                !transaction.name.includes('CAPITAL ONE CRCARDPMT') &&
-                !transaction.name.includes('VENMO CASHOUT')
-            );
+            // prevent duplicate transactions after appeding balance to identifier
+            .filter((transaction) => isDateAfterJuly72024(transaction.date));
           resolve(transactions);
         } else if (results.meta.fields?.join(',').includes(VENDMO_FIELDS_SUBSTR)) {
           const transactions = (results.data as VenmoTransaction[])
@@ -179,7 +183,7 @@ export const parseTransactionsCSV = (file: File): Promise<Omit<InsertTransaction
                 usageDate: dateString,
                 name,
                 source: 'venmo',
-                identifier: transactionIdentifier(dateString, name, amount),
+                identifier: transactionIdentifier(dateString, name, amount, 'N/A'),
                 displayName: name
               };
             });
@@ -211,4 +215,10 @@ export const aggregateRefunds = (
   );
 
   return Object.values(idToTransaction);
+};
+
+const isDateAfterJuly72024 = (dateString: string): boolean => {
+  const inputDate = startOfDay(parse(dateString, 'yyyy-MM-dd', new Date()));
+  const july72024 = startOfDay(new Date(2024, 6, 7)); // Note: month is 0-indexed, so 6 represents July
+  return isAfter(inputDate, july72024);
 };
