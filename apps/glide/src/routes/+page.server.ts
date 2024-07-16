@@ -13,7 +13,6 @@ export const load: ServerLoad = async ({ url, locals }) => {
   const fetchWeeklyExpenses = async () => {
     if (!locals.user) return;
 
-    // await db.delete(transactionTable).where(eq(transactionTable.userId, locals.user.id));
     const refund = alias(transactionTable, 'refund');
     const expenses = await db
       .select()
@@ -55,7 +54,8 @@ export const load: ServerLoad = async ({ url, locals }) => {
           eq(transactionTable.userId, locals.user.id),
           gt(transactionTable.amount, 0),
           isNull(transactionTable.refundId),
-          eq(transactionTable.isIgnore, false)
+          eq(transactionTable.isIgnore, false),
+          gte(transactionTable.usageDate, '2024-04-08') // date to start tracking from)
         )
       )
       .orderBy(desc(transactionTable.usageDate))
@@ -85,7 +85,7 @@ export const load: ServerLoad = async ({ url, locals }) => {
     return pendingRefunds;
   };
 
-  const fetchDateUnsetExpenses = async () => {
+  const fetchDateUnsetTransactions = async () => {
     if (!locals.user) return;
 
     const pendingRefunds = await db
@@ -94,8 +94,8 @@ export const load: ServerLoad = async ({ url, locals }) => {
       .where(
         and(
           eq(transactionTable.userId, locals.user.id),
-          lt(transactionTable.amount, 0),
           eq(transactionTable.isIgnore, false),
+          isNull(transactionTable.refundId),
           isNull(transactionTable.usageDate)
         )
       )
@@ -123,7 +123,7 @@ export const load: ServerLoad = async ({ url, locals }) => {
     items: fetchItems(),
     refundCandidates: fetchRefundCandidates(),
     pendingRefunds: fetchPendingRefunds(),
-    dateUnsetExpenses: fetchDateUnsetExpenses(),
+    dateUnsetTransactions: fetchDateUnsetTransactions(),
     recentlyIgnoredExpenses: fetchRecentlyIgnoredExpenses()
   };
 };

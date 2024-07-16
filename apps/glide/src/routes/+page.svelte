@@ -137,15 +137,15 @@
 
       <section class="py-12 mt-8">
         <div class="flex justify-between items-center">
-          <h2 class="text-3xl font-extrabold">Date unset</h2>
+          <h2 class="text-3xl font-extrabold">Date unset transactions</h2>
         </div>
 
-        {#await data.dateUnsetExpenses}
+        {#await data.dateUnsetTransactions}
           <span class="loading loading-spinner loading-sm" />
-        {:then dateUnsetExpenses}
+        {:then dateUnsetTransactions}
           <div class="mt-4">
-            {#if dateUnsetExpenses && dateUnsetExpenses.length > 0}
-              {#each dateUnsetExpenses as transaction}
+            {#if dateUnsetTransactions && dateUnsetTransactions.length > 0}
+              {#each dateUnsetTransactions as transaction}
                 <TransactionItem {transaction} bind:dialogAssignRefund bind:refundId />
               {/each}
             {:else}
@@ -223,17 +223,19 @@
 </PageContainer>
 
 <dialog bind:this={dialogAssignRefund} class="modal">
-  <div class="modal-box relative box-border max-h-[70vh] max-w-lg">
+  <div class="modal-box relative box-border h-[60vh] max-w-lg">
     <h2 class="text-xl font-extrabold">Assign refund</h2>
 
     <div class="mt-4">
       {#await data.refundCandidates}
         <span class="loading loading-spinner loading-sm" />
       {:then refundCandidates}
-        {#if refundCandidates}
+        {#if refundCandidates && refundCandidates.length > 0}
           {#each refundCandidates as transaction}
             <TransactionItem {transaction} bind:refundId />
           {/each}
+        {:else}
+          <p class="text-sm text-base-content/80">No refund candidates</p>
         {/if}
       {/await}
     </div>
