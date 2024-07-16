@@ -26,7 +26,7 @@ export const load: ServerLoad = async ({ url, locals }) => {
           eq(transactionTable.isPendingRefund, false),
           eq(transactionTable.isRecurring, false),
           isNull(transactionTable.refundId),
-          gte(transactionTable.date, '2024-04-08') // date to start tracking from
+          gte(transactionTable.usageDate, '2024-04-08') // date to start tracking from
         )
       )
       .leftJoin(refund, eq(transactionTable.id, refund.refundId))
