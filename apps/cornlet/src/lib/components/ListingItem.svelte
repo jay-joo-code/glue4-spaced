@@ -29,7 +29,7 @@
     <div class="grid grid-cols-10 gap-4 py-3 md:px-3 rounded-xl">
       <div class="col-span-4">
         <img
-          class="w-full object-cover rounded-lg max-h-[180px] {!isAvailable && 'opacity-60'}"
+          class="w-full object-cover rounded-lg h-[120px] {!isAvailable && 'opacity-60'}"
           src={listing.photoUrls[0]}
         />
       </div>
@@ -84,7 +84,7 @@
       <div class="grid grid-cols-10 gap-4 hover:bg-base-200 rounded-xl py-3 md:px-3">
         <div class="col-span-4">
           <img
-            class="w-full object-cover rounded-lg max-h-[180px] {!isAvailable && 'opacity-60'}"
+            class="w-full object-cover rounded-lg h-[120px] {!isAvailable && 'opacity-60'}"
             src={listing.photoUrls[0]}
           />
         </div>
