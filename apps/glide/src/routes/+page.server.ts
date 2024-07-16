@@ -30,8 +30,7 @@ export const load: ServerLoad = async ({ url, locals }) => {
         )
       )
       .leftJoin(refund, eq(transactionTable.id, refund.refundId))
-      .orderBy(desc(transactionTable.usageDate))
-      .limit(200);
+      .orderBy(desc(transactionTable.usageDate));
 
     const expensesWithRefunds = aggregateRefunds(expenses);
     const weeklyExpenses = groupTransactionsByWeek(expensesWithRefunds);
