@@ -76,23 +76,25 @@
           {:then weeklyExpenses}
             {#if weeklyExpenses}
               <div
-                class="grid grid-cols-5 w-full font-extrabold px-1 border-b-2 border-base-content/20 pb-2 text-sm"
+                class="grid grid-cols-5 md:grid-cols-6 w-full font-extrabold px-1 border-b-2 border-base-content/20 pb-2 text-sm"
               >
                 <p class="col-span-2">Week</p>
+                <p class="text-center hidden md:block">Budget</p>
                 <p class="text-center">Expense</p>
                 <p class="text-center">Budget diff</p>
                 <p class="text-center">Rollover</p>
               </div>
 
-              {#each weeklyExpenses as { weekString, totalAmount, budgetDiff, budgetRollover } (weekString)}
+              {#each weeklyExpenses as { weekString, totalAmount, budgetDiff, budgetRollover, budget } (weekString)}
                 <div class="border-b border-base-content/20 py-1">
                   <a class="btn btn-ghost w-full !px-1" href="#{weekString}">
-                    <div class="grid grid-cols-5 w-full">
+                    <div class="grid grid-cols-5 md:grid-cols-6 w-full">
                       <p
                         class="text-xs md:text-sm font-extrabold text-left text-base-content/60 col-span-2"
                       >
                         {weekString}
                       </p>
+                      <p class="text-xs md:text-sm font-medium hidden md:block">${budget}</p>
                       <p class="text-xs md:text-sm font-medium">{formatMoney(totalAmount)}</p>
                       <p
                         class="text-xs md:text-sm font-medium text-error"

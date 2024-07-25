@@ -30,6 +30,7 @@ export const groupTransactionsByWeek = (transactions: TransactionWithRefunds[]) 
 
   const transactionGroups = Object.entries(groups).map(([weekKey, transactions]) => {
     let weekString;
+    let budget = 0;
 
     if (weekKey === 'DATE_UNSET') {
       weekString = 'Date unset';
@@ -42,6 +43,8 @@ export const groupTransactionsByWeek = (transactions: TransactionWithRefunds[]) 
         date.getMonth() === endOfWeekDate.getMonth() ? 'dd' : 'MMM dd'
       );
       weekString = `Week ${formattedStartDate} - ${formattedEndDate}`;
+      const lastDayOfJune2024 = new Date('2024-06-30');
+      budget = isAfter(date, lastDayOfJune2024) ? 300 : 250;
     }
     const totalAmount = transactions.reduce((accum, transaction) => {
       let sum = accum + transaction.amount;
@@ -54,7 +57,9 @@ export const groupTransactionsByWeek = (transactions: TransactionWithRefunds[]) 
     return {
       weekString,
       totalAmount,
-      transactions
+      transactions,
+      weekKey,
+      budget
     };
   });
 
@@ -64,7 +69,6 @@ export const groupTransactionsByWeek = (transactions: TransactionWithRefunds[]) 
     transactionGroups.unshift(obj);
   }
 
-  const WEEKLY_BUDGET = 250;
   let budgetRollover = 0;
   const transactionGroupsWithBudgetTracking = transactionGroups
     .reverse()
@@ -72,7 +76,7 @@ export const groupTransactionsByWeek = (transactions: TransactionWithRefunds[]) 
       const budgetDiff =
         transactionGroup.weekString === 'Date unset'
           ? 0
-          : WEEKLY_BUDGET + transactionGroup.totalAmount;
+          : transactionGroup.budget + transactionGroup.totalAmount;
       budgetRollover += budgetDiff;
 
       return {
