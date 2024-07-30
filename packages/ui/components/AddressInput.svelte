@@ -1,4 +1,4 @@
-<script lang="ts" generics="T extends Record<string, unknown>">
+<script lang="ts">
   import type {
     GoogleGeocodeResponse,
     GooglePlaceSuggestion,
@@ -10,6 +10,8 @@
   import queryString from 'query-string';
   import { type FormPathLeaves, type SuperForm } from 'sveltekit-superforms';
   import SelectInput from './SelectInput.svelte';
+
+  type T = $$Generic<Record<string, unknown>>;
 
   export let superform: SuperForm<T>;
   export let field: FormPathLeaves<T, string>;

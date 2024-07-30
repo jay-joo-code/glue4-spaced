@@ -1,8 +1,10 @@
-<script lang="ts" generics="Suggestion extends Record<string, unknown>">
+<script lang="ts">
   export let value: string;
   export let suggestions: Suggestion[];
   export let onSuggestionSelect: (suggestion: Suggestion) => void;
   export let getSuggestionLabel: (suggestion: Suggestion) => string;
+
+  type Suggestion = $$Generic<Record<string, unknown>>;
 
   let highlightedIdx = -1;
   let isInputFocused = false;

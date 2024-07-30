@@ -1,4 +1,4 @@
-<script lang="ts" generics="T extends Record<string, unknown>">
+<script lang="ts">
   import { onMount } from 'svelte';
   import FormHelperText from './FormHelperText.svelte';
   import type { HandleFileUpload, HelperText, HelperTextStatus } from '@glue/types';
@@ -6,6 +6,8 @@
   import { dndzone } from 'svelte-dnd-action';
   import { flip } from 'svelte/animate';
   import { arrayProxy, type SuperForm, type FormPathArrays } from 'sveltekit-superforms';
+
+  type T = $$Generic<Record<string, unknown>>;
 
   export let handleFileUpload: HandleFileUpload;
   export let superform: SuperForm<T>;

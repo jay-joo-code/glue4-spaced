@@ -1,4 +1,4 @@
-<script lang="ts" generics="T extends Record<string, unknown>">
+<script lang="ts">
   import FormHelperText from './FormHelperText.svelte';
 
   import type { HelperText, HelperTextStatus } from '@glue/types';
@@ -8,6 +8,8 @@
     type FormPathLeaves,
     type SuperForm
   } from 'sveltekit-superforms';
+
+  type T = $$Generic<Record<string, unknown>>;
 
   export let superform: SuperForm<T>;
   export let field: FormPathLeaves<T, string>;
