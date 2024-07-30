@@ -90,91 +90,83 @@
   };
 </script>
 
-<PageContainer title="Home" layout="mobile-only" APP_NAME={config.appName}>
-  <div class="flex w-full justify-center">
-    <div class="w-full max-w-3xl">
-      <input
-        type="text"
-        placeholder="Search for a card"
-        class="input-bordered input input-md w-full rounded-full"
-        bind:this={inputElement}
-        on:keyup={(event) => {
-          const query = event?.target?.value?.trim();
-          if (query) handleDebouncedInputChange(query);
-          else {
-            resetSearchResults();
-            searchQuery = '';
-          }
-        }}
-        use:shortcut={{
-          control: true,
-          code: 'KeyK',
-          callback: () => {
-            inputElement.focus();
-          }
-        }}
-      />
+<PageContainer title="Home" layout="mobile-only" APP_NAME={config.appName} class="max-w-3xl ">
+  <input
+    type="text"
+    placeholder="Search for a card"
+    class="input-bordered input input-md w-full rounded-full"
+    bind:this={inputElement}
+    on:keyup={(event) => {
+      const query = event?.target?.value?.trim();
+      if (query) handleDebouncedInputChange(query);
+      else {
+        resetSearchResults();
+        searchQuery = '';
+      }
+    }}
+    use:shortcut={{
+      control: true,
+      code: 'KeyK',
+      callback: () => {
+        inputElement.focus();
+      }
+    }}
+  />
 
-      {#if searchQuery?.length > 0}
-        <div class="mt-6 space-y-4">
-          {#each searchResultCards as flashcard (flashcard?.id)}
-            <Flashcard {flashcard} />
-          {/each}
-        </div>
-      {:else}
-        <div class="mt-8 flex items-center justify-between">
-          <div class="flex items-center">
-            <h2 class="text-3xl font-extrabold">Today</h2>
-            <!-- <input
+  {#if searchQuery?.length > 0}
+    <div class="mt-6 space-y-4">
+      {#each searchResultCards as flashcard (flashcard?.id)}
+        <Flashcard {flashcard} />
+      {/each}
+    </div>
+  {:else}
+    <div class="mt-8 flex items-center justify-between">
+      <div class="flex items-center">
+        <h2 class="text-3xl font-extrabold">Today</h2>
+        <!-- <input
 							type="checkbox"
 							class="toggle-success toggle toggle-sm ml-5 mt-2"
 							bind:checked={isHideCards} />
 						<p class="ml-2 mt-2 text-xs text-base-content/80">Hide existing cards</p> -->
-          </div>
-          <div class="flex items-center space-x-2">
-            <button
-              class="btn-ghost btn-sm btn"
-              on:click={resetSpace}
-              disabled={isResetSpaceLoading}
-            >
-              {#if isResetSpaceLoading}
-                <span class="loading loading-spinner loading-xs" />
-                {resetFlashcardCurrent} / {resetFlashcardTotal}
-              {:else}
-                <IconRefresh />
-              {/if}
-              Reset space
-              {#if !isResetSpaceLoading}
-                ({todayFlashcards?.length})
-              {/if}
-            </button>
-            <button class="btn-secondary btn-sm btn" on:click={addCard} disabled={isAddCardLoading}>
-              {#if isAddCardLoading}
-                <span class="loading loading-spinner loading-xs" />
-              {:else}
-                <IconAdd />
-              {/if}
-              Add card
-            </button>
-          </div>
-        </div>
-
-        {#if !isHideCards}
-          <div class="mt-6 space-y-4">
-            {#each todayFlashcards as flashcard (flashcard?.id)}
-              <Flashcard {flashcard} />
-            {/each}
-          </div>
-
-          <h2 class="mt-10 text-3xl font-extrabold">Upcoming</h2>
-          <div class="relative mt-6 space-y-4">
-            {#each upcomingFlashcards as flashcard (flashcard?.id)}
-              <Flashcard {flashcard} />
-            {/each}
-            <div class="absolute bottom-0 w-full bg-gradient-to-t from-base-100 pt-64" />
-          </div>
-        {/if}
-      {/if}
+      </div>
+      <div class="flex items-center space-x-2">
+        <button class="btn-ghost btn-sm btn" on:click={resetSpace} disabled={isResetSpaceLoading}>
+          {#if isResetSpaceLoading}
+            <span class="loading loading-spinner loading-xs" />
+            {resetFlashcardCurrent} / {resetFlashcardTotal}
+          {:else}
+            <IconRefresh />
+          {/if}
+          Reset space
+          {#if !isResetSpaceLoading}
+            ({todayFlashcards?.length})
+          {/if}
+        </button>
+        <button class="btn-secondary btn-sm btn" on:click={addCard} disabled={isAddCardLoading}>
+          {#if isAddCardLoading}
+            <span class="loading loading-spinner loading-xs" />
+          {:else}
+            <IconAdd />
+          {/if}
+          Add card
+        </button>
+      </div>
     </div>
-  </div>
+
+    {#if !isHideCards}
+      <div class="mt-6 space-y-4">
+        {#each todayFlashcards as flashcard (flashcard?.id)}
+          <Flashcard {flashcard} />
+        {/each}
+      </div>
+
+      <h2 class="mt-10 text-3xl font-extrabold">Upcoming</h2>
+      <div class="relative mt-6 space-y-4">
+        {#each upcomingFlashcards as flashcard (flashcard?.id)}
+          <Flashcard {flashcard} />
+        {/each}
+        <div class="absolute bottom-0 w-full bg-gradient-to-t from-base-100 pt-64" />
+      </div>
+    {/if}
+  {/if}
 </PageContainer>
