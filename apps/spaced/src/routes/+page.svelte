@@ -1,13 +1,12 @@
 <script lang="ts">
-  import PageContainer from '$lib/components/glue/PageContainer.svelte';
-  import Flashcard from '$lib/components/Flashcard.svelte';
   import { page } from '$app/stores';
-  import IconAdd from '$lib/icons/glue/IconAdd.svelte';
-  import { toast } from '@zerodevx/svelte-toast';
+  import Flashcard from '$lib/components/Flashcard.svelte';
   import { invalidateAll } from '$app/navigation';
   import { shortcut } from '$lib/actions/shortcut';
-  import IconRefresh from '$lib/icons/glue/IconRefresh.svelte';
+  import { toast } from '@zerodevx/svelte-toast';
+  import { IconAdd, IconRefresh, PageContainer } from '@glue/ui';
   import { add, differenceInDays } from 'date-fns';
+  import config from '$lib/glue/config';
 
   let searchQuery = '';
   let searchResultCards = [];
@@ -91,7 +90,7 @@
   };
 </script>
 
-<PageContainer title="Home" layout="mobile-only">
+<PageContainer title="Home" layout="mobile-only" APP_NAME={config.appName}>
   <div class="flex w-full justify-center">
     <div class="w-full max-w-3xl">
       <input

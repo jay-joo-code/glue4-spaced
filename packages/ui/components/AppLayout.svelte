@@ -6,11 +6,11 @@
   import type { User } from 'lucia';
 
   export let APP_NAME: string;
-  export let PUBLIC_NAVS: Nav[];
-  export let PRIVATE_NAVS: Nav[];
-  export let AVATAR_NAVS: Nav[];
-  export let FOOTER_NAVS: FooterNav[];
-  export let ACTION_BUTTONS: ActionButton[];
+  export let PUBLIC_NAVS: Nav[] = [];
+  export let PRIVATE_NAVS: Nav[] = [];
+  export let AVATAR_NAVS: Nav[] = [];
+  export let FOOTER_NAVS: FooterNav[] = [];
+  export let ACTION_BUTTONS: ActionButton[] = [];
   export let user: User = undefined;
 
   const toastOptions = {
