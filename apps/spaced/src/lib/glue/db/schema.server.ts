@@ -26,21 +26,19 @@ export const sessionTable = pgTable('session', {
   }).notNull()
 });
 
-export const itemTable = pgTable('item', {
+export const categoryTable = pgTable('category', {
   id: uuid('id').defaultRandom().primaryKey(),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
   updatedAt: timestamp('updated_at')
     .notNull()
     .defaultNow()
     .$onUpdate(() => new Date()),
-  userId: uuid('user_id')
-    .notNull()
-    .references(() => userTable.id),
-  institution: text('institution').notNull(),
-  accessToken: text('access_token').notNull(),
-  cursor: text('cursor'),
-  plaidItemId: text('plaid_item_id').notNull()
+
+  name: text('name').notNull()
 });
+
+export type InsertCategory = typeof categoryTable.$inferInsert;
+export type SelectCategory = typeof categoryTable.$inferSelect;
 
 export const flashcardTable = pgTable('flashcard', {
   id: uuid('id').defaultRandom().primaryKey(),
@@ -54,7 +52,7 @@ export const flashcardTable = pgTable('flashcard', {
     .references(() => userTable.id),
 
   body: text('body'),
-  due: timestamp('due', { precision: 6, withTimezone: true })
+  due: timestamp('due', { withTimezone: true })
 });
 
 export type InsertFlashcard = typeof flashcardTable.$inferInsert;

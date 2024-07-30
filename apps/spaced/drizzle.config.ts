@@ -2,10 +2,10 @@ import 'dotenv/config';
 import type { Config } from 'drizzle-kit';
 
 export default {
-  schema: './src/db/schema.server.ts',
+  schema: './src/lib/glue/db/schema.server.ts',
   out: './drizzle',
-  driver: 'pg',
+  dialect: 'postgresql',
   dbCredentials: {
-    connectionString: process.env.NEON_DATABASE_URL_POOLED!
+    url: process.env.NEON_DATABASE_URL_POOLED!
   }
 } satisfies Config;
