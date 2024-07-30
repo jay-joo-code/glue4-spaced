@@ -32,11 +32,19 @@
 <svelte:head>
   <title>{title ? `${title} | ` : ''}{APP_NAME}</title>
 </svelte:head>
+
+<!-- PageContainer -->
 {#if layout === 'mobile-only'}
   <div class="flex justify-center">
     <div
-      class="{$$props.class} w-full {isHoriPadding && 'px-4 md:px-8'} {isVertPadding &&
-        'pt-6 md:pt-12 pb-8'} {limitWidth && 'max-w-7xl'} {isMinHeight && 'min-h-[80vh]'}"
+      class="{$$props.class} w-full"
+      class:px-4={isHoriPadding}
+      class:md:px-8={isHoriPadding}
+      class:pt-6={isVertPadding}
+      class:pb-8={isVertPadding}
+      class:md:pt-12={isVertPadding}
+      class:max-w-7xl={limitWidth}
+      class:min-h-[80vh]={isMinHeight}
     >
       <slot />
     </div>
