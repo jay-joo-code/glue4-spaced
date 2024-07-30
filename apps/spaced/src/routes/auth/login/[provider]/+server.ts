@@ -33,5 +33,5 @@ export const GET: RequestHandler = async ({ url, params, cookies }) => {
     sameSite: 'lax'
   });
 
-  redirect(302, authUrl.toString());
+  throw redirect(302, authUrl.toString());
 };
