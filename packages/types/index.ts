@@ -188,3 +188,12 @@ export type HandleFileUpload = ({
   files: FileList;
   superform: SuperForm<any>;
 }) => Promise<string[]>;
+
+export interface GlueConfig {
+  appName: string;
+  adminEmail: string;
+  prodDomain: string;
+
+  isBeta?: boolean;
+  sentryDsnPublic?: string;
+}
