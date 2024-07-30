@@ -1,4 +1,4 @@
-import { protectedRouteRedirectUrl } from '$root/src/lib/util/auth';
+import { protectedRouteRedirectUrl } from '@glue/utils';
 import { json, redirect } from '@sveltejs/kit';
 import type { RequestEvent } from '@sveltejs/kit';
 import queryString from 'query-string';
