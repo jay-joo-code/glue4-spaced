@@ -24,6 +24,7 @@ The default email account for this project is cornellsentiment@gmail.com.
 spaced.team.contact@gmail.com is used some of the services, such as:
 
 - Neon DB
+- GCP
 
 ## Add branch protection rules
 

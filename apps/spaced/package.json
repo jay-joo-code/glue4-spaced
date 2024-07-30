@@ -41,6 +41,7 @@
   },
   "type": "module",
   "dependencies": {
+    "@lucia-auth/adapter-drizzle": "^1.0.7",
     "@sendgrid/mail": "^7.7.0",
     "@sentry/sveltekit": "^7.53.1",
     "@supabase/auth-helpers-sveltekit": "^0.9.4",
@@ -62,6 +63,7 @@
     "@tiptap/pm": "^2.0.4",
     "@tiptap/starter-kit": "^2.0.4",
     "@zerodevx/svelte-toast": "^0.9.3",
+    "arctic": "^1.9.2",
     "axios": "^1.4.0",
     "browser-image-compression": "^2.0.2",
     "cheerio": "^1.0.0-rc.12",
@@ -76,6 +78,7 @@
     "highlight.js": "^11.8.0",
     "just-debounce-it": "^3.2.0",
     "lowlight": "^2.9.0",
+    "lucia": "^3.2.0",
     "meilisearch": "^0.30.0",
     "showdown": "^2.1.0",
     "universal-cookie": "^4.0.4"

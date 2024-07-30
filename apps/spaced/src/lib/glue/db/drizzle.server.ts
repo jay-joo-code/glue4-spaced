@@ -1,4 +1,3 @@
-import { dev } from '$app/environment';
 import { NEON_DATABASE_URL_POOLED } from '$env/static/private';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';

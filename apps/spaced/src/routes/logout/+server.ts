@@ -1,6 +1,6 @@
 import { redirect } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { lucia } from '$root/src/db/auth.server';
+import { lucia } from '$lib/glue/db/auth.server';
 
 export const GET: RequestHandler = async ({ cookies }) => {
   const sessionCookie = lucia.createBlankSessionCookie();

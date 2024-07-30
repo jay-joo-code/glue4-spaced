@@ -1,11 +1,11 @@
-import { error, redirect } from '@sveltejs/kit';
-import type { RequestHandler } from './$types';
-import { Google, OAuth2RequestError } from 'arctic';
 import { OAUTH_GOOGLE_CLIENT_ID, OAUTH_GOOGLE_CLIENT_SECRET } from '$env/static/private';
-import { lucia } from '$root/src/db/auth.server';
-import db from '$root/src/db/drizzle.server';
-import { userTable } from '$root/src/db/schema.server';
+import { lucia } from '$lib/glue/db/auth.server';
+import db from '$lib/glue/db/drizzle.server';
+import { userTable } from '$lib/glue/db/schema.server';
+import { error } from '@sveltejs/kit';
+import { Google, OAuth2RequestError } from 'arctic';
 import { eq } from 'drizzle-orm';
+import type { RequestHandler } from './$types';
 
 interface OAuthUser {
   email: string;
