@@ -52,18 +52,6 @@
               <li><a href={navElt?.href}>{navElt?.label}</a></li>
             {/if}
           {/each}
-
-          <!-- mobile action buttons -->
-          <div class="my-2 flex px-2">
-            {#each actionButtons as actionButton}
-              <a
-                class="btn btn-sm last:hidden w-full btn-outline"
-                class:btn-primary={actionButton?.variant === 'primary'}
-                class:btn-ghost={actionButton?.variant === 'ghost'}
-                href={actionButton?.href}>{actionButton?.label}</a
-              >
-            {/each}
-          </div>
         </ul>
       </div>
 
@@ -95,7 +83,7 @@
     <div class="navbar-end space-x-2">
       {#each actionButtons as actionButton}
         <a
-          class="btn btn-sm md:btn-md hidden last:flex md:flex"
+          class="btn btn-sm md:btn-md last:flex flex"
           class:btn-primary={actionButton?.variant === 'primary'}
           class:btn-ghost={actionButton?.variant === 'ghost'}
           href={actionButton?.href}>{actionButton?.label}</a
