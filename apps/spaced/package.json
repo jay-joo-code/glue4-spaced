@@ -72,7 +72,6 @@
     "date-fns-tz": "^2.0.0",
     "date-picker-svelte": "^2.2.5",
     "debounce": "^1.2.1",
-    "drizzle-orm": "^0.32.1",
     "drizzle-zod": "^0.5.1",
     "highlight-words": "^1.2.1",
     "highlight.js": "^11.8.0",

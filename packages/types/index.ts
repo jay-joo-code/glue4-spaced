@@ -1,4 +1,4 @@
-import type { Writable } from 'svelte/store';
+import type { AnyPgTable } from 'drizzle-orm/pg-core';
 import { type SuperForm } from 'sveltekit-superforms';
 
 export type Nav = {
@@ -194,6 +194,7 @@ export interface GlueConfig {
   adminEmail: string;
   prodDomain: string;
 
+  endpointConfigs?: Record<string, { table: AnyPgTable }>;
   isBeta?: boolean;
   sentryDsnPublic?: string;
 }
