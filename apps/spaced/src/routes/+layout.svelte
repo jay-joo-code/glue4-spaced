@@ -12,14 +12,14 @@
     ? [
         {
           label: 'Sign out',
-          href: '/logout',
+          href: '/glue/logout',
           variant: 'ghost'
         }
       ]
     : [
         {
           label: 'Sign in',
-          href: '/login',
+          href: '/glue/login',
           variant: 'ghost'
         }
       ]}

@@ -6,7 +6,7 @@
   export let variant: 'center-box' | 'split-screen' = 'split-screen';
   export let bgPattern: 'temple' | 'autumn' = 'temple';
 
-  const googleOAuthHref = `/auth/login/google?redirectTo=${redirectTo}`;
+  const googleOAuthHref = `/glue/auth/login/google?redirectTo=${redirectTo}`;
 </script>
 
 <PageContainer {APP_NAME} title="Login" layout="fullscreen">
