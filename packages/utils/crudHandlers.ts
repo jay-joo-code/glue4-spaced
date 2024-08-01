@@ -8,14 +8,19 @@ import { type PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 const deserializeRequestBody = async (request: Request, tableSchema: AnyPgTable) => {
   const columns = getTableColumns(tableSchema);
   const data: Record<string, any> = {};
-  Object.entries(await request.json()).map(([column, value]) => {
-    if (columns[column]?.dataType === 'date') {
-      data[column] = new Date(value as string);
-    } else {
-      data[column] = value;
-    }
-  });
-  return data;
+
+  try {
+    Object.entries(await request.json()).map(([column, value]) => {
+      if (columns[column]?.dataType === 'date') {
+        data[column] = new Date(value as string);
+      } else {
+        data[column] = value;
+      }
+    });
+    return data;
+  } catch (error) {
+    return {};
+  }
 };
 
 export const createHandlerFactory = (
@@ -127,7 +132,7 @@ export const deleteHandlerFactory = (
       throw error(500, 'Endpoint configs not configured');
     }
 
-    const { table } = params;
+    const { table, id } = params;
 
     if (!table) {
       throw error(400, 'Table name is required');
@@ -139,18 +144,28 @@ export const deleteHandlerFactory = (
       throw error(400, 'Invalid table name');
     }
 
-    const requestBody = await deserializeRequestBody(request, tableSchema);
-
-    if (!requestBody || !requestBody.ids) {
-      throw error(400, 'ids required in request body');
-    }
-
     try {
-      const { ids } = requestBody;
-      const result = await db
-        .delete(tableSchema)
-        .where(and(inArray(tableSchema.id, ids), eq(tableSchema.userId, locals.user?.id)))
-        .returning();
+      let result;
+      if (id) {
+        console.log('condition');
+        result = await db
+          .delete(tableSchema)
+          .where(and(eq(tableSchema.id, id), eq(tableSchema.userId, locals.user?.id)))
+          .returning();
+      } else {
+        const requestBody = await deserializeRequestBody(request, tableSchema);
+
+        if (!requestBody.ids) {
+          throw error(400, 'ids required in request body');
+        }
+
+        const { ids } = requestBody;
+
+        result = await db
+          .delete(tableSchema)
+          .where(and(inArray(tableSchema.id, ids), eq(tableSchema.userId, locals.user?.id)))
+          .returning();
+      }
 
       if (!result.length) {
         throw error(404, 'Records not found or you do not have permission to delete them');
