@@ -5,9 +5,9 @@
   import Flashcard from '$lib/components/Flashcard.svelte';
   import config from '$lib/glue/config';
   import { IconAdd, IconRefresh, PageContainer } from '@glue/ui';
+  import { updateUrlWithSearchParam } from '@glue/utils';
   import { toast } from '@zerodevx/svelte-toast';
   import debounce from 'just-debounce-it';
-  import { updateUrlWithSearchParam } from '@glue/utils';
 
   export let data;
 
@@ -73,7 +73,7 @@
     </div>
 
     <div class="flex items-center space-x-2">
-      <button class="btn-ghost btn-sm btn" on:click={resetSpace} disabled={isResetSpaceLoading}>
+      <!-- <button class="btn-ghost btn-sm btn" on:click={resetSpace} disabled={isResetSpaceLoading}>
         {#if isResetSpaceLoading}
           <span class="loading loading-spinner loading-xs" />
           {resetFlashcardCurrent} / {resetFlashcardTotal}
@@ -81,7 +81,7 @@
           <IconRefresh />
         {/if}
         Reset space
-      </button>
+      </button> -->
       <button class="btn-secondary btn-sm btn" on:click={addCard} disabled={isAddCardLoading}>
         {#if isAddCardLoading}
           <span class="loading loading-spinner loading-xs" />
@@ -112,7 +112,35 @@
     }}
   />
 
-  <div class="mt-8">
+  <div class="mt-4 px-2">
+    {#await data.lazy.categories}
+      <span class="loading loading-spinner loading-sm" />
+    {:then categories}
+      <div class="flex space-x-2">
+        {#each categories as category}
+          <button
+            class="btn btn-sm btn-outline"
+            class:btn-active={$page.url.searchParams.get('category') === category.id}
+            on:click={() => {
+              if ($page.url.searchParams.get('category') === category.id) {
+                goto(updateUrlWithSearchParam($page.url, 'category', undefined), {
+                  keepFocus: true,
+                  invalidateAll: true
+                });
+              } else {
+                goto(updateUrlWithSearchParam($page.url, 'category', category.id), {
+                  keepFocus: true,
+                  invalidateAll: true
+                });
+              }
+            }}>{category.name} <span class="ml-[1px]">{category.count}</span></button
+          >
+        {/each}
+      </div>
+    {/await}
+  </div>
+
+  <div class="mt-12">
     {#await data.lazy.flashcards}
       <span class="loading loading-spinner loading-sm" />
     {:then flashcards}

@@ -6,28 +6,26 @@
   import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
   import Document from '@tiptap/extension-document';
   import FloatingMenu from '@tiptap/extension-floating-menu';
+  import Link from '@tiptap/extension-link';
   import Placeholder from '@tiptap/extension-placeholder';
-  import Typography from '@tiptap/extension-typography';
-  import StarterKit from '@tiptap/starter-kit';
   import Table from '@tiptap/extension-table';
   import TableCell from '@tiptap/extension-table-cell';
   import TableHeader from '@tiptap/extension-table-header';
   import TableRow from '@tiptap/extension-table-row';
+  import Typography from '@tiptap/extension-typography';
+  import StarterKit from '@tiptap/starter-kit';
   import { toast } from '@zerodevx/svelte-toast';
   import { add, format, formatDistanceToNowStrict } from 'date-fns';
   import debounce from 'debounce';
   import 'highlight.js/styles/github-dark.css';
   import { lowlight } from 'lowlight';
   import { onDestroy, onMount } from 'svelte';
-  import Link from '@tiptap/extension-link';
 
   export let flashcard;
 
   let element: HTMLDivElement;
   let editor: Editor;
   let flashcardHeight: number;
-
-  $: ({ supabase } = $page.data);
 
   const debouncedUpdateFlashcard = debounce.debounce(async () => {
     if (flashcard?.body !== editor.getHTML() && editor.getText().length > 0) {
@@ -167,7 +165,36 @@
     </button>
   </div>
 
-  <div class="absolute right-2 top-2 z-[1]">
+  <div class="absolute right-2 top-2 z-[1] flex items-center space-x-2">
+    <select
+      class="select select-bordered w-full max-w-xs select-sm"
+      on:input={async (event) => {
+        const response = await fetch(`/glue/api/crud/flashcard/${flashcard.id}`, {
+          method: 'PUT',
+          body: JSON.stringify({
+            categoryId: event.currentTarget.value
+          })
+        });
+
+        if (response.ok) {
+          invalidateAll();
+        } else {
+          toast.push('There was an error with handling your request');
+        }
+      }}
+    >
+      {#await $page.data.lazy.categories then categories}
+        <option selected={flashcard.categoryId === undefined} value={undefined}
+          >Uncategorised</option
+        >
+        {#each categories as category}
+          <option selected={flashcard.categoryId === category.id} value={category.id}
+            >{category.name}</option
+          >
+        {/each}
+      {/await}
+    </select>
+
     <div class="dropdown-left dropdown">
       <label tabindex="0" class="btn-secondary btn-xs btn m-1 text-lg"><IconCheckOutlined /></label>
 

@@ -89,6 +89,10 @@ export const updateHandlerFactory = (
       throw error(400, 'Invalid table name');
     }
 
+    if (requestBody.id) {
+      throw error(400, 'id supplied to an update endpoint');
+    }
+
     try {
       let result;
 

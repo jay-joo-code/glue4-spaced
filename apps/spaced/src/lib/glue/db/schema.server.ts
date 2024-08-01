@@ -33,6 +33,9 @@ export const categoryTable = pgTable('category', {
     .notNull()
     .defaultNow()
     .$onUpdate(() => new Date()),
+  userId: uuid('user_id')
+    .notNull()
+    .references(() => userTable.id),
 
   name: text('name').notNull()
 });
@@ -52,7 +55,8 @@ export const flashcardTable = pgTable('flashcard', {
     .references(() => userTable.id),
 
   body: text('body'),
-  due: timestamp('due', { withTimezone: true })
+  due: timestamp('due', { withTimezone: true }),
+  categoryId: uuid('category_id').references(() => categoryTable.id)
 });
 
 export type InsertFlashcard = typeof flashcardTable.$inferInsert;
