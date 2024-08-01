@@ -17,7 +17,7 @@ export const load: ServerLoad = async ({ url, locals }) => {
       .from(flashcardTable)
       .where(and(eq(flashcardTable.userId, locals.user.id), lte(flashcardTable.due, new Date())))
       .orderBy(desc(flashcardTable.due))
-      .limit(10);
+      .limit(5);
 
     return flashcards;
   };
