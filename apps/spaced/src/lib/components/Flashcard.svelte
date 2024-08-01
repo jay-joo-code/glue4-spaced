@@ -193,12 +193,12 @@
       {/await}
     </select>
 
-    <div class="dropdown-bottom dropdown">
+    <div class="dropdown-bottom dropdown dropdown-end">
       <label tabindex="0" class="btn-secondary btn-xs btn m-1 text-lg"><IconCheckOutlined /></label>
 
       <ul
         tabindex="0"
-        class="dropdown-content menu rounded-box z-20 bg-base-200 p-2 text-end shadow w-32"
+        class="dropdown-content menu rounded-box z-20 mt-2 bg-base-200 p-2 text-end shadow w-32"
       >
         <li
           on:click={() => {
