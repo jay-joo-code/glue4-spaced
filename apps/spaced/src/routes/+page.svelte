@@ -118,7 +118,7 @@
       <div class="flex space-x-2">
         {#each categories as category}
           <button
-            class="btn btn-sm btn-outline"
+            class="btn btn-sm btn-outline border-base-content/30"
             class:btn-active={$page.url.searchParams.get('category') === category.id}
             on:click={() => {
               if ($page.url.searchParams.get('category') === category.id) {
@@ -159,7 +159,7 @@
           </form>
         {/if}
         <button
-          class="btn btn-sm btn-outline text-lg"
+          class="btn btn-sm btn-outline text-lg border-base-content/30"
           on:click={() => {
             isCreatingCategory = true;
           }}><IconAdd /></button
