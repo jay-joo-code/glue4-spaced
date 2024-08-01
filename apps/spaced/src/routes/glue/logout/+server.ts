@@ -8,5 +8,5 @@ export const GET: RequestHandler = async ({ cookies }) => {
     path: '.',
     ...sessionCookie.attributes
   });
-  return redirect(302, '/');
+  throw redirect(302, '/');
 };

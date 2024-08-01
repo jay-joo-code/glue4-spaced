@@ -26,7 +26,7 @@ export const GET: RequestHandler = async ({ url, params, cookies }) => {
     const params = new URLSearchParams(url.search);
     params.delete('code');
     params.delete('state');
-    const REDIRECT_URL = `${url.origin}/auth/redirect/${provider}`;
+    const REDIRECT_URL = `${url.origin}/glue/auth/redirect/${provider}`;
     const google = new Google(OAUTH_GOOGLE_CLIENT_ID, OAUTH_GOOGLE_CLIENT_SECRET, REDIRECT_URL);
     const tokens = await google.validateAuthorizationCode(code, storedCodeVerifier);
     const response = await fetch('https://openidconnect.googleapis.com/v1/userinfo', {

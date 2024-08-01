@@ -6,7 +6,7 @@ import { and, asc, desc, eq, gt, lte } from 'drizzle-orm';
 
 export const load: ServerLoad = async ({ url, locals }) => {
   if (!locals.user) {
-    return redirect(302, protectedRouteRedirectUrl(url));
+    throw redirect(302, protectedRouteRedirectUrl(url));
   }
 
   const fetchTodayFlashcards = async () => {

@@ -9,7 +9,7 @@ export const GET: RequestHandler = async ({ url, params, cookies }) => {
 
   const state = generateState();
   const codeVerifier = generateCodeVerifier();
-  const REDIRECT_URL = `${url.origin}/auth/redirect/${provider}`;
+  const REDIRECT_URL = `${url.origin}/glue/auth/redirect/${provider}`;
 
   // TODO: handle different providers
   const google = new Google(OAUTH_GOOGLE_CLIENT_ID, OAUTH_GOOGLE_CLIENT_SECRET, REDIRECT_URL);
