@@ -133,12 +133,18 @@
     {#await data.todayFlashcards}
       <span class="loading loading-spinner loading-sm" />
     {:then todayFlashcards}
-      <div class="space-y-4 relative">
-        {#each todayFlashcards as flashcard (flashcard?.id)}
-          <Flashcard {flashcard} />
-        {/each}
-        <div class="absolute bottom-0 w-full bg-gradient-to-t from-base-100 pt-64" />
-      </div>
+      {#if todayFlashcards.length > 0}
+        <div class="space-y-4 relative">
+          {#each todayFlashcards as flashcard (flashcard?.id)}
+            <Flashcard {flashcard} />
+          {/each}
+          <div class="absolute bottom-0 w-full bg-gradient-to-t from-base-100 pt-64" />
+        </div>
+      {:else}
+        <p class="text-sm text-center text-base-content/80 mt-10">
+          Completed all flashcards for today
+        </p>
+      {/if}
     {/await}
   </div>
 </PageContainer>
