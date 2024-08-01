@@ -77,7 +77,7 @@ export const load: ServerLoad = async ({ url, locals }) => {
       {
         id: 'uncategorized',
         name: 'Uncategorized',
-        count: categoryCount['Uncategorized']
+        count: categoryCount['Uncategorized'] || 0
       },
       ...categories.map((category) => ({
         ...category,
