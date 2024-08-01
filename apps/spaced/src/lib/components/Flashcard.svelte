@@ -117,9 +117,15 @@
       },
       onBlur: async ({ editor }) => {
         if (editor?.getText()?.trim()?.length === 0) {
-          const { error } = await supabase.from('flashcards').delete().eq('id', flashcard?.id);
-          if (error) toast.push('An error occurred with auto deleting an empty card');
-          else invalidateAll();
+          const response = await fetch(`/glue/api/crud/flashcard/${flashcard.id}`, {
+            method: 'DELETE'
+          });
+
+          if (response.ok) {
+            invalidateAll();
+          } else {
+            toast.push('There was an error with deleting the empty flashcard');
+          }
         }
       }
     });
