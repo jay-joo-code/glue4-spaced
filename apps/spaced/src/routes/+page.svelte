@@ -115,7 +115,7 @@
     {#await data.lazy.categories}
       <span class="loading loading-spinner loading-sm" />
     {:then categories}
-      <div class="flex space-x-2">
+      <div class="flex gap-x-2 gap-y-3 flex-wrap">
         {#each categories as category}
           <button
             class="btn btn-sm btn-outline border-base-content/30"
