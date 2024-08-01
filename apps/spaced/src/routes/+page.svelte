@@ -4,7 +4,7 @@
   import { shortcut } from '$lib/actions/shortcut';
   import Flashcard from '$lib/components/Flashcard.svelte';
   import config from '$lib/glue/config';
-  import { IconAdd, IconRefresh, PageContainer } from '@glue/ui';
+  import { IconAdd, PageContainer } from '@glue/ui';
   import { updateUrlWithSearchParam } from '@glue/utils';
   import { toast } from '@zerodevx/svelte-toast';
   import debounce from 'just-debounce-it';
@@ -13,10 +13,9 @@
 
   let isAddCardLoading = false;
   let inputElement: HTMLInputElement;
-  let isResetSpaceLoading = false;
-  let resetFlashcardTotal = 0;
-  let resetFlashcardCurrent = 0;
   let searchTerm = $page.url.searchParams.get('search') || '';
+  let isCreatingCategory = false;
+  let newCategoryName = '';
 
   const addCard = async () => {
     const response = await fetch('/glue/api/crud/flashcard', {
@@ -136,6 +135,35 @@
             }}>{category.name} <span class="ml-[1px]">{category.count}</span></button
           >
         {/each}
+
+        {#if isCreatingCategory}
+          <form
+            on:submit={async () => {
+              const response = await fetch('/glue/api/crud/category', {
+                method: 'POST',
+                body: JSON.stringify({
+                  name: newCategoryName
+                })
+              });
+
+              if (response.ok) {
+                invalidateAll();
+                newCategoryName = '';
+                isCreatingCategory = false;
+              } else {
+                toast.push('There was an error with creating a new category');
+              }
+            }}
+          >
+            <input class="input input-sm !border-base-content" bind:value={newCategoryName} />
+          </form>
+        {/if}
+        <button
+          class="btn btn-sm btn-outline text-lg"
+          on:click={() => {
+            isCreatingCategory = true;
+          }}><IconAdd /></button
+        >
       </div>
     {/await}
   </div>

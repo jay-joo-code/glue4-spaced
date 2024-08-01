@@ -1,9 +1,12 @@
 import { GlueEndpoints } from '@glue/types';
-import { flashcardTable } from './db/schema.server';
+import { categoryTable, flashcardTable } from './db/schema.server';
 
 const endpoints = {
   flashcard: {
     table: flashcardTable
+  },
+  category: {
+    table: categoryTable
   }
 } satisfies GlueEndpoints;
 
