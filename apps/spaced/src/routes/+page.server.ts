@@ -2,9 +2,9 @@ import db from '$lib/glue/db/drizzle.server';
 import { flashcardTable } from '$lib/glue/db/schema.server';
 import { protectedRouteRedirectUrl } from '@glue/utils';
 import { redirect, type ServerLoad } from '@sveltejs/kit';
-import { and, desc, eq, ilike, lte, or } from 'drizzle-orm';
+import { and, desc, eq, ilike, lte } from 'drizzle-orm';
 
-export const load: ServerLoad = async ({ url, locals, params }) => {
+export const load: ServerLoad = async ({ url, locals }) => {
   if (!locals.user) {
     throw redirect(302, protectedRouteRedirectUrl(url));
   }
@@ -32,6 +32,8 @@ export const load: ServerLoad = async ({ url, locals, params }) => {
   };
 
   return {
-    flashcards: await fetchFlashcards()
+    lazy: {
+      flashcards: fetchFlashcards()
+    }
   };
 };

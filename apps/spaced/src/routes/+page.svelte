@@ -113,7 +113,7 @@
   />
 
   <div class="mt-8">
-    {#await data.flashcards}
+    {#await data.lazy.flashcards}
       <span class="loading loading-spinner loading-sm" />
     {:then flashcards}
       {#if flashcards.length > 0}
