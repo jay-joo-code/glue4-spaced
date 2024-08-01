@@ -2,7 +2,7 @@ import db from '$lib/glue/db/drizzle.server';
 import { categoryTable, flashcardTable } from '$lib/glue/db/schema.server';
 import { protectedRouteRedirectUrl } from '@glue/utils';
 import { redirect, type ServerLoad } from '@sveltejs/kit';
-import { and, desc, eq, ilike, isNull, lte, sql } from 'drizzle-orm';
+import { and, asc, desc, eq, ilike, isNull, lte, sql } from 'drizzle-orm';
 
 export const load: ServerLoad = async ({ url, locals }) => {
   if (!locals.user) {
@@ -52,7 +52,7 @@ export const load: ServerLoad = async ({ url, locals }) => {
       .select()
       .from(categoryTable)
       .where(eq(categoryTable.userId, locals.user.id))
-      .orderBy(desc(categoryTable.createdAt));
+      .orderBy(asc(categoryTable.createdAt));
 
     const counts = await db
       .select({
