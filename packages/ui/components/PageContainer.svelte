@@ -12,7 +12,6 @@
   export let isMinHeight = true;
 
   const handleFocus = () => {
-    console.log('handleFocus');
     invalidateAll();
   };
 
