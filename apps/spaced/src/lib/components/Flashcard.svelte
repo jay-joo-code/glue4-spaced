@@ -169,10 +169,11 @@
     <select
       class="select select-bordered w-full max-w-xs select-sm"
       on:input={async (event) => {
+        const categoryId = event.currentTarget.value;
         const response = await fetch(`/glue/api/crud/flashcard/${flashcard.id}`, {
           method: 'PUT',
           body: JSON.stringify({
-            categoryId: event.currentTarget.value
+            categoryId: categoryId === 'uncategorized' ? null : categoryId
           })
         });
 
@@ -184,9 +185,6 @@
       }}
     >
       {#await $page.data.lazy.categories then categories}
-        <option selected={flashcard.categoryId === undefined} value={undefined}
-          >Uncategorized</option
-        >
         {#each categories as category}
           <option selected={flashcard.categoryId === category.id} value={category.id}
             >{category.name}</option
