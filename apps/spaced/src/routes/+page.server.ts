@@ -2,41 +2,36 @@ import db from '$lib/glue/db/drizzle.server';
 import { flashcardTable } from '$lib/glue/db/schema.server';
 import { protectedRouteRedirectUrl } from '@glue/utils';
 import { redirect, type ServerLoad } from '@sveltejs/kit';
-import { and, asc, desc, eq, gt, lte } from 'drizzle-orm';
+import { and, desc, eq, ilike, lte, or } from 'drizzle-orm';
 
-export const load: ServerLoad = async ({ url, locals }) => {
+export const load: ServerLoad = async ({ url, locals, params }) => {
   if (!locals.user) {
     throw redirect(302, protectedRouteRedirectUrl(url));
   }
 
-  const fetchTodayFlashcards = async () => {
+  const fetchFlashcards = async () => {
     if (!locals.user) return [];
+    const query = url.searchParams.get('search');
 
-    const flashcards = await db
-      .select()
-      .from(flashcardTable)
-      .where(and(eq(flashcardTable.userId, locals.user.id), lte(flashcardTable.due, new Date())))
-      .orderBy(desc(flashcardTable.due))
-      .limit(5);
-
-    return flashcards;
-  };
-
-  const fetchUpcomingFlashcards = async () => {
-    if (!locals.user) return [];
-
-    const flashcards = await db
-      .select()
-      .from(flashcardTable)
-      .where(and(eq(flashcardTable.userId, locals.user.id), gt(flashcardTable.due, new Date())))
-      .orderBy(asc(flashcardTable.due))
-      .limit(4);
-
-    return flashcards;
+    if (query) {
+      const keywords = query.split(' ');
+      const conditions = keywords.map((keyword) => ilike(flashcardTable.body, `%${keyword}%`));
+      return await db
+        .select()
+        .from(flashcardTable)
+        .where(and(eq(flashcardTable.userId, locals.user.id), ...conditions))
+        .orderBy(desc(flashcardTable.due));
+    } else {
+      return await db
+        .select()
+        .from(flashcardTable)
+        .where(and(eq(flashcardTable.userId, locals.user.id), lte(flashcardTable.due, new Date())))
+        .orderBy(desc(flashcardTable.due))
+        .limit(5);
+    }
   };
 
   return {
-    todayFlashcards: await fetchTodayFlashcards(),
-    upcomingFlashcards: await fetchUpcomingFlashcards()
+    flashcards: await fetchFlashcards()
   };
 };

@@ -1,7 +1,6 @@
 <script lang="ts">
-  import { browser } from '$app/environment';
-  import { onDestroy, onMount } from 'svelte';
   import { invalidateAll } from '$app/navigation';
+  import { onMount } from 'svelte';
 
   export let APP_NAME: string;
   export let title: string;
@@ -12,20 +11,23 @@
   export let isInvalidateOnFocus = true;
   export let isMinHeight = true;
 
-  onMount(() => {
-    if (isInvalidateOnFocus) {
-      window.addEventListener('gluefocus', () => {
-        invalidateAll();
-      });
-    }
-  });
+  const handleFocus = () => {
+    console.log('handleFocus');
+    invalidateAll();
+  };
 
-  onDestroy(() => {
-    if (browser) {
-      window.removeEventListener('gluefocus', () => {
-        invalidateAll();
-      });
+  onMount(() => {
+    if (isInvalidateOnFocus && typeof window !== 'undefined' && window.addEventListener) {
+      window.addEventListener('visibilitychange', handleFocus, false);
+      window.addEventListener('focus', handleFocus, false);
     }
+
+    return () => {
+      if (isInvalidateOnFocus) {
+        window.removeEventListener('visibilitychange', handleFocus);
+        window.removeEventListener('focus', handleFocus);
+      }
+    };
   });
 </script>
 

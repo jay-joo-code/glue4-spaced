@@ -5,3 +5,4 @@ export { default as placesGeocodeHandler } from './placesGeocodeHandler';
 export { default as createGlueConfig } from './createGlueConfig';
 export { default as protectedRouteRedirectUrl } from './protectedRouteRedirectUrl';
 export { createHandlerFactory, updateHandlerFactory, deleteHandlerFactory } from './crudHandlers';
+export { default as updateUrlWithSearchParam } from './updateUrlWithSearchParam';
