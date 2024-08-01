@@ -17,11 +17,8 @@
   let resetFlashcardCurrent = 0;
 
   const addCard = async () => {
-    const response = await fetch('/glue/api/crud/flashcards', {
+    const response = await fetch('/glue/api/crud/flashcard', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
       body: JSON.stringify({
         body: '',
         due: new Date()
@@ -31,7 +28,7 @@
     if (response.ok) {
       invalidateAll();
     } else {
-      toast.push('There was an error with handling your request');
+      toast.push('There was an error with creating a flashcard');
     }
   };
 
