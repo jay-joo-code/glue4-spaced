@@ -165,7 +165,7 @@
     </button>
   </div>
 
-  <div class="absolute right-2 top-2 z-[1] flex items-center space-x-2">
+  <div class="absolute right-2 bottom-2 z-[1] flex items-center space-x-2">
     <select
       class="select select-bordered w-full max-w-xs select-sm"
       on:input={async (event) => {
