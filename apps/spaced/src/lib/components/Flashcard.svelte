@@ -68,11 +68,18 @@
 
   const incrementDue = async (days: number) => {
     const due = add(new Date(), { days });
-    const { error } = await supabase.from('flashcards').update({ due }).eq('id', flashcard?.id);
-    if (error) toast.push('An error has occured with updating due date');
-    else {
-      await invalidateAll();
+    const response = await fetch(`/glue/api/crud/flashcard/${flashcard.id}`, {
+      method: 'PUT',
+      body: JSON.stringify({
+        due
+      })
+    });
+
+    if (response.ok) {
       toast.push(`Updated due date to ${format(due, 'yyyy/MM/dd iii')}`);
+      invalidateAll();
+    } else {
+      toast.push('There was an error with updating due date');
     }
   };
 
