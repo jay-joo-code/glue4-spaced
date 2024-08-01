@@ -51,7 +51,8 @@ export const load: ServerLoad = async ({ url, locals }) => {
     const categories = await db
       .select()
       .from(categoryTable)
-      .where(eq(categoryTable.userId, locals.user.id));
+      .where(eq(categoryTable.userId, locals.user.id))
+      .orderBy(desc(categoryTable.createdAt));
 
     const counts = await db
       .select({
