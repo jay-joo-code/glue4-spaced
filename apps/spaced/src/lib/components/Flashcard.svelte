@@ -30,7 +30,7 @@
   $: ({ supabase } = $page.data);
 
   const debouncedUpdateFlashcard = debounce.debounce(async () => {
-    if (flashcard?.body !== editor.getHTML()) {
+    if (flashcard?.body !== editor.getHTML() && editor.getText().length > 0) {
       const response = await fetch(`/glue/api/crud/flashcard/${flashcard.id}`, {
         method: 'PUT',
         headers: {
@@ -42,7 +42,7 @@
       });
 
       if (!response.ok) {
-        toast.push('There was an error with handling your request');
+        toast.push('There was an error with debounced saving flashcard body');
       }
     }
   }, 500);
