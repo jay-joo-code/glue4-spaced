@@ -138,14 +138,15 @@
     {#await data.todayFlashcards}
       <span class="loading loading-spinner loading-sm" />
     {:then todayFlashcards}
-      <div class="mt-6 space-y-4">
+      <div class="mt-6 space-y-4 relative">
         {#each todayFlashcards as flashcard (flashcard?.id)}
           <Flashcard {flashcard} />
         {/each}
+        <div class="absolute bottom-0 w-full bg-gradient-to-t from-base-100 pt-64" />
       </div>
     {/await}
 
-    <h2 class="mt-10 text-3xl font-extrabold">Upcoming</h2>
+    <!-- <h2 class="mt-10 text-3xl font-extrabold">Upcoming</h2>
 
     {#await data.upcomingFlashcards}
       <span class="loading loading-spinner loading-sm" />
@@ -154,8 +155,7 @@
         {#each upcomingFlashcards as flashcard (flashcard?.id)}
           <Flashcard {flashcard} />
         {/each}
-        <div class="absolute bottom-0 w-full bg-gradient-to-t from-base-100 pt-64" />
       </div>
-    {/await}
+      {/await} -->
   {/if}
 </PageContainer>
