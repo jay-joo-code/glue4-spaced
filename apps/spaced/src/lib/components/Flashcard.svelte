@@ -185,7 +185,7 @@
     >
       {#await $page.data.lazy.categories then categories}
         <option selected={flashcard.categoryId === undefined} value={undefined}
-          >Uncategorised</option
+          >Uncategorized</option
         >
         {#each categories as category}
           <option selected={flashcard.categoryId === category.id} value={category.id}

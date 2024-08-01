@@ -2,7 +2,7 @@ import db from '$lib/glue/db/drizzle.server';
 import { categoryTable, flashcardTable } from '$lib/glue/db/schema.server';
 import { protectedRouteRedirectUrl } from '@glue/utils';
 import { redirect, type ServerLoad } from '@sveltejs/kit';
-import { and, desc, eq, ilike, lte, sql } from 'drizzle-orm';
+import { and, desc, eq, ilike, isNull, lte, sql } from 'drizzle-orm';
 
 export const load: ServerLoad = async ({ url, locals }) => {
   if (!locals.user) {
@@ -13,7 +13,13 @@ export const load: ServerLoad = async ({ url, locals }) => {
     if (!locals.user) return [];
     const query = url.searchParams.get('search');
     const categoryId = url.searchParams.get('category');
-    const categoryCondition = categoryId ? [eq(flashcardTable.categoryId, categoryId)] : [];
+
+    let categoryCondition =
+      categoryId === 'uncategorized'
+        ? [isNull(flashcardTable.categoryId)]
+        : categoryId
+        ? [eq(flashcardTable.categoryId, categoryId)]
+        : [];
 
     if (query) {
       const keywords = query.split(' ');
@@ -61,13 +67,22 @@ export const load: ServerLoad = async ({ url, locals }) => {
     for (const count of counts) {
       if (count.categoryId) {
         categoryCount[count.categoryId] = count.count;
+      } else {
+        categoryCount['Uncategorized'] = count.count;
       }
     }
 
-    return categories.map((category) => ({
-      ...category,
-      count: categoryCount[category.id] || 0
-    }));
+    return [
+      {
+        id: 'uncategorized',
+        name: 'Uncategorized',
+        count: categoryCount['Uncategorized']
+      },
+      ...categories.map((category) => ({
+        ...category,
+        count: categoryCount[category.id] || 0
+      }))
+    ];
   };
 
   return {
