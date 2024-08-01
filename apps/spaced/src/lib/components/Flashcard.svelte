@@ -261,7 +261,7 @@
   :global(.ProseMirror h2) {
     font-weight: bold;
     margin-bottom: 0.2rem;
-    color: hsl(var(--ac));
+    color: oklch(var(--ac));
   }
   :global(.ProseMirror p) {
     opacity: 0.9;
@@ -272,8 +272,8 @@
     cursor: pointer;
   }
   :global(.ProseMirror code) {
-    background-color: hsl(var(--b3));
-    color: hsl(var(--er));
+    background-color: oklch(var(--b3));
+    color: oklch(var(--er));
   }
   :global(.ProseMirror pre) {
     background: #0d0d0d;
@@ -326,7 +326,7 @@
   }
 
   :global(.ProseMirror th) {
-    background-color: hsl(var(--b2));
+    background-color: oklch(var(--b2));
     font-weight: medium;
     text-align: left;
   }
