@@ -165,98 +165,100 @@
     </button>
   </div>
 
-  <div class="absolute right-2 bottom-2 z-[1] flex items-center space-x-2">
-    <select
-      class="select select-bordered w-full max-w-xs select-sm"
-      on:input={async (event) => {
-        const categoryId = event.currentTarget.value;
-        const response = await fetch(`/glue/api/crud/flashcard/${flashcard.id}`, {
-          method: 'PUT',
-          body: JSON.stringify({
-            categoryId: categoryId === 'uncategorized' ? null : categoryId
-          })
-        });
-
-        if (response.ok) {
-          invalidateAll();
-        } else {
-          toast.push('There was an error with handling your request');
-        }
-      }}
-    >
-      {#await $page.data.lazy.categories then categories}
-        {#each categories as category}
-          <option selected={flashcard.categoryId === category.id} value={category.id}
-            >{category.name}</option
-          >
-        {/each}
-      {/await}
-    </select>
-
-    <div class="dropdown-bottom dropdown dropdown-end">
-      <label tabindex="0" class="btn-secondary btn-xs btn m-1 text-lg"><IconCheckOutlined /></label>
-
-      <ul
-        tabindex="0"
-        class="dropdown-content menu rounded-box z-20 mt-2 bg-base-200 p-2 text-end shadow w-32"
-      >
-        <li
-          on:click={() => {
-            incrementRandomDue(2, 4);
-          }}
-        >
-          <a>A few days</a>
-        </li>
-        <li
-          on:click={() => {
-            incrementRandomDue(6, 8);
-          }}
-        >
-          <a>+1 week</a>
-        </li>
-        <li
-          on:click={() => {
-            incrementRandomDue(13, 15);
-          }}
-        >
-          <a>+2 weeks</a>
-        </li>
-        <li
-          on:click={() => {
-            incrementRandomDue(27, 29);
-          }}
-        >
-          <a>+1 month</a>
-        </li>
-        <li
-          on:click={() => {
-            incrementRandomDue(58, 62);
-          }}
-        >
-          <a>+2 months</a>
-        </li>
-        <li
-          on:click={() => {
-            incrementRandomDue(360, 370);
-          }}
-        >
-          <a>+1 year</a>
-        </li>
-      </ul>
-    </div>
-  </div>
-
   <!-- direct parent div required for keyboard navigation, focus handling -->
   <div>
     <div bind:this={element} />
   </div>
 
-  <div class="mt-4">
+  <div class="mt-4 flex items-center justify-between">
     <p class="text-xs text-base-content/70">
       Due in {formatDistanceToNowStrict(new Date(flashcard?.due))} • Created {formatDistanceToNowStrict(
         new Date(flashcard?.createdAt)
       )} ago
     </p>
+
+    <div class="flex items-center space-x-2">
+      <select
+        class="select select-bordered w-full max-w-xs select-sm"
+        on:input={async (event) => {
+          const categoryId = event.currentTarget.value;
+          const response = await fetch(`/glue/api/crud/flashcard/${flashcard.id}`, {
+            method: 'PUT',
+            body: JSON.stringify({
+              categoryId: categoryId === 'uncategorized' ? null : categoryId
+            })
+          });
+
+          if (response.ok) {
+            invalidateAll();
+          } else {
+            toast.push('There was an error with handling your request');
+          }
+        }}
+      >
+        {#await $page.data.lazy.categories then categories}
+          {#each categories as category}
+            <option selected={flashcard.categoryId === category.id} value={category.id}
+              >{category.name}</option
+            >
+          {/each}
+        {/await}
+      </select>
+
+      <div class="dropdown-bottom dropdown dropdown-end">
+        <label tabindex="0" class="btn-secondary btn-xs btn m-1 text-lg"
+          ><IconCheckOutlined /></label
+        >
+
+        <ul
+          tabindex="0"
+          class="dropdown-content menu rounded-box z-10 mt-2 bg-base-200 p-2 text-end shadow w-32"
+        >
+          <li
+            on:click={() => {
+              incrementRandomDue(2, 4);
+            }}
+          >
+            <a>A few days</a>
+          </li>
+          <li
+            on:click={() => {
+              incrementRandomDue(6, 8);
+            }}
+          >
+            <a>+1 week</a>
+          </li>
+          <li
+            on:click={() => {
+              incrementRandomDue(13, 15);
+            }}
+          >
+            <a>+2 weeks</a>
+          </li>
+          <li
+            on:click={() => {
+              incrementRandomDue(27, 29);
+            }}
+          >
+            <a>+1 month</a>
+          </li>
+          <li
+            on:click={() => {
+              incrementRandomDue(58, 62);
+            }}
+          >
+            <a>+2 months</a>
+          </li>
+          <li
+            on:click={() => {
+              incrementRandomDue(360, 370);
+            }}
+          >
+            <a>+1 year</a>
+          </li>
+        </ul>
+      </div>
+    </div>
   </div>
 </div>
 
