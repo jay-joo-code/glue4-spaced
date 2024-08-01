@@ -25,21 +25,25 @@
 
   let element: HTMLDivElement;
   let editor: Editor;
-  let isExpandToggled = false;
   let flashcardHeight: number;
 
   $: ({ supabase } = $page.data);
-  $: isExpanded = flashcardHeight < 600 || isExpandToggled;
 
   const debouncedUpdateFlashcard = debounce.debounce(async () => {
     if (flashcard?.body !== editor.getHTML()) {
-      const { error } = await supabase
-        .from('flashcards')
-        .update({ body: editor.getHTML() })
-        .eq('id', flashcard?.id);
+      const response = await fetch(`/glue/api/crud/flashcard/${flashcard.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          body: editor.getHTML()
+        })
+      });
 
-      if (error) toast.push('An error has occured while auto-saving the flashcard');
-      else invalidateAll();
+      if (!response.ok) {
+        toast.push('There was an error with handling your request');
+      }
     }
   }, 500);
 
@@ -117,10 +121,6 @@
           if (error) toast.push('An error occurred with auto deleting an empty card');
           else invalidateAll();
         }
-        isExpandToggled = false;
-      },
-      onFocus: () => {
-        isExpandToggled = true;
       }
     });
   });
@@ -136,9 +136,6 @@
   class="relative rounded-lg border border-base-content/20 px-3 py-4"
   bind:clientHeight={flashcardHeight}
 >
-  <!-- {#if !isExpanded}
-		<div class="absolute inset-x-0 bottom-0 z-10 h-24 w-full bg-gradient-to-t from-base-100" />
-	{/if} -->
   <div class="floating-menu ml-2 opacity-70">
     <button
       on:click={() => editor?.chain().focus().toggleCodeBlock().run()}

@@ -16,7 +16,8 @@ export const load: ServerLoad = async ({ url, locals }) => {
       .select()
       .from(flashcardTable)
       .where(and(eq(flashcardTable.userId, locals.user.id), lte(flashcardTable.due, new Date())))
-      .orderBy(desc(flashcardTable.due));
+      .orderBy(desc(flashcardTable.due))
+      .limit(10);
 
     return flashcards;
   };
@@ -35,7 +36,7 @@ export const load: ServerLoad = async ({ url, locals }) => {
   };
 
   return {
-    todayFlashcards: fetchTodayFlashcards(),
-    upcomingFlashcards: fetchUpcomingFlashcards()
+    todayFlashcards: await fetchTodayFlashcards(),
+    upcomingFlashcards: await fetchUpcomingFlashcards()
   };
 };

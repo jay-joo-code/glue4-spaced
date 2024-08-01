@@ -1,12 +1,26 @@
-import { error, json, redirect, type RequestHandler, type RequestEvent } from '@sveltejs/kit';
+import { type GlueEndpoints } from '@glue/types';
 import { protectedRouteRedirectUrl } from '@glue/utils';
-import { and, inArray, eq } from 'drizzle-orm';
+import { error, json, redirect, type RequestHandler } from '@sveltejs/kit';
+import { and, eq, getTableColumns, inArray } from 'drizzle-orm';
+import type { AnyPgTable } from 'drizzle-orm/pg-core';
 import { type PostgresJsDatabase } from 'drizzle-orm/postgres-js';
-import { type GlueConfig } from '@glue/types';
+
+const deserializeRequestBody = async (request: Request, tableSchema: AnyPgTable) => {
+  const columns = getTableColumns(tableSchema);
+  const data: Record<string, any> = {};
+  Object.entries(await request.json()).map(([column, value]) => {
+    if (columns[column]?.dataType === 'date') {
+      data[column] = new Date(value as string);
+    } else {
+      data[column] = value;
+    }
+  });
+  return data;
+};
 
 export const createHandlerFactory = (
   db: PostgresJsDatabase<Record<string, never>>,
-  glueConfig: GlueConfig
+  endpoints: GlueEndpoints
 ): RequestHandler => {
   const createHandler: RequestHandler = async ({ request, params, locals, url }) => {
     if (!locals.user) {
@@ -15,7 +29,7 @@ export const createHandlerFactory = (
 
     const { table } = params;
 
-    if (!glueConfig.endpointConfigs) {
+    if (!endpoints) {
       throw error(500, 'Endpoint configs not configured');
     }
 
@@ -23,17 +37,20 @@ export const createHandlerFactory = (
       throw error(400, 'Table name is required');
     }
 
-    const tableSchema = glueConfig.endpointConfigs[table].table;
-    const data = await request.json();
+    const tableSchema = endpoints[table].table;
+    const requestBody = await deserializeRequestBody(request, tableSchema);
 
     if (!tableSchema) {
       throw error(400, 'Invalid table name');
     }
 
     try {
-      const result = await db.insert(tableSchema).values({ ...data, userId: locals.user?.id });
+      const result = await db
+        .insert(tableSchema)
+        .values({ ...requestBody, userId: locals.user?.id });
       return json(result, { status: 201 });
     } catch (err) {
+      console.log('err', err);
       throw error(500, 'Internal Server Error');
     }
   };
@@ -43,17 +60,16 @@ export const createHandlerFactory = (
 
 export const updateHandlerFactory = (
   db: PostgresJsDatabase<Record<string, never>>,
-  glueConfig: GlueConfig
+  endpoints: GlueEndpoints
 ): RequestHandler => {
   const updateHandler: RequestHandler = async ({ request, params, locals, url }) => {
     if (!locals.user) {
       return redirect(302, protectedRouteRedirectUrl(url));
     }
 
-    const { table } = params;
-    const ids = url.searchParams.getAll('id');
+    const { table, id } = params;
 
-    if (!glueConfig.endpointConfigs) {
+    if (!endpoints) {
       throw error(500, 'Endpoint configs not configured');
     }
 
@@ -61,19 +77,30 @@ export const updateHandlerFactory = (
       throw error(400, 'Table name is required');
     }
 
-    const tableSchema = glueConfig.endpointConfigs[table].table;
-    const data = await request.json();
+    const tableSchema = endpoints[table].table;
+    const requestBody = await deserializeRequestBody(request, tableSchema);
 
     if (!tableSchema) {
       throw error(400, 'Invalid table name');
     }
 
     try {
-      const result = await db
-        .update(tableSchema)
-        .set(data)
-        .where(and(inArray(tableSchema.id, ids), eq(tableSchema.userId, locals.user?.id)))
-        .returning();
+      let result;
+
+      if (id) {
+        result = await db
+          .update(tableSchema)
+          .set(requestBody)
+          .where(and(eq(tableSchema.id, id), eq(tableSchema.userId, locals.user?.id)))
+          .returning();
+      } else {
+        // const result = await db
+        //   .update(tableSchema)
+        //   .set(requestBody)
+        //   .where(and(inArray(tableSchema.id, ids), eq(tableSchema.userId, locals.user?.id)))
+        //   .returning();
+        throw error(500, 'Not implemented error');
+      }
 
       if (!result.length) {
         throw error(404, 'Records not found or you do not have permission to update them');
@@ -89,31 +116,37 @@ export const updateHandlerFactory = (
 
 export const deleteHandlerFactory = (
   db: PostgresJsDatabase<Record<string, never>>,
-  glueConfig: GlueConfig
+  endpoints: GlueEndpoints
 ): RequestHandler => {
-  const deleteHandler: RequestHandler = async ({ locals, url, params }) => {
+  const deleteHandler: RequestHandler = async ({ request, locals, url, params }) => {
     if (!locals.user) {
       return redirect(302, protectedRouteRedirectUrl(url));
     }
 
-    if (!glueConfig.endpointConfigs) {
+    if (!endpoints) {
       throw error(500, 'Endpoint configs not configured');
     }
 
     const { table } = params;
-    const ids = url.searchParams.getAll('id');
 
     if (!table) {
       throw error(400, 'Table name is required');
     }
 
-    const tableSchema = glueConfig.endpointConfigs[table].table;
+    const tableSchema = endpoints[table].table;
 
     if (!tableSchema) {
       throw error(400, 'Invalid table name');
     }
 
+    const requestBody = await deserializeRequestBody(request, tableSchema);
+
+    if (!requestBody || !requestBody.ids) {
+      throw error(400, 'ids required in request body');
+    }
+
     try {
+      const { ids } = requestBody;
       const result = await db
         .delete(tableSchema)
         .where(and(inArray(tableSchema.id, ids), eq(tableSchema.userId, locals.user?.id)))

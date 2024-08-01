@@ -1,71 +1,8 @@
-import db from '$root/src/db/drizzle.server';
-import { protectedRouteRedirectUrl } from '$root/src/lib/util/auth';
-import { ENDPOINT_CONFIGS } from '$root/src/lib/config';
-import { error, json, redirect, type RequestHandler } from '@sveltejs/kit';
-import { and, eq } from 'drizzle-orm';
+import db from '$lib/glue/db/drizzle.server';
+import endpoints from '$lib/glue/endpoints';
+import { createHandlerFactory, deleteHandlerFactory, updateHandlerFactory } from '@glue/utils';
+import { type RequestHandler } from '@sveltejs/kit';
 
-export const PUT: RequestHandler = async ({ request, params, locals, url }) => {
-  if (!locals.user) {
-    return redirect(302, protectedRouteRedirectUrl(url));
-  }
-
-  const { table, id } = params;
-
-  if (!table) {
-    throw error(400, 'Table name is required');
-  }
-
-  const tableSchema = ENDPOINT_CONFIGS[table].table;
-  const data = await request.json();
-
-  if (!tableSchema) {
-    throw error(400, 'Invalid table name');
-  }
-
-  try {
-    const [result] = await db
-      .update(tableSchema)
-      .set(data)
-      .where(and(eq(tableSchema.id, id), eq(tableSchema.userId, locals.user?.id)))
-      .returning();
-
-    if (!result) {
-      throw error(404, 'Record not found or you do not have permission to update it');
-    }
-    return json(result);
-  } catch (err) {
-    throw error(500, 'Internal Server Error');
-  }
-};
-
-export const DELETE: RequestHandler = async ({ params, locals, url }) => {
-  if (!locals.user) {
-    return redirect(302, protectedRouteRedirectUrl(url));
-  }
-
-  const { table, id } = params;
-
-  if (!table) {
-    throw error(400, 'Table name is required');
-  }
-
-  const tableSchema = ENDPOINT_CONFIGS[table].table;
-
-  if (!tableSchema) {
-    throw error(400, 'Invalid table name');
-  }
-
-  try {
-    const [result] = await db
-      .delete(tableSchema)
-      .where(and(eq(tableSchema.id, id), eq(tableSchema.userId, locals.user?.id)))
-      .returning();
-
-    if (!result) {
-      throw error(404, 'Record not found or you do not have permission to delete it');
-    }
-    return json({ message: 'Record deleted successfully' });
-  } catch (err) {
-    throw error(500, 'Internal Server Error');
-  }
-};
+export const POST: RequestHandler = createHandlerFactory(db, endpoints);
+export const PUT: RequestHandler = updateHandlerFactory(db, endpoints);
+export const DELETE: RequestHandler = deleteHandlerFactory(db, endpoints);

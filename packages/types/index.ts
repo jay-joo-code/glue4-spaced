@@ -194,7 +194,8 @@ export interface GlueConfig {
   adminEmail: string;
   prodDomain: string;
 
-  endpointConfigs?: Record<string, { table: AnyPgTable }>;
   isBeta?: boolean;
   sentryDsnPublic?: string;
 }
+
+export type GlueEndpoints = Record<string, { table: AnyPgTable }>;
