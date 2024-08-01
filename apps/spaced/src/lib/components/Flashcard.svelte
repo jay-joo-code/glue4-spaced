@@ -193,68 +193,54 @@
       {/await}
     </select>
 
-    <div class="dropdown-left dropdown">
+    <div class="dropdown-bottom dropdown">
       <label tabindex="0" class="btn-secondary btn-xs btn m-1 text-lg"><IconCheckOutlined /></label>
 
       <ul
         tabindex="0"
-        class="dropdown-content menu rounded-box z-[2] bg-base-100 p-2 text-end shadow"
+        class="dropdown-content menu rounded-box z-20 bg-base-200 p-2 text-end shadow w-32"
       >
         <li
           on:click={() => {
             incrementRandomDue(2, 4);
           }}
         >
-          <a>+2~4</a>
+          <a>A few days</a>
         </li>
         <li
           on:click={() => {
             incrementRandomDue(6, 8);
           }}
         >
-          <a>+6~8</a>
+          <a>+1 week</a>
         </li>
         <li
           on:click={() => {
             incrementRandomDue(13, 15);
           }}
         >
-          <a>+13~15</a>
-        </li>
-        <li
-          on:click={() => {
-            incrementRandomDue(20, 22);
-          }}
-        >
-          <a>+20~22</a>
+          <a>+2 weeks</a>
         </li>
         <li
           on:click={() => {
             incrementRandomDue(27, 29);
           }}
         >
-          <a>+27~29</a>
+          <a>+1 month</a>
         </li>
         <li
           on:click={() => {
-            incrementRandomDue(34, 36);
+            incrementRandomDue(58, 62);
           }}
         >
-          <a>+34~36</a>
+          <a>+2 months</a>
         </li>
         <li
           on:click={() => {
-            incrementRandomDue(41, 43);
+            incrementRandomDue(360, 370);
           }}
         >
-          <a>+41~43</a>
-        </li>
-        <li
-          on:click={() => {
-            incrementRandomDue(365, 365);
-          }}
-        >
-          <a>+365</a>
+          <a>+1 year</a>
         </li>
       </ul>
     </div>
