@@ -173,8 +173,6 @@
       <span class="loading loading-spinner loading-sm" />
     {:then flashcards}
       {#if flashcards.length > 0}
-        <p class="text-sm ml-1 text-base-content/80">Showing {flashcards.length} flashcards</p>
-
         <div class="space-y-4 relative mt-4">
           {#each flashcards as flashcard (flashcard?.id)}
             <Flashcard {flashcard} />
