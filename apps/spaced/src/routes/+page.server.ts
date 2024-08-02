@@ -108,7 +108,8 @@ export const load: ServerLoad = async ({ url, locals }) => {
           gt(flashcardTable.due, new Date())
         )
       )
-      .orderBy(desc(flashcardTable.due));
+      .orderBy(desc(flashcardTable.due))
+      .limit(15);
   };
 
   return {

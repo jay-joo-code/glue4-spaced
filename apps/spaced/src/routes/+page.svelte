@@ -87,7 +87,7 @@
       <span class="loading loading-spinner loading-sm" />
     {:then categories}
       <div class="flex gap-x-2 gap-y-3 flex-wrap">
-        {#each categories as category}
+        {#each categories as category (category.id)}
           <button
             class="btn btn-sm btn-outline border-base-content/30"
             class:btn-active={$page.url.searchParams.get('category') === category.id}
@@ -145,7 +145,7 @@
     {:then flashcards}
       {#if flashcards.length > 0}
         <div class="space-y-4 relative mt-4">
-          {#each flashcards as flashcard (flashcard?.id)}
+          {#each flashcards as flashcard (flashcard.id)}
             <Flashcard {flashcard} />
           {/each}
 
@@ -161,24 +161,26 @@
     {/await}
   </div>
 
-  {#if categoryId}
-    <div class="mt-12">
-      {#await data.lazy.upcomingFlashcards}
-        <span class="loading loading-spinner loading-sm" />
-      {:then upcomingFlashcards}
-        <h2 class="text-2xl font-extrabold mt-12">Upcoming flashcards</h2>
-        <div class="mt-8">
-          {#if upcomingFlashcards.length > 0}
+  {#if categoryId && !searchTerm}
+    {#await data.lazy.upcomingFlashcards}
+      <span class="loading loading-spinner loading-sm" />
+    {:then upcomingFlashcards}
+      {#if upcomingFlashcards.length > 0}
+        <div class="mt-12 relative">
+          <h2 class="text-2xl font-extrabold mt-12">Upcoming flashcards</h2>
+          <div class="mt-8">
             <div class="space-y-4 relative mt-4">
-              {#each upcomingFlashcards as flashcard (flashcard?.id)}
+              {#each upcomingFlashcards as flashcard (flashcard.id)}
                 <Flashcard {flashcard} />
               {/each}
             </div>
-          {:else}
-            <p class="text-sm text-center text-base-content/80 mt-10">No upcoming flashcards</p>
+          </div>
+
+          {#if upcomingFlashcards.length === 15}
+            <div class="absolute bottom-0 w-full bg-gradient-to-t from-base-100 pt-64" />
           {/if}
         </div>
-      {/await}
-    </div>
+      {/if}
+    {/await}
   {/if}
 </PageContainer>
