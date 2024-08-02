@@ -42,27 +42,7 @@
 
   const debouncedHandleInputChange = debounce(handleInputChange, 500);
 
-  const resetSpace = async () => {
-    toast.push('Feature not implemented');
-    // isResetSpaceLoading = true;
-    // resetFlashcardTotal = todayFlashcards?.length || 0;
-    // resetFlashcardCurrent = 0;
-    // try {
-    //   const lastFlashcard = todayFlashcards[todayFlashcards?.length - 1];
-    //   const daysDiff = differenceInDays(new Date(), new Date(lastFlashcard?.due)) + 1;
-    //   for (const flashcard of todayFlashcards) {
-    //     const newDue = add(new Date(flashcard?.due), { days: daysDiff });
-    //     await supabase.from('flashcards').update({ due: newDue }).eq('id', flashcard?.id).select();
-    //     resetFlashcardCurrent += 1;
-    //   }
-    //   await invalidateAll();
-    // } catch (error) {
-    //   toast.push('There was an error with resetting spaces');
-    // }
-    // isResetSpaceLoading = false;
-    // resetFlashcardTotal = 0;
-    // resetFlashcardCurrent = 0;
-  };
+  $: categoryId = $page.url.searchParams.get('category');
 </script>
 
 <PageContainer title="Home" layout="mobile-only" APP_NAME={config.appName} class="max-w-3xl ">
@@ -72,15 +52,6 @@
     </div>
 
     <div class="flex items-center space-x-2">
-      <!-- <button class="btn-ghost btn-sm btn" on:click={resetSpace} disabled={isResetSpaceLoading}>
-        {#if isResetSpaceLoading}
-          <span class="loading loading-spinner loading-xs" />
-          {resetFlashcardCurrent} / {resetFlashcardTotal}
-        {:else}
-          <IconRefresh />
-        {/if}
-        Reset space
-      </button> -->
       <button class="btn-secondary btn-sm btn" on:click={addCard} disabled={isAddCardLoading}>
         {#if isAddCardLoading}
           <span class="loading loading-spinner loading-xs" />
@@ -189,4 +160,25 @@
       {/if}
     {/await}
   </div>
+
+  {#if categoryId}
+    <div class="mt-12">
+      {#await data.lazy.upcomingFlashcards}
+        <span class="loading loading-spinner loading-sm" />
+      {:then upcomingFlashcards}
+        <h2 class="text-2xl font-extrabold mt-12">Upcoming flashcards</h2>
+        <div class="mt-8">
+          {#if upcomingFlashcards.length > 0}
+            <div class="space-y-4 relative mt-4">
+              {#each upcomingFlashcards as flashcard (flashcard?.id)}
+                <Flashcard {flashcard} />
+              {/each}
+            </div>
+          {:else}
+            <p class="text-sm text-center text-base-content/80 mt-10">No upcoming flashcards</p>
+          {/if}
+        </div>
+      {/await}
+    </div>
+  {/if}
 </PageContainer>

@@ -2,7 +2,15 @@ import db from '$lib/glue/db/drizzle.server';
 import { categoryTable, flashcardTable } from '$lib/glue/db/schema.server';
 import { protectedRouteRedirectUrl } from '@glue/utils';
 import { redirect, type ServerLoad } from '@sveltejs/kit';
-import { and, asc, desc, eq, ilike, isNull, lte, sql } from 'drizzle-orm';
+import { and, asc, desc, eq, gt, ilike, isNull, lte, sql } from 'drizzle-orm';
+
+const getCategoryCondition = (categoryId: string | null) => {
+  return categoryId === 'uncategorized'
+    ? [isNull(flashcardTable.categoryId)]
+    : categoryId
+    ? [eq(flashcardTable.categoryId, categoryId)]
+    : [];
+};
 
 export const load: ServerLoad = async ({ url, locals }) => {
   if (!locals.user) {
@@ -11,15 +19,10 @@ export const load: ServerLoad = async ({ url, locals }) => {
 
   const fetchFlashcards = async () => {
     if (!locals.user) return [];
+
     const query = url.searchParams.get('search');
     const categoryId = url.searchParams.get('category');
-
-    let categoryCondition =
-      categoryId === 'uncategorized'
-        ? [isNull(flashcardTable.categoryId)]
-        : categoryId
-        ? [eq(flashcardTable.categoryId, categoryId)]
-        : [];
+    let categoryCondition = getCategoryCondition(categoryId);
 
     if (query) {
       const keywords = query.split(' ');
@@ -86,10 +89,33 @@ export const load: ServerLoad = async ({ url, locals }) => {
     ];
   };
 
+  const fetchUpcomingFlashcards = async () => {
+    if (!locals.user) return [];
+
+    const categoryId = url.searchParams.get('category');
+    const query = url.searchParams.get('search');
+    let categoryCondition = getCategoryCondition(categoryId);
+
+    if (query || !categoryId) return [];
+
+    return await db
+      .select()
+      .from(flashcardTable)
+      .where(
+        and(
+          eq(flashcardTable.userId, locals.user.id),
+          ...categoryCondition,
+          gt(flashcardTable.due, new Date())
+        )
+      )
+      .orderBy(desc(flashcardTable.due));
+  };
+
   return {
     lazy: {
       flashcards: fetchFlashcards(),
-      categories: fetchCategories()
+      categories: fetchCategories(),
+      upcomingFlashcards: fetchUpcomingFlashcards()
     }
   };
 };
