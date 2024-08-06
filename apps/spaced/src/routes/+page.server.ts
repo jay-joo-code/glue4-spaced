@@ -51,6 +51,13 @@ export const load: ServerLoad = async ({ url, locals }) => {
   const fetchCategories = async () => {
     if (!locals.user) return [];
 
+    const query = url.searchParams.get('search');
+    const keywords = query?.split(' ');
+    const conditions =
+      query && keywords
+        ? keywords.map((keyword) => ilike(flashcardTable.body, `%${keyword}%`))
+        : [lte(flashcardTable.due, new Date())];
+
     const categories = await db
       .select()
       .from(categoryTable)
@@ -63,7 +70,7 @@ export const load: ServerLoad = async ({ url, locals }) => {
         count: sql<number>`cast(count(${flashcardTable.id}) as int)`
       })
       .from(flashcardTable)
-      .where(lte(flashcardTable.due, new Date()))
+      .where(and(...conditions))
       .groupBy(flashcardTable.categoryId);
 
     const categoryCount: Record<string, number> = {};
@@ -75,6 +82,7 @@ export const load: ServerLoad = async ({ url, locals }) => {
         categoryCount['Uncategorized'] = count.count;
       }
     }
+    console.log('counts', counts);
 
     return [
       {
@@ -108,7 +116,7 @@ export const load: ServerLoad = async ({ url, locals }) => {
           gt(flashcardTable.due, new Date())
         )
       )
-      .orderBy(desc(flashcardTable.due))
+      .orderBy(asc(flashcardTable.due))
       .limit(15);
   };
 
