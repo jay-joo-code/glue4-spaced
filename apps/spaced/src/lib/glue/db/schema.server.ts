@@ -56,7 +56,7 @@ export const flashcardTable = pgTable('flashcard', {
 
   body: text('body'),
   due: timestamp('due', { withTimezone: true }),
-  categoryId: uuid('category_id').references(() => categoryTable.id)
+  categoryId: uuid('category_id').references(() => categoryTable.id, { onDelete: 'no action' })
 });
 
 export type InsertFlashcard = typeof flashcardTable.$inferInsert;
