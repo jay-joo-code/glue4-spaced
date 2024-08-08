@@ -18,11 +18,13 @@
   let newCategoryName = '';
 
   const addCard = async () => {
+    const categoryId = $page.url.searchParams.get('category');
     const response = await fetch('/glue/api/crud/flashcard', {
       method: 'POST',
       body: JSON.stringify({
         body: '',
-        due: new Date()
+        due: new Date(),
+        categoryId
       })
     });
 
