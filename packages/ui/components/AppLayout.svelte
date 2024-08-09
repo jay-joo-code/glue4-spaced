@@ -31,7 +31,7 @@
   <SvelteToast options={toastOptions} />
 </div>
 
-<div class="w-screen">
+<div class="">
   <Navbar
     appName={APP_NAME}
     sitemap={PUBLIC_NAVS}
